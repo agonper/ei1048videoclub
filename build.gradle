@@ -3,12 +3,15 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.mockito:mockito-core:2.2.19'
+    compile 'org.hibernate:hibernate-core:5.2.4.Final'
+    compile 'mysql:mysql-connector-java:6.0.5'
 }
