@@ -3,6 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
@@ -28,6 +29,7 @@ jfx {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
 }
