@@ -22,6 +22,8 @@ variables:
 # https://docs.gradle.org/current/userguide/gradle_wrapper.html
 # It is expected that any modern gradle project has a wrapper
 before_script:
+    - apt-get update
+    - apt-get install -y openjfx
     - chmod +x gradlew
 
 # We redirect the gradle user home using -g so that it caches the
