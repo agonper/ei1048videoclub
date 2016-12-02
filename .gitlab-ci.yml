@@ -6,6 +6,17 @@
 # https://github.com/gradle/gradle
 image: java:8
 
+# Using mysql for integration tests
+services:
+ - mysql:5.7
+
+# Environment variables needed by the application to be able to connect to the docker container running the MySQL database
+variables:
+  MYSQL_ROOT_PASSWORD: r29dt4
+  MYSQL_USER: videoclub
+  MYSQL_PASSWORD: q1w2e3r4t5y6
+  MYSQL_DATABASE: agdc-videoclub
+
 # Make the gradle wrapper executable. This essentially downloads a copy of
 # Gradle to build the project with.
 # https://docs.gradle.org/current/userguide/gradle_wrapper.html
