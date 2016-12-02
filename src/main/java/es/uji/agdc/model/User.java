@@ -1,4 +1,4 @@
-package es.uji.agdc.model.entity;
+package es.uji.agdc.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
