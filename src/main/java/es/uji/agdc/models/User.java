@@ -1,4 +1,4 @@
-package es.uji.agdc.model.entity;
+package es.uji.agdc.models;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -8,9 +8,13 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @Column(nullable = false)
+public class User extends AbstractEntity {
+
+    public enum Role{
+        ADMIN, MEMBER
+    }
+
+    @Column(nullable = false, unique = true)
     private String dni;
 
     @Column(nullable = false)
@@ -22,17 +26,21 @@ public class User {
     @Column(nullable = false)
     private int phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private LocalDate birthday;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private Role role;
 
     public String getDni() {
         return dni;
@@ -106,6 +114,15 @@ public class User {
         return this;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public User setRole(Role role) {
+        this.role = role;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -117,6 +134,7 @@ public class User {
                 ", birthday=" + birthday +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                '}';
+                ", role=" + role +
+                "} " + super.toString();
     }
 }
