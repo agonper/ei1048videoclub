@@ -1,4 +1,4 @@
-package controllers;
+package es.uji.agdc.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
