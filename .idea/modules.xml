@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ei1048videoclub.iml" filepath="$PROJECT_DIR$/.idea/modules/ei1048videoclub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ei1048videoclub_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ei1048videoclub_main.iml" group="ei1048videoclub" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ei1048videoclub_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ei1048videoclub_test.iml" group="ei1048videoclub" />
     </modules>
   </component>
 </project>
