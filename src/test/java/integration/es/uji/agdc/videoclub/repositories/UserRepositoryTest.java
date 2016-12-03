@@ -29,7 +29,7 @@ public class UserRepositoryTest {
     private static User user;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @BeforeClass
     public static void setUp() throws Exception {
