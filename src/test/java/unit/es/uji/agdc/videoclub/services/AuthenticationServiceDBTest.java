@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,10 +30,11 @@ public class AuthenticationServiceDBTest {
     public void setUp() throws Exception {
         repository = mock(UserRepository.class);
         authService = new AuthenticationServiceDB(repository);
-        user = user = new User()
+        user = new User()
                 .setUsername("paquito69")
                 .setPassword("pacosd69");
 
+        when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
     }
 
