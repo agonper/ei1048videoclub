@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * Provides a handy way to return informative results form service calls
  */
 public class Result {
     public enum Type {
@@ -15,14 +15,29 @@ public class Result {
     private final String msg;
     private final List<String> fields;
 
+    /**
+     * Creates a result with the given type
+     * @param type {@link Type}
+     */
     public Result(Type type) {
         this(type, "");
     }
 
+    /**
+     * Creates a result with the given type and message
+     * @param type {@link Type}
+     * @param msg {@link String} containing the result message
+     */
     public Result(Type type, String msg) {
         this(type, msg, new LinkedList<>());
     }
 
+    /**
+     * Creates a result with the given type, message and list of fields. Low level.
+     * @param type {@link Type}
+     * @param msg {@link String} the result message
+     * @param fields {@link List<String>} a list of fields affected by the result
+     */
     private Result(Type type, String msg, List<String> fields) {
         this.type = type;
         this.msg = msg;
