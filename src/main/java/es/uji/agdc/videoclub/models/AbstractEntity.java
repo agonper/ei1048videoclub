@@ -1,4 +1,4 @@
-package es.uji.agdc.models;
+package es.uji.agdc.videoclub.models;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

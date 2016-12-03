@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane prefHeight="230.0" prefWidth="500.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.controllers.LoginController">
+<GridPane prefHeight="230.0" prefWidth="500.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.LoginController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     </columnConstraints>

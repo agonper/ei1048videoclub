@@ -1,4 +1,4 @@
-package es.uji.agdc.models;
+package es.uji.agdc.videoclub.models;
 
 import javax.persistence.*;
 import java.time.LocalDate;

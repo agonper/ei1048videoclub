@@ -1,8 +1,8 @@
-package integration.es.uji.agdc.repositories;
+package integration.es.uji.agdc.videoclub.repositories;
 
-import es.uji.agdc.Main;
-import es.uji.agdc.models.User;
-import es.uji.agdc.repositories.UserRepository;
+import es.uji.agdc.videoclub.Main;
+import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.repositories.UserRepository;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

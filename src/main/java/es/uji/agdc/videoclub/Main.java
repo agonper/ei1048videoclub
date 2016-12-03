@@ -1,4 +1,4 @@
-package es.uji.agdc;
+package es.uji.agdc.videoclub;
 
 
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ public class Main extends Application{
         try {
             // Load and initialize the fxml
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../../views/root.fxml"));
+            loader.setLocation(Main.class.getResource("/views/root.fxml"));
             rootLayout = (BorderPane) loader.load();
 
             GridPane login = (GridPane) loadLoginLayout();
@@ -65,7 +65,7 @@ public class Main extends Application{
 
     private Pane loadLoginLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("../../../views/login.fxml"));
+        loader.setLocation(Main.class.getResource("/views/login.fxml"));
         GridPane login = (GridPane) loader.load();
         return login;
     }

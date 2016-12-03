@@ -24,7 +24,7 @@ jar {
 }
 
 jfx {
-    mainClass = "es.uji.agdc.Main"
+    mainClass = "es.uji.agdc.videoclub.Main"
     vendor = group
 }
 

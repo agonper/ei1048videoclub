@@ -1,6 +1,6 @@
-package es.uji.agdc.repositories;
+package es.uji.agdc.videoclub.repositories;
 
-import es.uji.agdc.models.User;
+import es.uji.agdc.videoclub.models.User;
 
 import java.util.Optional;
 import java.util.stream.Stream;
