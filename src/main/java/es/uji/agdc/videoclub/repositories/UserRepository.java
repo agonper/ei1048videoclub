@@ -6,10 +6,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Created by alberto on 2/12/16.
- */
-
-/**
  * Repository (DAO) that permits CRUD operations on user entities
  */
 public interface UserRepository extends CrudRepositoryJ8<User, Long> {

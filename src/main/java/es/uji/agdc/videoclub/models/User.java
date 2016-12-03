@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
- * Created by alberto on 1/12/16.
+ * User entity, from the business domain
  */
 @Entity
 @Table(name = "users")

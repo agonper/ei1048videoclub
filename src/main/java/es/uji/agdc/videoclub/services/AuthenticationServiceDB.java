@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * Created by Alberto on 03/12/2016.
+ * AuthenticationService with a DB source
+ *
+ * Uses {@link UserRepository} interface to access to the underlying DB
+ *
+ * Use @Autowire to create an instance from @Component or @Bean
  */
 @Service
 public class AuthenticationServiceDB implements AuthenticationService {

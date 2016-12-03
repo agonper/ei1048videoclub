@@ -9,11 +9,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Created by alberto on 2/12/16.
- */
-
-
-/**
  * {@link CrudRepository} with Java 8 features
  * @param <T> Entity
  * @param <ID> Entity primary key. Must be serializable.
