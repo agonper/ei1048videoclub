@@ -3,7 +3,7 @@ package es.uji.agdc.videoclub.services;
 import es.uji.agdc.videoclub.services.utils.Result;
 
 /**
- * Authentication service, interface every authentication service should implement this interface
+ * Authentication service interface. Every authentication service must implement this interface.
  */
 public interface AuthenticationService {
     /**

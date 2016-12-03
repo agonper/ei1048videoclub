@@ -123,6 +123,14 @@ public class User extends AbstractEntity {
         return this;
     }
 
+    public boolean isMember() {
+        return role == Role.MEMBER;
+    }
+
+    public boolean isAdmin() {
+        return !isMember();
+    }
+
     @Override
     public String toString() {
         return "User{" +
