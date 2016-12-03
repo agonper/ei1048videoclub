@@ -12,7 +12,7 @@ docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=r29dt4 -e MYSQL_USER=videoclub
 
 Para solucionar esto tenemos dos opciones:
 1. Añadir al final del fichero **hosts** del sistema la siguiente línea
- `127.0.0.1 msql`
+ `127.0.0.1 mysql`
 2. En el fichero **application.properties** localizado en `$PROJECT_ROOT/src/main/resources`, cambiar el hostname de *mysql* a *localhost*
 
 ## Tecnologías empleadas
