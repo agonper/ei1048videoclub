@@ -23,7 +23,7 @@ import java.io.IOException;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class Main extends Application{
+public class Main extends Application {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     //TODO: Move configuration to a more confortable place
@@ -35,7 +35,9 @@ public class Main extends Application{
     private BorderPane rootLayout;
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class);
+        log.info("Booting up application...");
+        SpringApplication.run(Main.class, args);
+        log.info("Starting GUI");
         launch(args);
     }
 
