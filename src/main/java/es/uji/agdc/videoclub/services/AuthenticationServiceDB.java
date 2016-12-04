@@ -5,6 +5,8 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.Optional;
  */
 @Service
 public class AuthenticationServiceDB implements AuthenticationService {
+
+    private static Logger log = LoggerFactory.getLogger(AuthenticationServiceDB.class);
 
     private final UserService repository;
 
@@ -38,8 +42,10 @@ public class AuthenticationServiceDB implements AuthenticationService {
         if (possibleUser.isPresent()) {
             User user = possibleUser.get();
             if (encryptor.equals(password, user.getPassword())) {
+                log.info("User " + username + " authorized");
                 return ResultBuilder.ok();
             }
+            log.warn("Failed authentication attempt for user: " + username);
             return error.addField("PASSWORD");
         }
         return error.addField("USERNAME");

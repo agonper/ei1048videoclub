@@ -1,7 +1,7 @@
 package integration.es.uji.agdc.videoclub.initializers;
 
 import es.uji.agdc.videoclub.Main;
-import es.uji.agdc.videoclub.initializers.AdminChecker;
+import es.uji.agdc.videoclub.initializers.AdminInitializer;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @Transactional
-public class AdminCheckerTest {
+public class AdminInitializerTest {
     @Autowired
     private UserService service;
 
@@ -34,11 +34,11 @@ public class AdminCheckerTest {
         // The unavoidable condition is that the default admin must exist
 
         // Try to find the admin
-        Optional<User> possibleAdmin = service.findBy(UserQueryTypeSingle.USERNAME, AdminChecker.ADMIN_USERNAME);
+        Optional<User> possibleAdmin = service.findBy(UserQueryTypeSingle.USERNAME, AdminInitializer.ADMIN_USERNAME);
 
         // Assert that the admin is present
         assertTrue(possibleAdmin.isPresent());
         assertEquals(User.Role.ADMIN, possibleAdmin.get().getRole());
-        assertEquals(AdminChecker.ADMIN_USERNAME, possibleAdmin.get().getUsername());
+        assertEquals(AdminInitializer.ADMIN_USERNAME, possibleAdmin.get().getUsername());
     }
 }

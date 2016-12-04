@@ -18,14 +18,14 @@ import java.util.Optional;
  * Created by Alberto on 04/12/2016.
  */
 @Component
-public class AdminChecker {
+public class AdminInitializer {
     public static final String ADMIN_USERNAME = "admin";
-    private static Logger log = LoggerFactory.getLogger(AdminChecker.class);
+    private static Logger log = LoggerFactory.getLogger(AdminInitializer.class);
 
     private final UserService service;
 
     @Autowired
-    public AdminChecker(UserService service) {
+    public AdminInitializer(UserService service) {
         this.service = service;
     }
 
@@ -41,7 +41,7 @@ public class AdminChecker {
                 .setUsername(ADMIN_USERNAME)
                 .setPassword("1234");
 
-        Optional<User> possibleAdmin = service.findBy(UserQueryTypeSingle.USERNAME, ADMIN_USERNAME); // FIXME Look for other admins as well
+        Optional<User> possibleAdmin = service.findBy(UserQueryTypeSingle.USERNAME, ADMIN_USERNAME);
         if (!possibleAdmin.isPresent()) {
             log.info("No default admin was found, creating one");
             service.create(superAdmin);

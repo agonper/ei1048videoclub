@@ -1,6 +1,6 @@
 package unit.es.uji.agdc.videoclub.initializers;
 
-import es.uji.agdc.videoclub.initializers.AdminChecker;
+import es.uji.agdc.videoclub.initializers.AdminInitializer;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
@@ -19,20 +19,20 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Alberto on 04/12/2016.
  */
-public class AdminCheckerTest {
+public class AdminInitializerTest {
 
     private UserService service;
-    private AdminChecker checker;
+    private AdminInitializer checker;
 
     @Before
     public void setUp() throws Exception {
         service = mock(UserService.class);
-        checker = new AdminChecker(service);
+        checker = new AdminInitializer(service);
     }
 
     @Test
     public void createAdmin_adminDoesNotExists_createCalled() throws Exception {
-        when(service.findBy(UserQueryTypeSingle.USERNAME, AdminChecker.ADMIN_USERNAME)).thenReturn(Optional.empty());
+        when(service.findBy(UserQueryTypeSingle.USERNAME, AdminInitializer.ADMIN_USERNAME)).thenReturn(Optional.empty());
 
         // Execute initializer
         checker.onApplicationReady();
@@ -47,7 +47,7 @@ public class AdminCheckerTest {
 
     @Test
     public void createAdmin_adminAlreadyExists_createNotCalled() throws Exception {
-        when(service.findBy(UserQueryTypeSingle.USERNAME, AdminChecker.ADMIN_USERNAME)).thenReturn(Optional.of(new User()));
+        when(service.findBy(UserQueryTypeSingle.USERNAME, AdminInitializer.ADMIN_USERNAME)).thenReturn(Optional.of(new User()));
 
         // Execute initializer
         checker.onApplicationReady();

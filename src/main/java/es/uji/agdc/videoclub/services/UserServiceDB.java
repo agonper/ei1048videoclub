@@ -51,7 +51,7 @@ public class UserServiceDB implements UserService{
     @Override
     public Optional<User> findBy(UserQueryTypeSingle field, String value) {
         if (isNonValidValue(value)) {
-            log.warn("findBy(): Called with null or empty value");
+            log.warn("findBy(" + field + "): Called with null or empty value");
             return Optional.empty();
         }
 
@@ -77,7 +77,7 @@ public class UserServiceDB implements UserService{
         try {
             return repository.findOne(Long.valueOf(value));
         } catch (NumberFormatException e) {
-            log.warn("ID couldn't be parsed for:" + e.getMessage());
+            log.warn("ID couldn't be parsed. " + e.getMessage());
             return Optional.empty();
         }
     }
@@ -85,7 +85,7 @@ public class UserServiceDB implements UserService{
     @Override
     public Stream<User> findAllBy(UserQueryTypeMultiple field, String value) {
         if (isNonValidValue(value)) {
-            log.warn("findAllBy(): Called with null or empty value");
+            log.warn("findAllBy(" + field + "): Called with null or empty value");
             return Stream.empty();
         }
 
