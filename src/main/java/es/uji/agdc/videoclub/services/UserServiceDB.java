@@ -32,6 +32,8 @@ public class UserServiceDB implements UserService{
 
         try {
             // FIXME Control all different edge cases
+
+            // FIXME Before saving, hash user password
             repository.save(user);
             return ResultBuilder.ok();
         } catch (Exception e) {
