@@ -20,19 +20,19 @@ import java.util.Optional;
 @Service
 public class AuthenticationServiceDB implements AuthenticationService {
 
-    private final UserRepository repository;
+    private final UserService repository;
 
     private final PasswordEncryptor encryptor;
 
     @Autowired
-    public AuthenticationServiceDB(UserRepository repository, PasswordEncryptor encryptor) {
-        this.repository = repository;
+    public AuthenticationServiceDB(UserService service, PasswordEncryptor encryptor) {
+        this.repository = service;
         this.encryptor = encryptor;
     }
 
     @Override
     public Result auth(String username, String password) {
-        Optional<User> possibleUser = repository.findByUsername(username);
+        Optional<User> possibleUser = repository.findBy(UserQueryTypeSingle.USERNAME, username);
         Result error = ResultBuilder.error("LOGIN_FAILED");
 
         if (possibleUser.isPresent()) {
