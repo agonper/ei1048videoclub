@@ -4,6 +4,7 @@ import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
+import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import org.junit.*;
@@ -16,6 +17,7 @@ import javax.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -71,6 +73,18 @@ public class UserServiceDBTest {
         // Assert that the user has been found
         assertTrue(possibleUser.isPresent());
         assertEquals(user.getUsername(), possibleUser.get().getUsername());
+    }
+
+    @Test
+    public void findAll() throws Exception {
+        // Use the service to create a user
+        service.create(user);
+
+        // Fetching for users by role member should contain the user
+        Stream<User> members = service.findAllBy(UserQueryTypeMultiple.ROLE, User.Role.MEMBER.toString());
+
+        // Assert that the user is contained
+        assertTrue(members.anyMatch(user1 -> user1.equals(user)));
     }
 
     @After

@@ -4,6 +4,7 @@ import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
+import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import es.uji.agdc.videoclub.services.UserServiceDB;
@@ -14,6 +15,7 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -125,6 +127,13 @@ public class UserServiceDBTest {
     }
 
     @Test
+    public void findBy_id_nonValidNumberReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.ID, "not_valid");
+        verify(repository, never()).findOne(any());
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
     public void findBy_dni_found() throws Exception {
         when(repository.findByDni(user.getDni())).thenReturn(Optional.of(user));
         Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.DNI, user.getDni());
@@ -178,6 +187,41 @@ public class UserServiceDBTest {
         Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.EMAIL, "");
         verify(repository, never()).findByEmail(any());
         assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findAll_role_foundOneMemberUpperCase() throws Exception {
+        when(repository.findByRole(User.Role.MEMBER)).thenReturn(Stream.of(user));
+        Stream<User> members = service.findAllBy(UserQueryTypeMultiple.ROLE, User.Role.MEMBER.toString());
+        assertEquals(1, members.count());
+    }
+
+    @Test
+    public void findAll_role_foundOneMemberLowerCase() throws Exception {
+        when(repository.findByRole(User.Role.MEMBER)).thenReturn(Stream.of(user));
+        Stream<User> members = service.findAllBy(UserQueryTypeMultiple.ROLE, "member");
+        assertEquals(1, members.count());
+    }
+
+    @Test
+    public void findAll_role_foundNoMemberWithNonValidRole() throws Exception {
+        when(repository.findByRole(User.Role.MEMBER)).thenReturn(Stream.of(user));
+        Stream<User> members = service.findAllBy(UserQueryTypeMultiple.ROLE, "membe");
+        assertEquals(0, members.count());
+    }
+
+    @Test
+    public void findAll_role_foundNoneWithNullRole() throws Exception {
+        Stream<User> members = service.findAllBy(UserQueryTypeMultiple.ROLE, null);
+        verify(repository, never()).findByRole(null);
+        assertEquals(0, members.count());
+    }
+
+    @Test
+    public void findAll_role_foundNoneWithEmptyRole() throws Exception {
+        Stream<User> members = service.findAllBy(UserQueryTypeMultiple.ROLE, "");
+        verify(repository, never()).findByRole(any());
+        assertEquals(0, members.count());
     }
 
     //FIXME Add more tests

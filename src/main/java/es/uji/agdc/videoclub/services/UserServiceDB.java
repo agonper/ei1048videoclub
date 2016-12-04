@@ -33,6 +33,7 @@ public class UserServiceDB implements UserService{
     public Result create(User user) {
 
         if (!user.isNew()) {
+            log.warn("create(): called with a non-new user");
             return ResultBuilder.error("OLD_USER");
         }
 
@@ -49,7 +50,10 @@ public class UserServiceDB implements UserService{
 
     @Override
     public Optional<User> findBy(UserQueryTypeSingle field, String value) {
-        if (isNonValidValue(value)) return Optional.empty();
+        if (isNonValidValue(value)) {
+            log.warn("findBy(): Called with null or empty value");
+            return Optional.empty();
+        }
 
         switch (field) {
             case ID:
@@ -73,15 +77,33 @@ public class UserServiceDB implements UserService{
         try {
             return repository.findOne(Long.valueOf(value));
         } catch (NumberFormatException e) {
-            log.warn(e.getMessage());
+            log.warn("ID couldn't be parsed for:" + e.getMessage());
             return Optional.empty();
         }
     }
 
     @Override
     public Stream<User> findAllBy(UserQueryTypeMultiple field, String value) {
-        // FIXME Implement
-        throw new Error("Unimplemented");
+        if (isNonValidValue(value)) {
+            log.warn("findAllBy(): Called with null or empty value");
+            return Stream.empty();
+        }
+
+        switch (field) {
+            case ROLE:
+                return findAllIfValidRole(value);
+            default:
+                throw new Error("Unimplemented");
+        }
+    }
+
+    private Stream<User> findAllIfValidRole(String value) {
+        try {
+            return repository.findByRole(User.Role.valueOf(value.toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            log.warn(e.getMessage());
+            return Stream.empty();
+        }
     }
 
     @Override
