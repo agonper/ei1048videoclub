@@ -1,5 +1,6 @@
 package unit.es.uji.agdc.videoclub.services;
 
+import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.AuthenticationService;
@@ -24,18 +25,22 @@ public class AuthenticationServiceDBTest {
 
     private AuthenticationService authService;
     private UserRepository repository;
+    private PasswordEncryptor encryptor;
     private User user;
 
     @Before
     public void setUp() throws Exception {
         repository = mock(UserRepository.class);
-        authService = new AuthenticationServiceDB(repository);
+        encryptor = mock(PasswordEncryptor.class);
+        authService = new AuthenticationServiceDB(repository, encryptor);
         user = new User()
                 .setUsername("paquito69")
                 .setPassword("pacosd69");
 
         when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(encryptor.equals(anyString(), anyString())).thenReturn(false);
+        when(encryptor.equals(user.getPassword(), user.getPassword())).thenReturn(true);
     }
 
     @Test

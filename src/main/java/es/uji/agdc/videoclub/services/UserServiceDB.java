@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.services;
 
+import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
@@ -17,10 +18,12 @@ import java.util.stream.Stream;
 public class UserServiceDB implements UserService{
 
     private final UserRepository repository;
+    private final PasswordEncryptor encryptor;
 
     @Autowired
-    public UserServiceDB(UserRepository repository) {
+    public UserServiceDB(UserRepository repository, PasswordEncryptor encryptor) {
         this.repository = repository;
+        this.encryptor = encryptor;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class UserServiceDB implements UserService{
         try {
             // FIXME Control all different edge cases
 
-            // FIXME Before saving, hash user password
+            user.setPassword(encryptor.hash(user.getPassword()));
             repository.save(user);
             return ResultBuilder.ok();
         } catch (Exception e) {

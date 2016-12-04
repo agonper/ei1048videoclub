@@ -1,5 +1,6 @@
 package unit.es.uji.agdc.videoclub.services;
 
+import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
@@ -25,6 +26,8 @@ public class UserServiceDBTest {
 
     private UserRepository repository;
 
+    private PasswordEncryptor encryptor;
+
     private UserService service;
 
     private User user;
@@ -32,7 +35,8 @@ public class UserServiceDBTest {
     @Before
     public void setUp() throws Exception {
         repository = mock(UserRepository.class);
-        service = new UserServiceDB(repository);
+        encryptor = mock(PasswordEncryptor.class);
+        service = new UserServiceDB(repository, encryptor);
         user = new User()
                 .setDni("10614397N")
                 .setName("Paco Sánchez Díaz")
@@ -47,7 +51,9 @@ public class UserServiceDBTest {
 
     @Test
     public void create_validUser_saveCalledAndReturnsOk() throws Exception {
+        String userPassword = user.getPassword();
         Result result = service.create(user);
+        verify(encryptor, only()).hash(userPassword);
         verify(repository, only()).save(user);
         assertTrue(result.isOk());
     }

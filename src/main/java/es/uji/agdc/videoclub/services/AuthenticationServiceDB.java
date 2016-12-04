@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.services;
 
+import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
@@ -21,9 +22,12 @@ public class AuthenticationServiceDB implements AuthenticationService {
 
     private final UserRepository repository;
 
+    private final PasswordEncryptor encryptor;
+
     @Autowired
-    public AuthenticationServiceDB(UserRepository repository) {
+    public AuthenticationServiceDB(UserRepository repository, PasswordEncryptor encryptor) {
         this.repository = repository;
+        this.encryptor = encryptor;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class AuthenticationServiceDB implements AuthenticationService {
 
         if (possibleUser.isPresent()) {
             User user = possibleUser.get();
-            if (user.getPassword().equals(password)) { //FIXME: Use BCrypt comparator
+            if (encryptor.equals(password, user.getPassword())) { //FIXME: Use BCrypt comparator
                 return ResultBuilder.ok();
             }
             return error.addField("PASSWORD");
