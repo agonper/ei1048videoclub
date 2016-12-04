@@ -37,7 +37,7 @@ public class AuthenticationServiceDB implements AuthenticationService {
 
         if (possibleUser.isPresent()) {
             User user = possibleUser.get();
-            if (encryptor.equals(password, user.getPassword())) { //FIXME: Use BCrypt comparator
+            if (encryptor.equals(password, user.getPassword())) {
                 return ResultBuilder.ok();
             }
             return error.addField("PASSWORD");

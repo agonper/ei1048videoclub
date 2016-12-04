@@ -39,6 +39,7 @@ public class AuthenticationServiceDBTest {
 
         when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+
         when(encryptor.equals(anyString(), anyString())).thenReturn(false);
         when(encryptor.equals(user.getPassword(), user.getPassword())).thenReturn(true);
     }

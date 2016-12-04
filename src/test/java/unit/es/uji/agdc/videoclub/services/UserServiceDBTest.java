@@ -82,6 +82,104 @@ public class UserServiceDBTest {
         assertTrue(!possibleUser.isPresent());
     }
 
+    @Test
+    public void findBy_username_nullValueReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.USERNAME, null);
+        verify(repository, never()).findByUsername(null);
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_username_emptyStringReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.USERNAME, "");
+        verify(repository, never()).findByUsername("");
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_id_found() throws Exception {
+        when(repository.findOne(0L)).thenReturn(Optional.of(user));
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.ID, Long.toString(0));
+        assertTrue(possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_id_notFound() throws Exception {
+        when(repository.findOne(anyLong())).thenReturn(Optional.empty());
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.ID, Long.toString(0));
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_id_nullValueReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.ID, null);
+        verify(repository, never()).findOne(null);
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_id_emptyStringReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.ID, "");
+        verify(repository, never()).findOne(any());
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_dni_found() throws Exception {
+        when(repository.findByDni(user.getDni())).thenReturn(Optional.of(user));
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.DNI, user.getDni());
+        assertTrue(possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_dni_notFound() throws Exception {
+        when(repository.findByDni(anyString())).thenReturn(Optional.empty());
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.DNI, user.getDni());
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_dni_nullValueReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.DNI, null);
+        verify(repository, never()).findByDni(null);
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_dni_emptyStringReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.DNI, "");
+        verify(repository, never()).findByDni(any());
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_email_found() throws Exception {
+        when(repository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.EMAIL, user.getEmail());
+        assertTrue(possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_email_notFound() throws Exception {
+        when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.EMAIL, user.getEmail());
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_email_nullValueReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.EMAIL, null);
+        verify(repository, never()).findByEmail(null);
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_email_emptyStringReturnsEmpty() throws Exception {
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.EMAIL, "");
+        verify(repository, never()).findByEmail(any());
+        assertTrue(!possibleUser.isPresent());
+    }
+
     //FIXME Add more tests
 
     @After

@@ -5,6 +5,8 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.stream.Stream;
  */
 @Service
 public class UserServiceDB implements UserService{
+    Logger log = LoggerFactory.getLogger(UserServiceDB.class);
 
     private final UserRepository repository;
     private final PasswordEncryptor encryptor;
@@ -46,30 +49,50 @@ public class UserServiceDB implements UserService{
 
     @Override
     public Optional<User> findBy(UserQueryTypeSingle field, String value) {
+        if (isNonValidValue(value)) return Optional.empty();
+
         switch (field) {
+            case ID:
+                return findOneIfValidId(value);
+            case DNI:
+                return repository.findByDni(value);
             case USERNAME:
                 return repository.findByUsername(value);
+            case EMAIL:
+                return repository.findByEmail(value);
             default:
-                // FIXME Implement remaining enum types
                 throw new Error("Unimplemented");
+        }
+    }
+
+    private boolean isNonValidValue(String value) {
+        return value == null || value.isEmpty();
+    }
+
+    private Optional<User> findOneIfValidId(String value) {
+        try {
+            return repository.findOne(Long.valueOf(value));
+        } catch (NumberFormatException e) {
+            log.warn(e.getMessage());
+            return Optional.empty();
         }
     }
 
     @Override
     public Stream<User> findAllBy(UserQueryTypeMultiple field, String value) {
-        // FIXME
+        // FIXME Implement
         throw new Error("Unimplemented");
     }
 
     @Override
     public Result update(User user) {
-        // FIXME
+        // FIXME Implement
         throw new Error("Unimplemented");
     }
 
     @Override
     public Result delete(User user) {
-        // FIXME
+        // FIXME Implement
         throw new Error("Unimplemented");
     }
 }
