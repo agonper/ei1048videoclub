@@ -4,6 +4,7 @@ import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
+import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -32,10 +33,10 @@ public class UserServiceDBTest {
     @Autowired
     private UserRepository repository;
 
-    private static User user;
+    private User user;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         user = UserFactory.createMember()
                 .setDni("10614397N")
                 .setName("Paco Sánchez Díaz")
@@ -61,26 +62,19 @@ public class UserServiceDBTest {
 
     @Test
     public void findBy() throws Exception {
-        // FIXME Complete
+        // Use the service to create a user
+        service.create(user);
+
+        // Fetch the user with the service itself to assert that the service is able to access the database
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername());
+
+        // Assert that the user has been found
+        assertTrue(possibleUser.isPresent());
+        assertEquals(user.getUsername(), possibleUser.get().getUsername());
     }
 
-    @Test
-    public void findAllBy() throws Exception {
-        // FIXME Complete
-    }
-
-    @Test
-    public void update() throws Exception {
-        // FIXME Complete
-    }
-
-    @Test
-    public void delete() throws Exception {
-        // FIXME Complete
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         user = null;
     }
 

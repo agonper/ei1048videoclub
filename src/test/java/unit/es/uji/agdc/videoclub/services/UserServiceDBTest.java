@@ -3,6 +3,7 @@ package unit.es.uji.agdc.videoclub.services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
+import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import es.uji.agdc.videoclub.services.UserServiceDB;
 import es.uji.agdc.videoclub.services.utils.Result;
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -60,7 +62,21 @@ public class UserServiceDBTest {
         assertEquals("OLD_USER", result.getMsg());
     }
 
-    //FIXME add more tests
+    @Test
+    public void findBy_username_found() throws Exception {
+        when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername());
+        assertTrue(possibleUser.isPresent());
+    }
+
+    @Test
+    public void findBy_username_notFound() throws Exception {
+        when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
+        Optional<User> possibleUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername());
+        assertTrue(!possibleUser.isPresent());
+    }
+
+    //FIXME Add more tests
 
     @After
     public void tearDown() throws Exception {

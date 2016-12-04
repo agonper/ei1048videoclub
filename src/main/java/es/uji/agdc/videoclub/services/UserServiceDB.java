@@ -43,8 +43,13 @@ public class UserServiceDB implements UserService{
 
     @Override
     public Optional<User> findBy(UserQueryTypeSingle field, String value) {
-        // FIXME
-        throw new Error("Unimplemented");
+        switch (field) {
+            case USERNAME:
+                return repository.findByUsername(value);
+            default:
+                // FIXME Implement remaining enum types
+                throw new Error("Unimplemented");
+        }
     }
 
     @Override
