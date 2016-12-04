@@ -4,13 +4,9 @@ import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
-import es.uji.agdc.videoclub.services.AuthenticationService;
 import es.uji.agdc.videoclub.services.UserService;
-import es.uji.agdc.videoclub.services.utils.Result;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,22 +14,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
 /**
- * Created by Alberto on 03/12/2016.
+ * Created by Alberto on 04/12/2016.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @Transactional
-public class AuthenticationServiceDBTest {
+public class UserServiceDBTest {
 
     @Autowired
-    private AuthenticationService authService;
+    private UserService service;
 
     @Autowired
-    private UserService userService;
+    private UserRepository repository;
 
     private static User user;
 
@@ -51,19 +48,40 @@ public class AuthenticationServiceDBTest {
     }
 
     @Test
-    public void auth() throws Exception {
-        // Create user first
-        userService.create(user);
+    public void create() throws Exception {
+        // Use the service to create a user
+        service.create(user);
 
-        // Try to authenticate user
-        Result result = authService.auth(user.getUsername(), "pacosd69");
+        // Fetch the user with the repository to assert that it is stored on the database
+        Optional<User> possibleUser = repository.findByUsername("paquito69");
 
-        // Assert that the user was successfully authenticated
-        assertTrue(result.isOk());
+        // Assert that the user has been returned
+        assertEquals(user.getName(), possibleUser.get().getName());
+    }
+
+    @Test
+    public void findBy() throws Exception {
+        // FIXME Complete
+    }
+
+    @Test
+    public void findAllBy() throws Exception {
+        // FIXME Complete
+    }
+
+    @Test
+    public void update() throws Exception {
+        // FIXME Complete
+    }
+
+    @Test
+    public void delete() throws Exception {
+        // FIXME Complete
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
         user = null;
     }
+
 }

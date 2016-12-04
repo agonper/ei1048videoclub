@@ -48,7 +48,7 @@ public abstract class AbstractEntity {
      * @return true if the entity is new
      */
     public boolean isNew() {
-        return id == null;
+        return getId() == null;
     }
 
     /**

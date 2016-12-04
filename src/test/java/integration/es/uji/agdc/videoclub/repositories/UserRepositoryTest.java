@@ -2,6 +2,7 @@ package integration.es.uji.agdc.videoclub.repositories;
 
 import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class UserRepositoryTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        user = new User()
+        user = UserFactory.createMember()
                 .setDni("10614397N")
                 .setName("Paco Sánchez Díaz")
                 .setAddress("C/Falsa, 123, 1º")
@@ -41,8 +42,7 @@ public class UserRepositoryTest {
                 .setEmail("pacosd@hotmail.com")
                 .setBirthday(LocalDate.of(2016, 1, 20))
                 .setUsername("paquito69")
-                .setPassword("pacosd69")
-                .setRole(User.Role.MEMBER);
+                .setPassword("pacosd69");
     }
 
     @Test
