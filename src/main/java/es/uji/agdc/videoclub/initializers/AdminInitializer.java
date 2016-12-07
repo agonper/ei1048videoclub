@@ -19,7 +19,10 @@ import java.util.Optional;
  */
 @Component
 public class AdminInitializer {
-    public static final String ADMIN_USERNAME = "admin";
+    public static final String
+            ADMIN_USERNAME = "admin",
+            ADMIN_DEFAULT_PASSWORD = "1234";
+
     private static Logger log = LoggerFactory.getLogger(AdminInitializer.class);
 
     private final UserService service;
