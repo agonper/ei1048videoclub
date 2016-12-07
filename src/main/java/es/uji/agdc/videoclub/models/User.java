@@ -29,8 +29,7 @@ public class User extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private LocalDate birthday;
+    private LocalDate lastPayment;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -87,12 +86,12 @@ public class User extends AbstractEntity {
         return this;
     }
 
-    public LocalDate getBirthday() {
-        return birthday;
+    public LocalDate getLastPayment() {
+        return lastPayment;
     }
 
-    public User setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
+    public User setLastPayment(LocalDate lastPayment) {
+        this.lastPayment = lastPayment;
         return this;
     }
 
@@ -139,7 +138,7 @@ public class User extends AbstractEntity {
                 ", address='" + address + '\'' +
                 ", phone=" + phone +
                 ", email='" + email + '\'' +
-                ", birthday=" + birthday +
+                ", lastPayment=" + lastPayment +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +

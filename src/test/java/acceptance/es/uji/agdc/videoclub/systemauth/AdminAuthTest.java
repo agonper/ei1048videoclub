@@ -49,7 +49,7 @@ public class AdminAuthTest {
 
     @Test
     public void auth_incorrectAuthenticationWrongPassword_returnsLOGIN_FAILED_PASSWORD() throws Exception {
-        // Given that we're creating a super admin during application initialization, we fail to introduce his/her username
+        // Given that we're creating a super admin during application initialization, we fail to introduce his/her password
         Result authResult = authService.auth(AdminInitializer.ADMIN_USERNAME, "foo");
 
         // Assert that auth returns an error with message: LOGIN_FAILED and the field that fails is PASSWORD

@@ -2,7 +2,6 @@ package unit.es.uji.agdc.videoclub.services;
 
 import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.models.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
@@ -45,7 +44,6 @@ public class UserServiceDBTest {
                 .setAddress("C/Falsa, 123, 1º")
                 .setPhone(693582471)
                 .setEmail("pacosd@hotmail.com")
-                .setBirthday(LocalDate.of(2016, 1, 20))
                 .setUsername("paquito69")
                 .setPassword("pacosd69")
                 .setRole(User.Role.MEMBER);

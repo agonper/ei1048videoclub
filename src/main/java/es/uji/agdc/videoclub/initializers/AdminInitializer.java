@@ -40,7 +40,6 @@ public class AdminInitializer {
                 .setAddress("C/El Mejor Videoclub, nª1, bajo")
                 .setPhone(693582471)
                 .setEmail("admin@videoclub.com")
-                .setBirthday(LocalDate.of(1986, 5, 20))
                 .setUsername(ADMIN_USERNAME)
                 .setPassword("1234");
 

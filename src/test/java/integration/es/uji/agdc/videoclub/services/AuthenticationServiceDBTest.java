@@ -42,7 +42,6 @@ public class AuthenticationServiceDBTest {
                 .setAddress("C/Falsa, 123, 1º")
                 .setPhone(693582471)
                 .setEmail("pacosd@hotmail.com")
-                .setBirthday(LocalDate.of(2016, 1, 20))
                 .setUsername("paquito69")
                 .setPassword("pacosd69");
     }
