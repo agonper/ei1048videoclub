@@ -4,8 +4,8 @@ import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.helpers.PasswordEncryptorBCrypt;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.AuthenticationService;
+import es.uji.agdc.videoclub.services.AuthenticationServiceDB;
 import es.uji.agdc.videoclub.services.UserService;
-import es.uji.agdc.videoclub.services.UserServiceDB;
 import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -32,14 +32,15 @@ public class LoginController {
     Button loginButton;
 
     // Utility objects
-    AuthenticationService authService;
-    User.Role userRole;
+    private AuthenticationService authService;
+    private User.Role userRole;
+    private UserService userService;
 
     @Autowired
-    public LoginController() {
+    public LoginController(UserService service) {
+        this.userService = service;
         PasswordEncryptor passEncrypt = new PasswordEncryptorBCrypt();
-        //UserService userService = new UserServiceDB();
-        //authService = new AuthenticationServiceDB(userService, passEncrypt);
+        authService = new AuthenticationServiceDB(userService, passEncrypt);
     }
 
     // Method used by JavaFX to initialize the FXML elements
