@@ -3,9 +3,7 @@ package es.uji.agdc.videoclub.controllers;
 import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.helpers.PasswordEncryptorBCrypt;
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.AuthenticationService;
-import es.uji.agdc.videoclub.services.AuthenticationServiceDB;
 import es.uji.agdc.videoclub.services.UserService;
 import es.uji.agdc.videoclub.services.UserServiceDB;
 import es.uji.agdc.videoclub.services.utils.Result;
@@ -14,10 +12,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by daniel on 1/12/16.
  */
+
+@Component
 public class LoginController {
 
     @FXML
@@ -33,12 +35,17 @@ public class LoginController {
     AuthenticationService authService;
     User.Role userRole;
 
-    // Method used by JavaFX
-    @FXML
-    private void initialize() {
+    @Autowired
+    public LoginController() {
         PasswordEncryptor passEncrypt = new PasswordEncryptorBCrypt();
         //UserService userService = new UserServiceDB();
         //authService = new AuthenticationServiceDB(userService, passEncrypt);
+    }
+
+    // Method used by JavaFX to initialize the FXML elements
+    @FXML
+    private void initialize() {
+
     }
 
     @FXML
