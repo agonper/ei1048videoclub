@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <BorderPane fx:id="mainSection_top_container">
+            <top>
+                <fx:include source="profile/section_and_loginBar.fxml"/>
+            </top>
+            <bottom>
+                <fx:include source="searchBar.fxml"/>
+            </bottom>
+        </BorderPane>
+    </top>
+    <center>
+        <BorderPane fx:id="mainSection_search_result_container">
+            <center>
+                <fx:include source="searchSection.fxml"/>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

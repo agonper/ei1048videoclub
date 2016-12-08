@@ -54,10 +54,10 @@ public class Main extends Application {
         try {
             // Load and initialize the fxml
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/views/root.fxml"));
+            loader.setLocation(Main.class.getResource("/views/app/root.fxml"));
             rootLayout = (BorderPane) loader.load();
 
-            GridPane login = (GridPane) loadLoginLayout();
+            BorderPane login = (BorderPane) loadLoginLayout();
             rootLayout.setCenter(login);
         }
         catch (IOException e) {
@@ -67,9 +67,16 @@ public class Main extends Application {
 
     private Pane loadLoginLayout() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("/views/login.fxml"));
-        GridPane login = (GridPane) loader.load();
+        loader.setLocation(Main.class.getResource("/views/app/auth/login.fxml"));
+        Pane login = loader.load();
         return login;
+    }
+
+    private Pane loadMainSection() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("/views/app/mainSection/mainSection.fxml"));
+        Pane mainSection = loader.load();
+        return mainSection;
     }
 
     private void showScenes() {

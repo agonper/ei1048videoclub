@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" style="-fx-border-color: black">
+   <center>
+      <TextField BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="80.0" />
+         </BorderPane.margin>
+      </TextField>
+   </center>
+   <right>
+      <Button mnemonicParsing="false" text="Buscar películas" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="40.0" right="80.0" />
+         </BorderPane.margin>
+      </Button>
+   </right>
+</BorderPane>

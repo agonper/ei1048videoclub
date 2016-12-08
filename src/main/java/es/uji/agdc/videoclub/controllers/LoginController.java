@@ -1,5 +1,14 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
+import es.uji.agdc.videoclub.helpers.PasswordEncryptorBCrypt;
+import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.repositories.UserRepository;
+import es.uji.agdc.videoclub.services.AuthenticationService;
+import es.uji.agdc.videoclub.services.AuthenticationServiceDB;
+import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.UserServiceDB;
+import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,10 +29,16 @@ public class LoginController {
     @FXML
     Button loginButton;
 
+    // Utility objects
+    AuthenticationService authService;
+    User.Role userRole;
+
     // Method used by JavaFX
     @FXML
     private void initialize() {
-
+        PasswordEncryptor passEncrypt = new PasswordEncryptorBCrypt();
+        //UserService userService = new UserServiceDB();
+        //authService = new AuthenticationServiceDB(userService, passEncrypt);
     }
 
     @FXML
@@ -51,14 +66,15 @@ public class LoginController {
             voidPasswordAlert.showAndWait();
         }
         else {
-            try {
-                //TODO: Introduce credentials management
+            Result loginResult = authService.auth(introducedUsername, introducedPassword);
+
+            if (loginResult.isOk()) {
+                // TODO: Get user role
                 successfulLogin_ViewChange();
             }
-            //TODO: Introduce login failed exceptions
-            catch (Exception e) {
-                //TODO: Introduce login failed message to the user
-            }
+
+            else
+                unsuccessfulLogin_errorMessage();
         }
     }
 
@@ -76,8 +92,11 @@ public class LoginController {
         //TODO: Change the view
     }
 
-    //TODO: Get user role
-    //private String obtainUserRole(User user) {
-
-    //}
+    private void unsuccessfulLogin_errorMessage() {
+        Alert incorrectLogin = new Alert(Alert.AlertType.ERROR);
+        incorrectLogin.setTitle("Autentificación fallida");
+        incorrectLogin.setHeaderText("Se ha introducido un nombre de usuario inexistente o una contraseña incorrecta.");
+        login_PasswordField.clear();
+        incorrectLogin.showAndWait();
+    }
 }

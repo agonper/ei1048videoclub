@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <top>
+        <BorderPane>
+            <top>
+                <fx:include source="section_and_loginBar.fxml" />
+            </top>
+            <bottom>
+                <Label alignment="CENTER" text="NOMBRE USUARIO" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding></Label>
+            </bottom>
+        </BorderPane>
+    </top>
+    
+    <center>
+        <TabPane>
+            <Tab closable="false" text="Datos personales">
+                <fx:include source="personal_data.fxml"/>
+            </Tab>
+            <Tab closable="false" text="Películas alquiladas">
+                <fx:include source="rented_movies.fxml"/>
+            </Tab>
+            <Tab closable="false" text="Opciones administrativas">
+                <fx:include source="administrative_options.fxml"/>
+            </Tab>
+            <Tab closable="false" text="Listado de usuarios">
+                <fx:include source="users_list.fxml"/>
+            </Tab>
+        </TabPane>
+    </center>
+
+</BorderPane>
