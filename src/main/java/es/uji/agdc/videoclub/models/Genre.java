@@ -4,10 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by alberto on 9/12/16.
+ * Genre entity from the business logic
  */
 @Entity
 @Table(name = "genres")
@@ -16,7 +17,7 @@ public class Genre extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "genres")
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<>();
 
     protected Genre() {
     }

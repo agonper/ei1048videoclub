@@ -4,10 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by alberto on 9/12/16.
+ * Director entity from the business logic
  */
 @Entity
 @Table(name = "directors")
@@ -16,7 +17,7 @@ public class Director extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "directors")
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<>();
 
     protected Director() {
     }

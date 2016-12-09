@@ -66,6 +66,13 @@ public class ActorRepositoryTest {
     }
 
     @Test
+    public void newActorHasNoMovies() throws Exception {
+        Actor savedActor = repository.save(actor);
+        assertNotNull(savedActor.getMovies());
+        assertEquals(0, savedActor.getMovies().size());
+    }
+
+    @Test
     public void modifyActor() throws Exception {
         Actor savedActor = repository.save(actor);
         String newActorName = "John Doe";

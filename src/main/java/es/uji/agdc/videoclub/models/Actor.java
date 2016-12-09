@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by alberto on 9/12/16.
+ * Actor entity from the business logic
  */
 @Entity
 @Table(name = "actors")
