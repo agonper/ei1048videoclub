@@ -2,7 +2,7 @@ package integration.es.uji.agdc.videoclub.services;
 
 import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.models.UserFactory;
+import es.uji.agdc.videoclub.models.utils.UserFactory;
 import es.uji.agdc.videoclub.services.AuthenticationService;
 import es.uji.agdc.videoclub.services.UserService;
 import es.uji.agdc.videoclub.services.utils.Result;
@@ -13,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-
-import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 

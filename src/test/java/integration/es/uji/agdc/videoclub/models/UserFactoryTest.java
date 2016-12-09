@@ -1,7 +1,7 @@
 package integration.es.uji.agdc.videoclub.models;
 
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.models.UserFactory;
+import es.uji.agdc.videoclub.models.utils.UserFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
