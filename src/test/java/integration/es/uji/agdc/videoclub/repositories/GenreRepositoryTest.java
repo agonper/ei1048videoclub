@@ -33,7 +33,7 @@ public class GenreRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        genre = new Genre("Comedia");
+        genre = new Genre("Comedy");
     }
 
     @Test

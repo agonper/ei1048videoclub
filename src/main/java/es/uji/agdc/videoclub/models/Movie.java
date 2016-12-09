@@ -1,8 +1,8 @@
 package es.uji.agdc.videoclub.models;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Movie entity from the business domain, contains actors, directors and genres
@@ -21,15 +21,15 @@ public class Movie extends AbstractEntity{
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "movie_actors")
-    private Set<Actor> actors = new HashSet<>();
+    private List<Actor> actors = new LinkedList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "movie_directors")
-    private Set<Director> directors = new HashSet<>();
+    private List<Director> directors = new LinkedList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "movie_genres")
-    private Set<Genre> genres = new HashSet<>();
+    private List<Genre> genres = new LinkedList<>();
 
     @Column(nullable = false, columnDefinition = "text")
     private String description;
@@ -82,33 +82,47 @@ public class Movie extends AbstractEntity{
         return this;
     }
 
-    public Set<Actor> getActors() {
+    public List<Actor> getActors() {
         return actors;
     }
 
-    public Set<Director> getDirectors() {
+    public List<Director> getDirectors() {
         return directors;
     }
 
-    public Set<Genre> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public Set<Actor> addActor(Actor actor) {
-        Set<Actor> actors = getActors();
+    public Movie addActor(Actor actor) {
+        List<Actor> actors = getActors();
         actors.add(actor);
-        return actors;
+        return this;
     }
 
-    public Set<Director> addDirector(Director director) {
-        Set<Director> directors = getDirectors();
+    public Movie addDirector(Director director) {
+        List<Director> directors = getDirectors();
         directors.add(director);
-        return directors;
+        return this;
     }
 
-    public Set<Genre> addGenre(Genre genre) {
-        Set<Genre> genres = getGenres();
+    public Movie addGenre(Genre genre) {
+        List<Genre> genres = getGenres();
         genres.add(genre);
-        return genres;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "title='" + title + '\'' +
+                ", titleOv='" + titleOv + '\'' +
+                ", year=" + year +
+                ", actors=" + actors +
+                ", directors=" + directors +
+                ", genres=" + genres +
+                ", description='" + description + '\'' +
+                ", availableCopies=" + availableCopies +
+                "} " + super.toString();
     }
 }
