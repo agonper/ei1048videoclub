@@ -1,7 +1,7 @@
 package es.uji.agdc.videoclub.initializers;
 
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.models.UserFactory;
+import es.uji.agdc.videoclub.models.utils.UserFactory;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import org.slf4j.Logger;
@@ -11,7 +11,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 /**

@@ -1,4 +1,6 @@
-package es.uji.agdc.videoclub.models;
+package es.uji.agdc.videoclub.models.utils;
+
+import es.uji.agdc.videoclub.models.User;
 
 /**
  * Created by Alberto on 03/12/2016.

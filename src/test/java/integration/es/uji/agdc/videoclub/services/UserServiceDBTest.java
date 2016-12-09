@@ -2,7 +2,7 @@ package integration.es.uji.agdc.videoclub.services;
 
 import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.models.UserFactory;
+import es.uji.agdc.videoclub.models.utils.UserFactory;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
