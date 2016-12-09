@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.services.AuthenticationService;
 import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.fxml.FXML;
@@ -88,7 +89,7 @@ public class LoginController {
 
 
     private void successfulLogin_ViewChange() {
-        //TODO: Change the view
+        Main.setState(Main.State.APPLICATION);
     }
 
     private void unsuccessfulLogin_errorMessage() {

@@ -1,13 +1,9 @@
 package es.uji.agdc.videoclub.views;
 
-import es.uji.agdc.videoclub.Main;
-import javafx.fxml.FXMLLoader;
+import es.uji.agdc.videoclub.models.User;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Callback;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,9 +21,6 @@ public class AuthScreen extends AbstractScreen {
     // Auth screen configuration
     private String title = "Aplicación videoclub";
 
-    @Autowired
-    ApplicationContext context;
-
     /**
      * Window functionality
      */
@@ -40,12 +33,7 @@ public class AuthScreen extends AbstractScreen {
 
     private void buildRootLayout() {
         try {
-            // Load and initialize the fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app/root.fxml"));
-            loader.setControllerFactory(aClass -> context.getBean(aClass));
-
-            root_Auth = (BorderPane) loader.load();
-
+            root_Auth = (BorderPane) super.loadScreen("/views/app/root.fxml");
             BorderPane login = (BorderPane) loadLoginLayout();
             root_Auth.setCenter(login);
         }
@@ -54,12 +42,15 @@ public class AuthScreen extends AbstractScreen {
         }
     }
 
-    private Pane loadLoginLayout() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app/auth/login.fxml"));
-        loader.setControllerFactory(aClass -> context.getBean(aClass));
-
-        Pane login = loader.load();
-        return login;
+    private Pane loadLoginLayout() {
+        try {
+            Pane login = super.loadScreen("/views/app/auth/login.fxml");
+            return login;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void showScene() {
