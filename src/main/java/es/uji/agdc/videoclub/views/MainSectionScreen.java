@@ -4,6 +4,7 @@ import es.uji.agdc.videoclub.models.User;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -15,9 +16,7 @@ import java.io.IOException;
 @Component
 public class MainSectionScreen extends AbstractScreen {
 
-    private BorderPane main_section_Auth;
-    private User loggedUser;
-
+    private BorderPane main_section;
 
     @Override
     public void showScreen() {
@@ -27,7 +26,7 @@ public class MainSectionScreen extends AbstractScreen {
 
     private void buildMainSection() {
         try {
-            this.main_section_Auth = (BorderPane) loadMainSection();
+            this.main_section = (BorderPane) loadMainSection();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -40,7 +39,7 @@ public class MainSectionScreen extends AbstractScreen {
     }
 
     private void showScene() {
-        Scene scene = new Scene(main_section_Auth);
+        Scene scene = new Scene(main_section);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

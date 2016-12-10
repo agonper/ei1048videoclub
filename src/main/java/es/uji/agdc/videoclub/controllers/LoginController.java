@@ -1,7 +1,11 @@
 package es.uji.agdc.videoclub.controllers;
 
 import es.uji.agdc.videoclub.Main;
+import es.uji.agdc.videoclub.helpers.AlertFactory;
+import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.AuthenticationService;
+import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
+import es.uji.agdc.videoclub.services.UserService;
 import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -31,10 +35,14 @@ public class LoginController {
 
     // Utility objects
     private AuthenticationService authService;
+    private UserService userService;
+
+    private User loggedUser;
 
     @Autowired
-    public LoginController(AuthenticationService service) {
+    public LoginController(AuthenticationService service, UserService userService) {
         this.authService = service;
+        this.userService = userService;
     }
 
     // Method used by JavaFX to initialize the FXML elements
@@ -53,30 +61,27 @@ public class LoginController {
         //TODO: Search a better method than dialogs (more like the web forms)
 
         if (voidUsername) {
-            Alert voidUsernameAlert = new Alert(Alert.AlertType.ERROR);
-            voidUsernameAlert.setTitle("Usuario vacío");
-            voidUsernameAlert.setHeaderText("No se ha introducido ningún nombre de usuario");
+            Alert voidUsername_Alert = AlertFactory.create_voidUsername_Alert();
             login_UsernameTextfield.clear();
-            voidUsernameAlert.showAndWait();
+            voidUsername_Alert.showAndWait();
         }
 
         else if (voidPassword) {
-            Alert voidPasswordAlert = new Alert(Alert.AlertType.ERROR);
-            voidPasswordAlert.setTitle("Contraseña vacía");
-            voidPasswordAlert.setHeaderText("No se ha introducido ninguna contraseña");
+            Alert voidPassword_Alert = AlertFactory.create_voidPassword_Alert();
             login_PasswordField.clear();
-            voidPasswordAlert.showAndWait();
+            voidPassword_Alert.showAndWait();
         }
         else {
             Result loginResult = authService.auth(introducedUsername, introducedPassword);
 
             if (loginResult.isOk()) {
-                // TODO: Get user role
-                successfulLogin_ViewChange();
+                loggedUser = userService.findBy(UserQueryTypeSingle.USERNAME, introducedUsername).get();
+                Main.setLoggedUser(loggedUser);
+                successfulLogin_Process();
             }
 
             else
-                unsuccessfulLogin_errorMessage();
+                unsuccessfulLogin_Process();
         }
     }
 
@@ -90,15 +95,13 @@ public class LoginController {
 
 
 
-    private void successfulLogin_ViewChange() {
+    private void successfulLogin_Process() {
         Main.setState(Main.State.APPLICATION);
     }
 
-    private void unsuccessfulLogin_errorMessage() {
-        Alert incorrectLogin = new Alert(Alert.AlertType.ERROR);
-        incorrectLogin.setTitle("Autentificación fallida");
-        incorrectLogin.setHeaderText("Se ha introducido un nombre de usuario inexistente o una contraseña incorrecta.");
+    private void unsuccessfulLogin_Process() {
+        Alert incorrectLogin_Alert = AlertFactory.create_incorrectLogin_Alert();
         login_PasswordField.clear();
-        incorrectLogin.showAndWait();
+        incorrectLogin_Alert.showAndWait();
     }
 }

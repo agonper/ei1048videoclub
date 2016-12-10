@@ -1,8 +1,10 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.Main;
+import es.uji.agdc.videoclub.models.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import org.springframework.asm.Label;
+import javafx.scene.control.Label;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,5 +35,15 @@ public class ProfileSectionController {
     @FXML
     Button closeSession_button;
 
+    @FXML
+    public void closeSession() {
+        Main.setState(Main.State.LOGIN);
+    }
 
+    // Method used by JavaFX to initialize the FXML elements
+    @FXML
+    private void initialize() {
+        User user = Main.getLoggedUser();
+        username_lb.setText(user.getUsername());
+    }
 }

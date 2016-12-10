@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub;
 
+import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.views.AuthScreen;
 import es.uji.agdc.videoclub.views.MainSectionScreen;
 import javafx.scene.Scene;
@@ -21,12 +22,12 @@ import javafx.stage.Stage;
 @SpringBootApplication
 public class Main extends Application {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static Stage primaryStage;
     private static ApplicationContext context;
 
     private static String[] args;
     private static State actualState = State.LOGIN;
+    private static User loggedUser;
 
     public enum State {
         LOGIN, APPLICATION
@@ -57,5 +58,21 @@ public class Main extends Application {
             mainScreen.setPrimaryStage(primaryStage);
             mainScreen.showScreen();
         }
+        else {
+            actualState = State.LOGIN;
+            primaryStage.close();
+            AuthScreen authScreen = context.getBean(AuthScreen.class);
+            authScreen.setPrimaryStage(primaryStage);
+            authScreen.showScreen();
+        }
+    }
+
+    //FIXME: Provisional
+    public static void setLoggedUser(User user) {
+        Main.loggedUser = user;
+    }
+
+    public static User getLoggedUser() {
+        return Main.loggedUser;
     }
 }
