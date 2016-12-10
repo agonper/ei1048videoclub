@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
  * Created by daniel on 1/12/16.
  */
 
+//TODO: Finish
+
 @Component
 public class LoginController {
 

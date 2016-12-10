@@ -2,21 +2,26 @@
 
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.geometry.Insets?>
 <BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
-    <top>
-        <BorderPane fx:id="mainSection_top_container">
-            <top>
-                <fx:include source="profile/section_and_loginBar.fxml"/>
-            </top>
-            <bottom>
-                <fx:include source="searchBar.fxml"/>
-            </bottom>
-        </BorderPane>
-    </top>
+    <left>
+        <HBox>
+            <fx:include source="profile/profileSection.fxml" />
+            <Separator orientation="VERTICAL"/>
+            <BorderPane.margin>
+                <Insets right="10.0"/>
+            </BorderPane.margin>
+        </HBox>
+    </left>
     <center>
         <BorderPane fx:id="mainSection_search_result_container">
+            <top>
+                <fx:include source="searchBar.fxml" />
+            </top>
             <center>
-                <fx:include source="searchSection.fxml"/>
+                <fx:include source="searchSection.fxml" />
             </center>
         </BorderPane>
     </center>
