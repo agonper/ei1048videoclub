@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Director entity from the business logic
@@ -17,7 +17,7 @@ public class Director extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "directors")
-    private Set<Movie> movies = new HashSet<>();
+    private List<Movie> movies = new LinkedList<>();
 
     protected Director() {
     }
@@ -35,7 +35,14 @@ public class Director extends AbstractEntity {
         return this;
     }
 
-    public Set<Movie> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
+    }
+
+    @Override
+    public String toString() {
+        return "Director{" +
+                "name='" + name + '\'' +
+                "} " + super.toString();
     }
 }

@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Genre entity from the business logic
@@ -17,7 +17,7 @@ public class Genre extends AbstractEntity {
     private String name;
 
     @ManyToMany(mappedBy = "genres")
-    private Set<Movie> movies = new HashSet<>();
+    private List<Movie> movies = new LinkedList<>();
 
     protected Genre() {
     }
@@ -35,7 +35,14 @@ public class Genre extends AbstractEntity {
         return this;
     }
 
-    public Set<Movie> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
+    }
+
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "name='" + name + '\'' +
+                "} " + super.toString();
     }
 }
