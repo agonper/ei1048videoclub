@@ -32,8 +32,8 @@ public class ApplicationStateData {
     public static void setNewState(ApplicationState newState) {
         boolean newStateIs_MainSection = newState == ApplicationState.MAIN_SECTION;
         boolean oldStateIs_Login = ApplicationStateData.actualState == ApplicationState.LOGIN;
-        boolean oldStateIs_MainSection = newStateIs_MainSection;
-        boolean newStateIs_Login = oldStateIs_Login;
+        boolean oldStateIs_MainSection = ApplicationStateData.actualState == ApplicationState.MAIN_SECTION;
+        boolean newStateIs_Login = newState == ApplicationState.LOGIN;
 
         if (newStateIs_MainSection && oldStateIs_Login) {
             ApplicationStateData.actualState = ApplicationState.MAIN_SECTION;

@@ -31,14 +31,13 @@ public class ProfileSectionController {
     Button closeSession_button;
 
     // Data & inner sections
-    private User loggedUser;
-    private PersonalDataScreen personalData;
+    private PersonalDataScreen personalData = new PersonalDataScreen();
 
 
     // Method used by JavaFX to initialize the FXML elements
     @FXML
     private void initialize() {
-        this.loggedUser = ApplicationStateData.getLoggedUser();
+        User loggedUser = ApplicationStateData.getLoggedUser();
         username_lb.setText(loggedUser.getUsername());
         if (loggedUser.isMember()) {
             //TODO: Delete admin options
@@ -47,8 +46,8 @@ public class ProfileSectionController {
 
     @FXML
     public void showPersonalData_Screen() {
-        if (personalData == null || personalData.isOpen() == false) {
-            personalData = new PersonalDataScreen(loggedUser);
+        if (personalData.isOpen() == false) {
+            personalData = new PersonalDataScreen();
             personalData.showScreen();
         }
     }
@@ -71,9 +70,10 @@ public class ProfileSectionController {
 
     @FXML
     public void closeSession() {
-        this.loggedUser = null;
         if (personalData.isOpen())
             personalData.close();
+
+        ApplicationStateData.setLoggedUser(null);
         ApplicationStateData.setNewState(ApplicationState.LOGIN);
     }
 

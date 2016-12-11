@@ -17,6 +17,10 @@ public class PersonalDataScreen extends AbstractScreen {
     private Stage personalDataStage = new Stage();
 
 
+    public PersonalDataScreen() {
+
+    }
+
     /** Window functionality */
 
     @Override
