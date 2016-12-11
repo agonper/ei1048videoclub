@@ -45,5 +45,8 @@ public class ProfileSectionController {
     private void initialize() {
         User user = Main.getLoggedUser();
         username_lb.setText(user.getUsername());
+        if (user.isMember()) {
+            //TODO: Delete admin options
+        }
     }
 }
