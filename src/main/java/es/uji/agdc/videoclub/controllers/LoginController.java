@@ -94,7 +94,6 @@ public class LoginController {
     }
 
 
-
     private void successfulLogin_Process() {
         Main.setState(Main.State.APPLICATION);
     }

@@ -2,6 +2,7 @@ package es.uji.agdc.videoclub.controllers;
 
 import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.views.PersonalDataScreen;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,18 +36,47 @@ public class ProfileSectionController {
     @FXML
     Button closeSession_button;
 
-    @FXML
-    public void closeSession() {
-        Main.setState(Main.State.LOGIN);
-    }
+    private User user;
+    private PersonalDataScreen personalData;
 
     // Method used by JavaFX to initialize the FXML elements
     @FXML
     private void initialize() {
-        User user = Main.getLoggedUser();
+        this.user = Main.getLoggedUser();
         username_lb.setText(user.getUsername());
         if (user.isMember()) {
             //TODO: Delete admin options
         }
+    }
+
+    //TODO: Finish controller
+    @FXML
+    public void showPersonalData_Screen() {
+        //TODO: Close when the session is closed
+        if (personalData == null || !personalData.isOpen()) {
+            personalData = new PersonalDataScreen(user);
+            personalData.showScreen();
+        }
+    }
+
+    @FXML
+    public void showRentedMovies_Screen() {
+        System.out.println("Rented movies");
+    }
+
+    @FXML
+    public void showAdministration_Screen() {
+        System.out.println("Administration screen");
+    }
+
+    @FXML
+    public void showListOfUsers_Screen() {
+        System.out.println("List of users");
+    }
+
+    @FXML
+    public void closeSession() {
+        this.user = null;
+        Main.setState(Main.State.LOGIN);
     }
 }
