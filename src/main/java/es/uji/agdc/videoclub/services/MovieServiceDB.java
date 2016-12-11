@@ -1,7 +1,9 @@
 package es.uji.agdc.videoclub.services;
 
 import es.uji.agdc.videoclub.models.Movie;
+import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,7 +15,12 @@ import java.util.stream.Stream;
 @Service
 public class MovieServiceDB implements MovieService{
 
+    private MovieRepository movieRepository;
 
+    @Autowired
+    public MovieServiceDB(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
 
     @Override
     public Result create(Movie movie) {
@@ -31,8 +38,8 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
-    public Stream<Movie> findAll() {
-        return null;
+    public Stream<Movie> findAll() { //FIXME Remove me
+        return movieRepository.findAll();
     }
 
     @Override

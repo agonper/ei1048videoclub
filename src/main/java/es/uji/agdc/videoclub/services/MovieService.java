@@ -7,7 +7,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Created by Alberto on 11/12/2016.
+ * Movie service interface that acts as a gateway between the user and the business logic.
+ *
+ * Every movie service must implement this interface.
  */
 public interface MovieService {
 
