@@ -17,6 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 /**
@@ -58,7 +60,32 @@ public class MovieRepositoryTest {
         assertEquals(movie.getDescription(), savedMovie.getDescription());
     }
 
-    //TODO Find by title and year
+    @Test
+    public void findMovieByTitleAndYear_matchingCase() throws Exception {
+        repository.save(movie);
+        Optional<Movie> possibleMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear());
+        assertTrue(possibleMovie.isPresent());
+        assertEquals(movie.getTitle(), possibleMovie.get().getTitle());
+        assertEquals(movie.getYear(), possibleMovie.get().getYear());
+    }
+
+    @Test
+    public void findMovieByTitleAndYear_lowerCase() throws Exception {
+        repository.save(movie);
+        Optional<Movie> possibleMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle().toLowerCase(), movie.getYear());
+        assertTrue(possibleMovie.isPresent());
+        assertEquals(movie.getTitle(), possibleMovie.get().getTitle());
+        assertEquals(movie.getYear(), possibleMovie.get().getYear());
+    }
+
+    @Test
+    public void findMovieByTitleAndYear_upperCase() throws Exception {
+        repository.save(movie);
+        Optional<Movie> possibleMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle().toUpperCase(), movie.getYear());
+        assertTrue(possibleMovie.isPresent());
+        assertEquals(movie.getTitle(), possibleMovie.get().getTitle());
+        assertEquals(movie.getYear(), possibleMovie.get().getYear());
+    }
 
     @Test
     public void modifyMovie() throws Exception {
@@ -69,7 +96,13 @@ public class MovieRepositoryTest {
         assertEquals(4, modifiedMovie.getAvailableCopies());
     }
 
-    //TODO Delete movie
+    @Test
+    public void deleteMovie() throws Exception {
+        Movie savedMovie = repository.save(movie);
+        repository.delete(savedMovie);
+        Optional<Movie> possibleMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear());
+        assertFalse(possibleMovie.isPresent());
+    }
 
     @After
     public void tearDown() throws Exception {

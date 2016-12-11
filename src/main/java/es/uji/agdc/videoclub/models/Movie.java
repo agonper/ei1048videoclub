@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "movies")
-public class Movie extends AbstractEntity{
+public class Movie extends AbstractEntity {
     @Column(nullable = false)
     private String title;
 
