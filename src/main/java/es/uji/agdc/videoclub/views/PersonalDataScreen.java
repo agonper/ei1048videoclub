@@ -30,7 +30,6 @@ public class PersonalDataScreen extends AbstractScreen {
     private void buildPersonalDataScreen() {
         try {
             this.personalDataScreen = (GridPane) super.loadScreen("/views/app/mainSection/profile/personal_data.fxml");
-            //TODO: Finish the screen
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -44,5 +43,9 @@ public class PersonalDataScreen extends AbstractScreen {
 
     public boolean isOpen() {
         return personalDataStage.isShowing();
+    }
+
+    public void close() {
+        personalDataStage.close();
     }
 }

@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.geometry.Insets?>
+
 <BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <left>
         <HBox>
