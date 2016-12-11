@@ -1,13 +1,20 @@
 package es.uji.agdc.videoclub.services;
 
+import es.uji.agdc.videoclub.models.Actor;
+import es.uji.agdc.videoclub.models.Director;
+import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
+import es.uji.agdc.videoclub.validators.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -16,13 +23,17 @@ import java.util.stream.Stream;
 @Service
 public class MovieServiceDB implements MovieService{
 
+    private static Logger log = LoggerFactory.getLogger(MovieServiceDB.class);
+
     private MovieRepository movieRepository;
     private MovieAssetService assetService;
+    private Validator<Movie> validator;
 
     @Autowired
-    public MovieServiceDB(MovieRepository movieRepository, MovieAssetService assetService) {
+    public MovieServiceDB(MovieRepository movieRepository, MovieAssetService assetService, Validator<Movie> validator) {
         this.movieRepository = movieRepository;
         this.assetService = assetService;
+        this.validator = validator;
     }
 
     @Override
@@ -31,15 +42,46 @@ public class MovieServiceDB implements MovieService{
         Result ALREADY_EXISTS = ResultBuilder.error("MOVIE_ALREADY_EXISTS");
 
         if (!movie.isNew()) {
+            log.warn("Tried to create an already persisted movie with ID: " + movie.getId());
             return ALREADY_EXISTS;
+        }
+
+        Result validatorResult = validator.validate(movie);
+        if (validatorResult.isError()) {
+            return validatorResult;
         }
 
         if (movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).isPresent()) {
             return ALREADY_EXISTS;
         }
 
-        movieRepository.save(movie);
+        cleanupAssets(movie);
+
+        Movie savedMovie = movieRepository.save(movie);
+        log.info("Movie saved with ID: " + savedMovie.getId());
         return ResultBuilder.ok();
+    }
+
+    private void cleanupAssets(Movie movie) {
+        // TODO find a way to cleanup this
+
+        // Grab those actors that already exist on the database and replace them
+        movie.setActors(movie.getActors().stream().map(actor -> {
+            Optional<Actor> possibleActor = assetService.findActorByName(actor.getName());
+            return possibleActor.isPresent() ? possibleActor.get() : actor;
+        }).collect(Collectors.toList()));
+
+        // Grab those directors that already exist on the database and replace them
+        movie.setDirectors(movie.getDirectors().stream().map(director -> {
+            Optional<Director> possibleDirector = assetService.findDirectorByName(director.getName());
+            return possibleDirector.isPresent() ? possibleDirector.get() : director;
+        }).collect(Collectors.toList()));
+
+        // Grab those genres that already exist on the database and replace them
+        movie.setGenres(movie.getGenres().stream().map(genre -> {
+            Optional<Genre> possibleGenre = assetService.findGenreByName(genre.getName());
+            return possibleGenre.isPresent() ? possibleGenre.get() : genre;
+        }).collect(Collectors.toList()));
     }
 
     @Override
