@@ -3,6 +3,7 @@ package es.uji.agdc.videoclub;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.views.AuthScreen;
 import es.uji.agdc.videoclub.views.MainSectionScreen;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ public class Main extends Application {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle(authScreen.getTitle());
+        this.primaryStage.setOnCloseRequest(e -> Platform.exit());
 
         authScreen.setPrimaryStage(primaryStage);
         authScreen.showScreen();

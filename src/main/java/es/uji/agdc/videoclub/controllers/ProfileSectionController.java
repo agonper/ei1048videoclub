@@ -52,7 +52,6 @@ public class ProfileSectionController {
     //TODO: Finish controller
     @FXML
     public void showPersonalData_Screen() {
-        //TODO: Close when the session is closed
         if (personalData == null || !personalData.isOpen()) {
             personalData = new PersonalDataScreen(user);
             personalData.showScreen();
@@ -77,6 +76,10 @@ public class ProfileSectionController {
     @FXML
     public void closeSession() {
         this.user = null;
+        if (personalData.isOpen())
+            personalData.close();
         Main.setState(Main.State.LOGIN);
     }
+
+
 }
