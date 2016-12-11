@@ -113,7 +113,7 @@ public class UserServiceDB implements UserService{
     }
 
     @Override
-    public Result remove(User user) {
+    public Result remove(String username) {
         // FIXME Implement
         throw new Error("Unimplemented");
     }
