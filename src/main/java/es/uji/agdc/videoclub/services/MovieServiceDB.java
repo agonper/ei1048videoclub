@@ -3,6 +3,7 @@ package es.uji.agdc.videoclub.services;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
+import es.uji.agdc.videoclub.services.utils.ResultBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +17,29 @@ import java.util.stream.Stream;
 public class MovieServiceDB implements MovieService{
 
     private MovieRepository movieRepository;
+    private MovieAssetService assetService;
 
     @Autowired
-    public MovieServiceDB(MovieRepository movieRepository) {
+    public MovieServiceDB(MovieRepository movieRepository, MovieAssetService assetService) {
         this.movieRepository = movieRepository;
+        this.assetService = assetService;
     }
 
     @Override
     public Result create(Movie movie) {
-        return null;
+
+        Result ALREADY_EXISTS = ResultBuilder.error("MOVIE_ALREADY_EXISTS");
+
+        if (!movie.isNew()) {
+            return ALREADY_EXISTS;
+        }
+
+        if (movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).isPresent()) {
+            return ALREADY_EXISTS;
+        }
+
+        movieRepository.save(movie);
+        return ResultBuilder.ok();
     }
 
     @Override
