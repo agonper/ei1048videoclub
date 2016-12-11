@@ -43,9 +43,9 @@ public interface UserService {
     Result update(User user);
 
     /**
-     * Deletes the given user entity, it must be a non-new entity
-     * @param user A non-new user entity
+     * Deletes a user by its given username. Returns error if the user was not found
+     * @param username The username of the user to be deleted
      * @return An OK {@link Result}, if everything went fine. If not an ERROR.
      */
-    Result delete(User user);
+    Result remove(String username);
 }
