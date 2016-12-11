@@ -6,6 +6,7 @@ import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.MovieAssetService;
+import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
 import es.uji.agdc.videoclub.services.MovieService;
 import es.uji.agdc.videoclub.services.MovieServiceDB;
 import es.uji.agdc.videoclub.services.utils.Result;
@@ -191,6 +192,58 @@ public class MovieServiceDBTest {
         when(movieRepository.findAll()).thenReturn(Stream.of(movie));
         Stream<Movie> allMovies = service.findAll();
         assertEquals(1, allMovies.count());
+    }
+
+    @Test
+    public void findBy_withNoValues_returnsEmpty() throws Exception {
+        Optional<Movie> possibleMovie = service.findBy(MovieQueryTypeSingle.ID);
+        assertFalse(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findBy_idWithValidLong_returnsMovie() throws Exception {
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(movie));
+        Optional<Movie> possibleMovie = service.findBy(MovieQueryTypeSingle.ID, String.valueOf(0));
+        assertTrue(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findBy_idWithEmptyLong_returnsEmpty() throws Exception {
+        Optional<Movie> possibleMovie = service.findBy(MovieQueryTypeSingle.ID);
+        verify(movieRepository, never()).findOne(anyLong());
+        assertFalse(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findBy_idWithNonValidLong_returnsEmpty() throws Exception {
+        Optional<Movie> possibleMovie = service.findBy(MovieQueryTypeSingle.ID, "blabla");
+        verify(movieRepository, never()).findOne(anyLong());
+        assertFalse(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findBy_titleAndYearWithValidTitleAndYear_returnsMovie() throws Exception {
+        when(movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()))
+                .thenReturn(Optional.of(movie));
+        Optional<Movie> possibleMovie =
+                service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle(), String.valueOf(movie.getYear()));
+        assertTrue(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findBy_titleAndYearWithEmptyYear_returnsEmpty() throws Exception {
+        Optional<Movie> possibleMovie =
+                service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle());
+        verify(movieRepository, never()).findByTitleIgnoreCaseAndYear(anyString(), anyInt());
+        assertFalse(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findBy_titleAndYearWithInvalidYear_returnsEmpty() throws Exception {
+        Optional<Movie> possibleMovie =
+                service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle(), "dos mil once");
+        verify(movieRepository, never()).findByTitleIgnoreCaseAndYear(anyString(), anyInt());
+        assertFalse(possibleMovie.isPresent());
     }
 
     @After

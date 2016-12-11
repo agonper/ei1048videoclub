@@ -1,11 +1,10 @@
-package integration.es.uji.agdc.videoclub.services;
+package acceptance.es.uji.agdc.videoclub.moviemanagement;
 
 import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.Actor;
 import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
-import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
 import es.uji.agdc.videoclub.services.MovieService;
 import org.junit.After;
@@ -17,9 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -29,15 +26,13 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @Transactional
-public class MovieServiceDBTest {
+public class MovieRecoveryTest {
+
     @Autowired
     private MovieService service;
-
-    @Autowired
-    private MovieRepository repository;
-
+    
     private Movie movie;
-
+    
     @Before
     public void setUp() throws Exception {
         movie = new Movie()
@@ -56,40 +51,32 @@ public class MovieServiceDBTest {
     }
 
     @Test
-    public void create() throws Exception {
+    public void findByTitleAndYear_existingMovie_showsUp() throws Exception {
+        // Given that the film is on the system
         service.create(movie);
-        Optional<Movie> possibleMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear());
+
+        // We try to find it via its title and year
+        Optional<Movie> possibleMovie = service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle(), String.valueOf(movie.getYear()));
+
+        // Assert that the movie is present and has that title and year
         assertTrue(possibleMovie.isPresent());
-        Movie recoveredMovie = possibleMovie.get();
-        assertTrue(!recoveredMovie.isNew());
-        assertEquals(this.movie.getTitle(), recoveredMovie.getTitle());
-        assertEquals(this.movie.getTitleOv(), recoveredMovie.getTitleOv());
-        assertEquals(this.movie.getActors().size(), recoveredMovie.getActors().size());
-        assertEquals(this.movie.getDirectors().size(), recoveredMovie.getDirectors().size());
-        assertEquals(this.movie.getGenres().size(), recoveredMovie.getGenres().size());
-        assertEquals(this.movie.getDescription(), recoveredMovie.getDescription());
-        assertEquals(this.movie.getDescription(), recoveredMovie.getDescription());
+        assertEquals(movie.getTitle(), possibleMovie.get().getTitle());
+        assertEquals(movie.getYear(), possibleMovie.get().getYear());
     }
 
     @Test
-    public void findBy() throws Exception {
-        service.create(movie);
-        Optional<Movie> possibleMovie =
-                service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle(), String.valueOf(movie.getYear()));
-        assertTrue(possibleMovie.isPresent());
-    }
+    public void findByTitleAndYear_nonexistingMovie_notFound() throws Exception {
+        // Given that the film is not on the system
 
-    @Test
-    public void findAll() throws Exception {
-        service.create(movie);
-        Stream<Movie> allMovies = service.findAll();
-        assertTrue(allMovies.count() > 0);
-    }
+        // We try to find it via its title and year
+        Optional<Movie> possibleMovie = service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle(), String.valueOf(movie.getYear()));
 
+        // Assert that the movie is present and has that title and year
+        assertFalse(possibleMovie.isPresent());
+    }
 
     @After
     public void tearDown() throws Exception {
         movie = null;
     }
-
 }

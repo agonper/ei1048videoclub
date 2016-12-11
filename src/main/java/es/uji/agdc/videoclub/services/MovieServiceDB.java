@@ -86,7 +86,45 @@ public class MovieServiceDB implements MovieService{
 
     @Override
     public Optional<Movie> findBy(MovieQueryTypeSingle query, String... values) {
-        return null;
+        if (values.length == 0) {
+            log.warn("findBy() called with 0 values");
+            return Optional.empty();
+        }
+
+        switch (query) {
+            case ID:
+                if (values.length != 1) {
+                    log.warn("findBy(ID) called with " + values.length + " values");
+                    return Optional.empty();
+                }
+                return findOneIfValidId(values[0]);
+            case TITLE_AND_YEAR:
+                if (values.length != 2) {
+                    log.warn("findBy(TITLE_AND_YEAR) called with " + values.length + " values");
+                    return Optional.empty();
+                }
+                return findOneIfValidYear(values[0], values[1]);
+            default:
+                throw new Error("Unimplemented");
+        }
+    }
+
+    private Optional<Movie> findOneIfValidId(String value) {
+        try {
+            return movieRepository.findOne(Long.valueOf(value));
+        } catch (NumberFormatException e) {
+            log.warn("ID couldn't be parsed. " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Movie> findOneIfValidYear(String title, String year) {
+        try {
+            return movieRepository.findByTitleIgnoreCaseAndYear(title, Integer.valueOf(year));
+        } catch (NumberFormatException e) {
+            log.warn("Year couldn't be parsed. " + e.getMessage());
+            return Optional.empty();
+        }
     }
 
     @Override
