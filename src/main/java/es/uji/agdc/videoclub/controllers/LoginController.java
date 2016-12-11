@@ -78,7 +78,6 @@ public class LoginController {
 
             if (loginResult.isOk()) {
                 loggedUser = userService.findBy(UserQueryTypeSingle.USERNAME, introducedUsername).get();
-                ApplicationStateData.setLoggedUser(loggedUser);
                 successfulLogin_Process();
             }
 
@@ -97,6 +96,7 @@ public class LoginController {
 
 
     private void successfulLogin_Process() {
+        ApplicationStateData.setLoggedUser(loggedUser);
         ApplicationStateData.setNewState(ApplicationState.MAIN_SECTION);
     }
 

@@ -7,13 +7,11 @@ import es.uji.agdc.videoclub.views.PersonalDataScreen;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by daniel on 10/12/16.
  */
 
-@Component
 public class ProfileSectionController {
 
     // View components
