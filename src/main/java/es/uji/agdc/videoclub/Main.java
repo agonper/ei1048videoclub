@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub;
 
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.views.AuthScreen;
 import es.uji.agdc.videoclub.views.MainSectionScreen;
@@ -27,12 +28,6 @@ public class Main extends Application {
     private static ApplicationContext context;
 
     private static String[] args;
-    private static State actualState = State.LOGIN;
-    private static User loggedUser;
-
-    public enum State {
-        LOGIN, APPLICATION
-    }
 
     public static void main(String[] args) {
         Main.args = args;
@@ -44,37 +39,13 @@ public class Main extends Application {
         context = SpringApplication.run(Main.class, args);
         AuthScreen authScreen = context.getBean(AuthScreen.class);
 
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle(authScreen.getTitle());
-        this.primaryStage.setOnCloseRequest(e -> Platform.exit());
+        Main.primaryStage = primaryStage;
+        Main.primaryStage.setTitle(authScreen.getTitle());
+        Main.primaryStage.setOnCloseRequest(e -> Platform.exit());
+
+        ApplicationStateData.setConfigurationData(Main.primaryStage, Main.context);
 
         authScreen.setPrimaryStage(primaryStage);
         authScreen.showScreen();
-    }
-
-    public static void setState(State newState) {
-        if (newState == State.APPLICATION) {
-            actualState = State.APPLICATION;
-            primaryStage.close();
-            MainSectionScreen mainScreen = context.getBean(MainSectionScreen.class);
-            mainScreen.setPrimaryStage(primaryStage);
-            mainScreen.showScreen();
-        }
-        else {
-            actualState = State.LOGIN;
-            primaryStage.close();
-            AuthScreen authScreen = context.getBean(AuthScreen.class);
-            authScreen.setPrimaryStage(primaryStage);
-            authScreen.showScreen();
-        }
-    }
-
-    //FIXME: Provisional
-    public static void setLoggedUser(User user) {
-        Main.loggedUser = user;
-    }
-
-    public static User getLoggedUser() {
-        return Main.loggedUser;
     }
 }

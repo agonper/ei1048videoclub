@@ -1,7 +1,8 @@
 package es.uji.agdc.videoclub.controllers;
 
-import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.helpers.AlertFactory;
+import es.uji.agdc.videoclub.helpers.ApplicationState;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.AuthenticationService;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
@@ -19,25 +20,24 @@ import org.springframework.stereotype.Component;
  * Created by daniel on 1/12/16.
  */
 
-//TODO: Finish
-
 @Component
 public class LoginController {
 
+    // View elements
     @FXML
     TextField login_UsernameTextfield;
-
     @FXML
     PasswordField login_PasswordField;
-
     @FXML
     Button loginButton;
 
     // Utility objects
     private AuthenticationService authService;
     private UserService userService;
-
     private User loggedUser;
+
+
+    /** Constructors */
 
     @Autowired
     public LoginController(AuthenticationService service, UserService userService) {
@@ -50,6 +50,8 @@ public class LoginController {
     private void initialize() {
 
     }
+
+    /** Controller actions */
 
     @FXML
     public void handleLoginAction() {
@@ -76,7 +78,7 @@ public class LoginController {
 
             if (loginResult.isOk()) {
                 loggedUser = userService.findBy(UserQueryTypeSingle.USERNAME, introducedUsername).get();
-                Main.setLoggedUser(loggedUser);
+                ApplicationStateData.setLoggedUser(loggedUser);
                 successfulLogin_Process();
             }
 
@@ -95,7 +97,7 @@ public class LoginController {
 
 
     private void successfulLogin_Process() {
-        Main.setState(Main.State.APPLICATION);
+        ApplicationStateData.setNewState(ApplicationState.MAIN_SECTION);
     }
 
     private void unsuccessfulLogin_Process() {

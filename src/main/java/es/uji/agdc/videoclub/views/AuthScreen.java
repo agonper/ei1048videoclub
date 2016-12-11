@@ -1,6 +1,5 @@
 package es.uji.agdc.videoclub.views;
 
-import es.uji.agdc.videoclub.models.User;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -19,11 +18,10 @@ public class AuthScreen extends AbstractScreen {
     private BorderPane root_Auth;
 
     // Auth screen configuration
-    private String title = "Aplicación videoclub";
+    private String title = "Aplicación videoclub - Autentificación";
 
-    /**
-     * Window functionality
-     */
+
+    /** Window functionality */
 
     @Override
     public void showScreen() {
@@ -60,9 +58,7 @@ public class AuthScreen extends AbstractScreen {
     }
 
 
-    /**
-     * Getters & setters
-     */
+    /** Getters & setters */
 
     public String getTitle() {
         return new String(title);

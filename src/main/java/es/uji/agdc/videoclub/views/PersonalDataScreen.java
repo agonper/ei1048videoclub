@@ -1,6 +1,5 @@
 package es.uji.agdc.videoclub.views;
 
-import es.uji.agdc.videoclub.models.User;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -13,19 +12,27 @@ import java.io.IOException;
 
 public class PersonalDataScreen extends AbstractScreen {
 
-    private User loggedUser;
+    // Auth screen elements
     private GridPane personalDataScreen;
     private Stage personalDataStage = new Stage();
 
-    public PersonalDataScreen(User loggedUser) {
-        this.loggedUser = loggedUser;
-    }
+
+    /** Window functionality */
 
     @Override
     public void showScreen() {
         buildPersonalDataScreen();
         showScene();
     }
+
+    public boolean isOpen() {
+        return personalDataStage.isShowing();
+    }
+
+    public void close() {
+        personalDataStage.close();
+    }
+
 
     private void buildPersonalDataScreen() {
         try {
@@ -39,13 +46,5 @@ public class PersonalDataScreen extends AbstractScreen {
     private void showScene() {
         personalDataStage.setScene(new Scene(personalDataScreen));
         personalDataStage.show();
-    }
-
-    public boolean isOpen() {
-        return personalDataStage.isShowing();
-    }
-
-    public void close() {
-        personalDataStage.close();
     }
 }

@@ -12,6 +12,11 @@ import java.io.IOException;
  * Created by daniel on 9/12/16.
  */
 
+/**
+ * All the classes that extends AbstractScreen
+ * 1) - Loads a screen
+ * 2) - Builds that screen
+ */
 public abstract class AbstractScreen {
 
     protected Stage primaryStage;
@@ -24,7 +29,7 @@ public abstract class AbstractScreen {
     }
 
     public void showScreen() {
-        //TODO: Ver qué hacer con las llamadas a este método
+
     }
 
     protected Pane loadScreen(String screenDir) throws IOException {

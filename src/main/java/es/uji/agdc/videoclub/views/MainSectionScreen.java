@@ -1,10 +1,8 @@
 package es.uji.agdc.videoclub.views;
 
-import es.uji.agdc.videoclub.models.User;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,7 +14,14 @@ import java.io.IOException;
 @Component
 public class MainSectionScreen extends AbstractScreen {
 
+    // MainSection screen elements
     private BorderPane main_section;
+
+    // MainSection screen configuration
+    private String title = "Aplicación videoclub - Sección principal";
+
+
+    /** Window functionality */
 
     @Override
     public void showScreen() {
@@ -41,6 +46,7 @@ public class MainSectionScreen extends AbstractScreen {
     private void showScene() {
         Scene scene = new Scene(main_section);
         primaryStage.setScene(scene);
+        primaryStage.setTitle(title);
         primaryStage.show();
     }
 }

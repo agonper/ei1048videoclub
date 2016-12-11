@@ -1,6 +1,7 @@
 package es.uji.agdc.videoclub.controllers;
 
-import es.uji.agdc.videoclub.Main;
+import es.uji.agdc.videoclub.helpers.ApplicationState;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.views.PersonalDataScreen;
 import javafx.fxml.FXML;
@@ -12,52 +13,47 @@ import org.springframework.stereotype.Component;
  * Created by daniel on 10/12/16.
  */
 
-//TODO: Finish
-
 @Component
 public class ProfileSectionController {
 
     // View components
     @FXML
     Label username_lb;
-
     @FXML
     Button personalData_button;
-
     @FXML
     Button rentedMovies_button;
-
     @FXML
     Button adminOptions_button;
-
     @FXML
     Button listOfUsers_button;
-
     @FXML
     Button closeSession_button;
 
-    private User user;
+    // Data & inner sections
+    private User loggedUser;
     private PersonalDataScreen personalData;
+
 
     // Method used by JavaFX to initialize the FXML elements
     @FXML
     private void initialize() {
-        this.user = Main.getLoggedUser();
-        username_lb.setText(user.getUsername());
-        if (user.isMember()) {
+        this.loggedUser = ApplicationStateData.getLoggedUser();
+        username_lb.setText(loggedUser.getUsername());
+        if (loggedUser.isMember()) {
             //TODO: Delete admin options
         }
     }
 
-    //TODO: Finish controller
     @FXML
     public void showPersonalData_Screen() {
-        if (personalData == null || !personalData.isOpen()) {
-            personalData = new PersonalDataScreen(user);
+        if (personalData == null || personalData.isOpen() == false) {
+            personalData = new PersonalDataScreen(loggedUser);
             personalData.showScreen();
         }
     }
 
+    //TODO: Finish controller
     @FXML
     public void showRentedMovies_Screen() {
         System.out.println("Rented movies");
@@ -75,10 +71,10 @@ public class ProfileSectionController {
 
     @FXML
     public void closeSession() {
-        this.user = null;
+        this.loggedUser = null;
         if (personalData.isOpen())
             personalData.close();
-        Main.setState(Main.State.LOGIN);
+        ApplicationStateData.setNewState(ApplicationState.LOGIN);
     }
 
 
