@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.views;
 
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;

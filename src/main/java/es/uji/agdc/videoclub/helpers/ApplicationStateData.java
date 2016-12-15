@@ -12,12 +12,12 @@ import org.springframework.context.ApplicationContext;
 public class ApplicationStateData {
 
     // Configuration objects
-    private static Stage primaryStage;
-    private static ApplicationContext context;
+    private static Stage primaryStage = null;
+    private static ApplicationContext context = null;
 
     // Application state data
     private static ApplicationState actualState = ApplicationState.LOGIN;
-    private static User loggedUser;
+    private static User loggedUser = null;
 
 
     public static void setConfigurationData(Stage primaryStage, ApplicationContext context) {

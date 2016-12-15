@@ -37,7 +37,7 @@
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="200.0" text="Opciones administrativas" fx:id="adminOptions_button" onAction="#showAdministration_Screen">
+      <Button mnemonicParsing="false" prefHeight="36.0" prefWidth="200.0" text="Panel de administración" fx:id="adminOptions_button" onAction="#showAdministrationPanel">
          <VBox.margin>
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>

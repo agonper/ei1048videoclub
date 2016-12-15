@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" maxWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.UsersListController">
+   <center>
+       <ScrollPane prefHeight="400.0" prefWidth="600.0">
+           <TableView fx:id="users_TableView" BorderPane.alignment="CENTER">
+               <columns>
+                   <TableColumn fx:id="DNI_TableColumn" prefWidth="60.0" text="DNI" />
+                   <TableColumn fx:id="completeName_TableColumn" prefWidth="150.0" text="Nombre completo" />
+                   <TableColumn fx:id="address_TableColumn" prefWidth="75.0" text="Dirección" />
+                   <TableColumn fx:id="phone_TableColumn" prefWidth="75.0" text="Teléfono" />
+                   <TableColumn fx:id="email_TableColumn" prefWidth="150.0" text="Correo electrónico" />
+                   <TableColumn fx:id="lastPayment_TableColumn" prefWidth="150.0" text="Fecha último pago" />
+                   <TableColumn fx:id="username_TableColumn" prefWidth="150.0" text="Nombre de usuario" />
+                   <TableColumn fx:id="role_TableColumn" prefWidth="60.0" text="Rol" />
+               </columns>
+           </TableView>
+       </ScrollPane>
+   </center>
+</BorderPane>
