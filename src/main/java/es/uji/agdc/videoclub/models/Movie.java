@@ -86,12 +86,24 @@ public class Movie extends AbstractEntity {
         return actors;
     }
 
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
+    }
+
     public List<Director> getDirectors() {
         return directors;
     }
 
+    public void setDirectors(List<Director> directors) {
+        this.directors = directors;
+    }
+
     public List<Genre> getGenres() {
         return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     public Movie addActor(Actor actor) {

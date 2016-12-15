@@ -1,4 +1,4 @@
-package integration.es.uji.agdc.videoclub.models.utils;
+package unit.es.uji.agdc.videoclub.models.utils;
 
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.utils.UserFactory;

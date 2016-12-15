@@ -1,4 +1,4 @@
-package integration.es.uji.agdc.videoclub.services.utils;
+package unit.es.uji.agdc.videoclub.services.utils;
 
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
