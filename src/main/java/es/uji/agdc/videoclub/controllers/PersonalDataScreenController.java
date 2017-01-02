@@ -5,6 +5,7 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class PersonalDataScreenController {
     @FXML
     private TextField email_TextField;
     @FXML
-    private TextField lastPayment_TextField;
+    private DatePicker lastPayment_TextField;
     @FXML
     private TextField username_TextField;
     @FXML
@@ -53,10 +54,9 @@ public class PersonalDataScreenController {
         email_TextField.setText(user.getEmail());
         LocalDate lastPayment = user.getLastPayment();
         if (lastPayment != null)
-            lastPayment_TextField.setText(user.getLastPayment().toString());
+            lastPayment_TextField.setUserData(user.getLastPayment());
 
-        else
-            lastPayment_TextField.setText(" - ");
+        lastPayment_TextField.setEditable(false);
 
         username_TextField.setText(user.getUsername());
     }
