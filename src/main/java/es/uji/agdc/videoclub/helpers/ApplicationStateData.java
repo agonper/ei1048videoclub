@@ -19,7 +19,6 @@ public class ApplicationStateData {
     private static ApplicationState actualState = ApplicationState.LOGIN;
     private static User loggedUser = null;
 
-
     public static void setConfigurationData(Stage primaryStage, ApplicationContext context) {
         if (primaryStage != null && context != null) {
             if (ApplicationStateData.primaryStage == null && ApplicationStateData.context == null) {

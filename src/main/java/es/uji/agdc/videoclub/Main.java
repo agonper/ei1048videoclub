@@ -1,13 +1,8 @@
 package es.uji.agdc.videoclub;
 
 import es.uji.agdc.videoclub.helpers.ApplicationStateData;
-import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.views.AuthScreen;
-import es.uji.agdc.videoclub.views.MainSectionScreen;
 import javafx.application.Platform;
-import javafx.scene.Scene;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

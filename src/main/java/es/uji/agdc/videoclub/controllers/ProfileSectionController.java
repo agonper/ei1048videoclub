@@ -109,7 +109,7 @@ public class ProfileSectionController {
 
             UsersListController controller = loader.getController();
             controller.setStage(listOfUsersStage);
-            //controller.loadData();
+            controller.loadData();
 
             listOfUsersStage.showAndWait();
 

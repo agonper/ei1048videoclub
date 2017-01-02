@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserService;
@@ -9,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -42,28 +42,23 @@ public class UsersListController {
     TableColumn role_TableColumn;
 
     private Stage listOfUsersStage;
-    private UserService userService;
-
-    //@Autowired
-    //public UsersListController(UserService userService) {
-    //    this.userService = userService;
-    //}
+    private UserService userService = Services.getUserService();
 
     public void setStage(Stage stage) {
         listOfUsersStage = stage;
     }
 
-    //public void loadData() {
-    //    Stream<User> members = userService.findAllBy(UserQueryTypeMultiple.ROLE, "MEMBER");
-    //    Stream<User> admins = userService.findAllBy(UserQueryTypeMultiple.ROLE, "ADMIN");
-    //    ObservableList<User> usersToTableView = FXCollections.observableArrayList();
-    //
-    //    Iterator<User> membersIterator = members.iterator();
-     //   while (membersIterator.hasNext())
-    //        usersToTableView.add(membersIterator.next());
+    public void loadData() {
+        Stream<User> members = userService.findAllBy(UserQueryTypeMultiple.ROLE, "MEMBER");
+        Stream<User> admins = userService.findAllBy(UserQueryTypeMultiple.ROLE, "ADMIN");
+        ObservableList<User> usersToTableView = FXCollections.observableArrayList();
 
-    //    Iterator<User> adminsIterator = admins.iterator();
-    //    while (adminsIterator.hasNext())
-    //        usersToTableView.add(adminsIterator.next());
-    //}
+        Iterator<User> membersIterator = members.iterator();
+        while (membersIterator.hasNext())
+            usersToTableView.add(membersIterator.next());
+
+        Iterator<User> adminsIterator = admins.iterator();
+        while (adminsIterator.hasNext())
+            usersToTableView.add(adminsIterator.next());
+    }
 }

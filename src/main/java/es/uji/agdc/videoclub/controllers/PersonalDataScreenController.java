@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
@@ -36,12 +37,13 @@ public class PersonalDataScreenController {
     private Stage personalDataStage;
 
     private boolean editingData = false;
-    private UserService userService;
+    private UserService userService = Services.getUserService();
 
     @FXML
     public void initialize() {
         changeEditableProperty_In_TextFields(false);
     }
+
 
     public void setUserData(User user) {
         dni_TextField.setText(user.getDni());
@@ -104,6 +106,7 @@ public class PersonalDataScreenController {
             editData_Button.setText("Editar datos");
             editingData = false;
             //TODO: Validar y guardar cambios
+            userService.update(new User());
         }
     }
 
