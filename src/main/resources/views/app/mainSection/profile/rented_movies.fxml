@@ -29,7 +29,7 @@
       </VBox>
    </top>
    <bottom>
-      <Button mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER_RIGHT">
+      <Button fx:id="rentedMovies_close_button" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER_RIGHT">
          <BorderPane.margin>
             <Insets bottom="20.0" left="10.0" right="20.0" top="10.0" />
          </BorderPane.margin></Button>
@@ -37,9 +37,9 @@
    <center>
       <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="100.0" text="Titulo" />
-          <TableColumn prefWidth="110.0" text="Acceso" />
-            <TableColumn prefWidth="150.0" text="Marcar como vista" />
+          <TableColumn fx:id="rentedMoviesTitle_tableColumn" prefWidth="100.0" text="Titulo" />
+          <TableColumn fx:id="rentedMoviesAccess_tableColumn" prefWidth="110.0" text="Acceso" />
+            <TableColumn fx:id="rentedMoviesMarkAsView_tableColumn" prefWidth="150.0" text="Marcar como vista" />
         </columns>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />

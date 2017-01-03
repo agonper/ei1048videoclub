@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" maxWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.UsersListController">
+<BorderPane maxWidth="1000.0" prefHeight="400.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.UsersListController">
    <center>
        <ScrollPane prefHeight="400.0" prefWidth="600.0">
            <TableView fx:id="users_TableView" BorderPane.alignment="CENTER">

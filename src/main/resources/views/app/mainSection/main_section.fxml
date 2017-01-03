@@ -16,7 +16,7 @@
 <BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <left>
         <HBox>
-            <fx:include source="profile/profileSection.fxml" />
+            <fx:include source="profile/profile_section.fxml" />
             <Separator orientation="VERTICAL" />
             <BorderPane.margin>
                 <Insets right="10.0" />
@@ -28,10 +28,10 @@
             <Tab fx:id="searchTab" closable="false" text="Búsqueda de películas">
                 <BorderPane fx:id="mainSection_search_result_container">
                     <top>
-                        <fx:include source="searchBar.fxml" />
+                        <fx:include source="search_bar.fxml" />
                     </top>
                     <center>
-                        <fx:include source="searchSection.fxml" />
+                        <fx:include source="search_section.fxml" />
                     </center>
                     <BorderPane.margin>
                         <Insets bottom="10.0" right="10.0" />
@@ -41,7 +41,7 @@
             <Tab fx:id="adminTab" closable="false" text="Opciones administrativas">
                 <BorderPane fx:id="mainSection_admin_container">
                     <center>
-                        <GridPane fx:id="admin_options_gridpane">
+                        <GridPane fx:id="admin_options_gridpane" alignment="TOP_CENTER">
                      <columnConstraints>
                         <ColumnConstraints halignment="CENTER" />
                         <ColumnConstraints halignment="CENTER" />

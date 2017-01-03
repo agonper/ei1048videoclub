@@ -24,7 +24,7 @@
    <center>
       <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuButton mnemonicParsing="false" text="DNI">
+            <MenuButton fx:id="searchBy_menuButton" mnemonicParsing="false" text="DNI">
               <items>
                 <MenuItem mnemonicParsing="false" text="DNI" />
                 <MenuItem mnemonicParsing="false" text="Usuario" />
@@ -38,7 +38,7 @@
                   <Insets right="20.0" />
                </HBox.margin>
             </TextField>
-            <Button mnemonicParsing="false" text="Buscar" />
+            <Button fx:id="searchBy_button" mnemonicParsing="false" text="Buscar" />
          </children>
          <padding>
             <Insets top="20.0" />

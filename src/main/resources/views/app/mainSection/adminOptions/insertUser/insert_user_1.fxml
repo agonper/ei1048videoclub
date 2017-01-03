@@ -45,9 +45,9 @@
                 <Label text="DNI" />
                 <Label text="Nombre completo" GridPane.rowIndex="1" />
                 <Label text="Dirección" GridPane.rowIndex="2" />
-                <TextField GridPane.columnIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="userDNI_textField" GridPane.columnIndex="1" />
+                <TextField fx:id="user_Name_textField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="userDirection_textField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
     </center>

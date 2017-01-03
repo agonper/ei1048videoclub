@@ -44,8 +44,8 @@
             <children>
                 <Label text="Número de teléfono" />
                 <Label text="Email" GridPane.rowIndex="1" />
-                <TextField GridPane.columnIndex="1" />
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="userPhoneNumber_textField" GridPane.columnIndex="1" />
+                <TextField fx:id="userEmail_textField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </center>

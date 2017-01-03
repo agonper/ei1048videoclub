@@ -25,7 +25,7 @@
             <Separator prefWidth="200.0" BorderPane.alignment="CENTER" />
          </bottom>
          <center>
-            <Pagination maxPageIndicatorCount="3" pageCount="3" prefHeight="60.0" prefWidth="460.0" BorderPane.alignment="CENTER">
+            <Pagination fx:id="insertUserPagination" maxPageIndicatorCount="3" pageCount="3" prefHeight="60.0" prefWidth="460.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="10.0" top="20.0" />
                </BorderPane.margin></Pagination>
@@ -38,8 +38,8 @@
    <bottom>
       <HBox prefHeight="35.0" prefWidth="460.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="&lt;- Anterior" disable="true"/>
-            <Button mnemonicParsing="false" text="Siguiente -&gt;" textAlignment="RIGHT">
+            <Button fx:id="userPagination_back_button" mnemonicParsing="false" text="&lt;- Anterior" disable="true"/>
+            <Button fx:id="userPagination_ahead_button" mnemonicParsing="false" text="Siguiente -&gt;" textAlignment="RIGHT">
                <HBox.margin>
                   <Insets left="270.0" />
                </HBox.margin></Button>

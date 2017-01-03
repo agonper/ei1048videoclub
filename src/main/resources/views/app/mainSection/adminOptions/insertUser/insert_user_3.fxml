@@ -50,9 +50,9 @@
                 <Label text="Usuario" />
                 <Label text="Contraseña" GridPane.rowIndex="1" />
                 <Label text="Fecha del último pago" GridPane.rowIndex="2" />
-                <TextField GridPane.columnIndex="1" />
-                <PasswordField prefHeight="26.0" prefWidth="145.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="user_username_textField" GridPane.columnIndex="1" />
+                <PasswordField fx:id="userPassword_passwordField" prefHeight="26.0" prefWidth="145.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <DatePicker fx:id="userLastPaymentDate_datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="20.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                 <graphic>
                     <ImageView>

@@ -16,21 +16,21 @@
          <top>
             <VBox alignment="TOP_CENTER" prefHeight="110.0" prefWidth="460.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Titulo">
+                  <Label fx:id="movieData_title_label" text="Titulo">
                      <font>
                         <Font size="24.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin></Label>
-                  <Label text="Titulo VO">
+                  <Label fx:id="movieData_titleVO_label" text="Titulo VO">
                      <font>
                         <Font size="16.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin></Label>
-                  <Label text="Año de estreno: ">
+                  <Label fx:id="movieData_year_label" text="Año de estreno: ">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin></Label>
@@ -49,10 +49,10 @@
    <bottom>
       <BorderPane prefHeight="40.0" prefWidth="460.0" BorderPane.alignment="CENTER">
          <left>
-            <Button mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER" />
+            <Button fx:id="movieData_close_button" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <Button mnemonicParsing="false" text="Alquilar" BorderPane.alignment="CENTER" />
+            <Button fx:id="movieData_rent_button" mnemonicParsing="false" text="Alquilar" BorderPane.alignment="CENTER" />
          </right>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" />
@@ -67,15 +67,15 @@
          <content>
             <VBox prefHeight="380.0" prefWidth="400.0">
                <children>
-                  <Label text="Actores principales: ">
+                  <Label fx:id="movieData_actors_label" text="Actores principales: ">
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" top="10.0" />
                      </VBox.margin></Label>
-                  <Label text="Director/es: ">
+                  <Label fx:id="movieData_directors_label" text="Director/es: ">
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" />
                      </VBox.margin></Label>
-                  <Label text="Géneros: ">
+                  <Label fx:id="movieData_generes_label" text="Géneros: ">
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" />
                      </VBox.margin></Label>
@@ -84,12 +84,12 @@
                         <Insets bottom="5.0" left="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextArea editable="false" prefHeight="200.0" prefWidth="200.0">
+                  <TextArea fx:id="movieData_description_textArea" editable="false" prefHeight="200.0" prefWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" />
                      </VBox.margin>
                   </TextArea>
-                  <Label text="Copias disponibles: ">
+                  <Label fx:id="movieData_copies_label" text="Copias disponibles: ">
                      <VBox.margin>
                         <Insets left="10.0" />
                      </VBox.margin>
