@@ -14,7 +14,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="es.uji.agdc.videoclub.controllers.LoginController">
     <top>
-        <fx:include source="corporativeBrandSpace.fxml"/>
+        <fx:include source="corporative_brand_space.fxml"/>
     </top>
     <bottom>
         <GridPane prefHeight="230.0" prefWidth="500.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
