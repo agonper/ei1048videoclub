@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class LoginController {
+public class LoginController extends Controller {
 
     // View elements
     @FXML

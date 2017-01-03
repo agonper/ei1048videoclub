@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.EditMovieController">
     <top>
         <Label text="Modificación de la película con:" BorderPane.alignment="CENTER">
             <font>

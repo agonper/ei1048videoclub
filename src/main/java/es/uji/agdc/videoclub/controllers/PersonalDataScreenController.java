@@ -16,7 +16,7 @@ import java.time.LocalDate;
  * Created by daniel on 15/12/16.
  */
 
-public class PersonalDataScreenController {
+public class PersonalDataScreenController extends Controller {
 
     @FXML
     private TextField dni_TextField;

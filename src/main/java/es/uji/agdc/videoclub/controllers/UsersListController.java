@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  */
 
 @Component
-public class UsersListController {
+public class UsersListController extends Controller {
 
     @FXML
     TableView users_TableView;

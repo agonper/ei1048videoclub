@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 
 @Component
-public class AdminSectionController {
+public class AdminSectionController extends Controller {
 
     private Stage nonPaymentsStage = null;
     private Stage newUserStage = null;
@@ -29,7 +29,6 @@ public class AdminSectionController {
     private String movieInsertionSection = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_root.fxml";
     private String movieEditSection = "/views/app/mainSection/adminOptions/editMovie/edit_movie.fxml";
 
-    //TODO: Finish methods
 
     private void loadSection(String resource, Stage stage, String title) {
         FXMLLoader loader = new FXMLLoader();
@@ -43,6 +42,9 @@ public class AdminSectionController {
             stage.initModality(Modality.WINDOW_MODAL);
             Scene scene = new Scene(loadedSection);
             stage.setScene(scene);
+
+            Controller controller = (Controller) loader.getController();
+            controller.setStage(stage);
 
             stage.showAndWait();
         }

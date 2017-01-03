@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 
 @Component
-public class ProfileSectionController {
+public class ProfileSectionController extends Controller {
 
     // View components
     @FXML
