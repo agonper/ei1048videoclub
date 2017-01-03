@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.MainSectionController">
     <left>
         <HBox>
             <fx:include source="profile/profile_section.fxml" />
@@ -18,7 +18,7 @@
         </HBox>
     </left>
     <center>
-        <TabPane>
+        <TabPane fx:id="tabs">
             <Tab fx:id="searchTab" closable="false" text="Búsqueda de películas">
                 <BorderPane fx:id="mainSection_search_result_container">
                     <top>
