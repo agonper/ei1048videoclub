@@ -3,7 +3,6 @@ package es.uji.agdc.videoclub.controllers;
 import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.models.User;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import org.springframework.stereotype.Component;
 

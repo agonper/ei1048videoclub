@@ -3,13 +3,15 @@ package es.uji.agdc.videoclub.controllers;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.utils.Result;
+import es.uji.agdc.videoclub.validators.UserValidator;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.time.LocalDate;
 
 /**
@@ -18,6 +20,8 @@ import java.time.LocalDate;
 
 public class PersonalDataScreenController extends Controller {
 
+    @FXML
+    private GridPane gridPane;
     @FXML
     private TextField dni_TextField;
     @FXML
@@ -33,7 +37,11 @@ public class PersonalDataScreenController extends Controller {
     @FXML
     private TextField username_TextField;
     @FXML
+    private TextField password_passwordField;
+    @FXML
     private Button editData_Button;
+    @FXML
+    private CheckBox showPassword_checkbox;
 
     private Stage personalDataStage;
 
@@ -43,6 +51,22 @@ public class PersonalDataScreenController extends Controller {
     @FXML
     public void initialize() {
         changeEditableProperty_In_TextFields(false);
+
+        DecimalFormat format = new DecimalFormat( "#.0" );
+        phone_TextField.setTextFormatter(new TextFormatter<>(c ->
+        {
+            if (c.getControlNewText().isEmpty())
+                return c;
+
+            ParsePosition parsePosition = new ParsePosition(0);
+            Object object = format.parse(c.getControlNewText(), parsePosition);
+
+            if (object == null || parsePosition.getIndex() < c.getControlNewText().length())
+                return null;
+
+            else
+                return c;
+        }));
     }
 
 
@@ -59,6 +83,8 @@ public class PersonalDataScreenController extends Controller {
         lastPayment_TextField.setEditable(false);
 
         username_TextField.setText(user.getUsername());
+
+        password_passwordField.setText(user.getPassword());
     }
     public void setStage(Stage dialogStage) {
         this.personalDataStage = dialogStage;
@@ -92,6 +118,10 @@ public class PersonalDataScreenController extends Controller {
         username_TextField.setEditable(newValue);
         username_TextField.setMouseTransparent(!newValue);
         username_TextField.setFocusTraversable(newValue);
+
+        password_passwordField.setEditable(newValue);
+        password_passwordField.setMouseTransparent(!newValue);
+        password_passwordField.setFocusTraversable(newValue);
     }
 
     @FXML
@@ -105,13 +135,63 @@ public class PersonalDataScreenController extends Controller {
             changeEditableProperty_In_TextFields(false);
             editData_Button.setText("Editar datos");
             editingData = false;
-            //TODO: Validar y guardar cambios
-            userService.update(new User());
+
+            UserValidator userValidator = new UserValidator();
+            User editedUser = new User();
+
+            editedUser.setDni(dni_TextField.getText());
+            editedUser.setName(name_TextField.getText());
+            editedUser.setAddress(dir_TextField.getText());
+            editedUser.setPhone(Integer.parseInt(phone_TextField.getText()));
+            editedUser.setEmail(email_TextField.getText());
+            editedUser.setLastPayment(lastPayment_TextField.getValue());
+            editedUser.setUsername(username_TextField.getText());
+            editedUser.setPassword(password_passwordField.getText());
+
+            Result validationResult = userValidator.validate(editedUser);
+
+            if (validationResult.isOk())
+                userService.update(editedUser);
+
+            else {
+                //TODO: Blame the user
+            }
         }
     }
 
     @FXML
     public void closeWindow() {
         personalDataStage.close();
+    }
+
+    @FXML
+    public void showPassword() {
+        String introducedPassword = password_passwordField.getText();
+        boolean editable = password_passwordField.editableProperty().get();
+        boolean mouseTransparent = password_passwordField.mouseTransparentProperty().get();
+        boolean focusTrasversable = password_passwordField.focusTraversableProperty().get();
+
+        gridPane.getChildren().remove(password_passwordField);
+
+        if (showPassword_checkbox.isSelected()) {
+            TextField password = new TextField();
+            password.setId("password_passwordField");
+            password.setText(introducedPassword);
+            password.setEditable(editable);
+            password.setMouseTransparent(mouseTransparent);
+            password.setFocusTraversable(focusTrasversable);
+            gridPane.add(password, 1, 7);
+            password_passwordField = password;
+        }
+        else {
+            PasswordField password = new PasswordField();
+            password.setId("password_passwordField");
+            password.setText(introducedPassword);
+            password.setEditable(editable);
+            password.setMouseTransparent(mouseTransparent);
+            password.setFocusTraversable(focusTrasversable);
+            gridPane.add(password, 1, 7);
+            password_passwordField = password;
+        }
     }
 }
