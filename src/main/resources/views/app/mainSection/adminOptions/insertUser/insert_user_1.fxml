@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.insertUser.InsertUser_1Controller">
     <top>
         <BorderPane>
             <top>
@@ -45,9 +45,9 @@
                 <Label text="DNI" />
                 <Label text="Nombre completo" GridPane.rowIndex="1" />
                 <Label text="Dirección" GridPane.rowIndex="2" />
-                <TextField fx:id="userDNI_textField" GridPane.columnIndex="1" />
-                <TextField fx:id="user_Name_textField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="userDirection_textField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="userDNI_textField" onKeyReleased="#checkDNI_TextField" GridPane.columnIndex="1" />
+                <TextField fx:id="user_Name_textField" onKeyReleased="#checkName_TextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="userAddress_textField" onKeyReleased="#checkAddress_TextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             </children>
         </GridPane>
     </center>

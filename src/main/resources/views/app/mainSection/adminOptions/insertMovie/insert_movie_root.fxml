@@ -6,10 +6,9 @@
 <?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.InsertMovieController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.InsertMovieController">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
@@ -25,25 +24,24 @@
             <Separator prefWidth="200.0" BorderPane.alignment="CENTER" />
          </bottom>
          <center>
-            <Pagination fx:id="movie_Pagination" maxPageIndicatorCount="4" pageCount="4" prefHeight="60.0" prefWidth="460.0" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets bottom="10.0" top="20.0" />
-               </BorderPane.margin></Pagination>
+
          </center>
       </BorderPane>
    </top>
    <center>
-      <fx:include source="insert_movie_1.fxml"/>
+      <fx:include source="insert_movie_1.fxml" />
    </center>
    <bottom>
-      <HBox prefHeight="35.0" prefWidth="460.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="moviePagination_back_button" mnemonicParsing="false" text="&lt;- Anterior" disable="true"/>
-            <Button fx:id="moviePagination_ahead_button" mnemonicParsing="false" text="Siguiente -&gt;" textAlignment="RIGHT">
-               <HBox.margin>
-                  <Insets left="270.0" />
-               </HBox.margin></Button>
-         </children>
-      </HBox>
+      <BorderPane>
+         <top>
+            <Pagination fx:id="movie_Pagination" maxPageIndicatorCount="4" onContextMenuRequested="#changedPage" pageCount="4" prefHeight="60.0" prefWidth="460.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </BorderPane.margin></Pagination>
+         </top>
+         <bottom>
+            <Button disable="true" text="Finalizar" BorderPane.alignment="CENTER_RIGHT" />
+         </bottom>
+      </BorderPane>
    </bottom>
 </BorderPane>
