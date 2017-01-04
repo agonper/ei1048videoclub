@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxWidth="1000.0" prefHeight="400.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.UsersListController">
    <center>
-       <ScrollPane prefHeight="400.0" prefWidth="600.0">
-           <TableView fx:id="users_TableView" BorderPane.alignment="CENTER">
-               <columns>
-                   <TableColumn fx:id="DNI_TableColumn" prefWidth="60.0" text="DNI" />
-                   <TableColumn fx:id="completeName_TableColumn" prefWidth="150.0" text="Nombre completo" />
-                   <TableColumn fx:id="address_TableColumn" prefWidth="75.0" text="Dirección" />
-                   <TableColumn fx:id="phone_TableColumn" prefWidth="75.0" text="Teléfono" />
-                   <TableColumn fx:id="email_TableColumn" prefWidth="150.0" text="Correo electrónico" />
-                   <TableColumn fx:id="lastPayment_TableColumn" prefWidth="150.0" text="Fecha último pago" />
-                   <TableColumn fx:id="username_TableColumn" prefWidth="150.0" text="Nombre de usuario" />
-                   <TableColumn fx:id="role_TableColumn" prefWidth="60.0" text="Rol" />
-               </columns>
-           </TableView>
-       </ScrollPane>
+       <TableView fx:id="users_TableView" BorderPane.alignment="CENTER">
+           <columns>
+               <TableColumn fx:id="DNI_TableColumn" prefWidth="60.0" text="DNI">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="dni" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="completeName_TableColumn" prefWidth="150.0" text="Nombre completo">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="name" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="address_TableColumn" prefWidth="75.0" text="Dirección">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="address" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="phone_TableColumn" prefWidth="75.0" text="Teléfono">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="phone" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="email_TableColumn" prefWidth="150.0" text="Correo electrónico">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="email" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="lastPayment_TableColumn" prefWidth="150.0" text="Fecha último pago">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="lastPayment" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="username_TableColumn" prefWidth="150.0" text="Nombre de usuario">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="username" />
+                   </cellValueFactory>
+               </TableColumn>
+               <TableColumn fx:id="role_TableColumn" prefWidth="60.0" text="Rol">
+                   <cellValueFactory>
+                       <PropertyValueFactory property="role" />
+                   </cellValueFactory>
+               </TableColumn>
+           </columns>
+           <FXCollections fx:factory="emptyObservableList" />
+       </TableView>
    </center>
 </BorderPane>

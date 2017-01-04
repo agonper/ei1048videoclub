@@ -22,12 +22,14 @@ public class AdminSectionController extends Controller {
     private Stage userEditStage = null;
     private Stage movieInsertionStage = null;
     private Stage movieEditStage = null;
+    private Stage listOfUsersStage = null;
 
     private String nonPaymentsSection = "/views/app/mainSection/adminOptions/users_with_non_payments.fxml";
     private String newUserSection = "/views/app/mainSection/adminOptions/insertUser/insert_user_root.fxml";
     private String userEditSection = "/views/app/mainSection/adminOptions/editUser/edit_user.fxml";
     private String movieInsertionSection = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_root.fxml";
     private String movieEditSection = "/views/app/mainSection/adminOptions/editMovie/edit_movie.fxml";
+    private String listOfUsersSection = "/views/app/mainSection/adminOptions/list_of_users.fxml";
 
 
     private void loadSection(String resource, Stage stage, String title) {
@@ -76,5 +78,10 @@ public class AdminSectionController extends Controller {
     @FXML
     public void showMovieEditSection() {
         loadSection(movieEditSection, movieEditStage, "Edición de una película");
+    }
+
+    @FXML
+    public void showListOfUsers() {
+        loadSection(listOfUsersSection, listOfUsersStage, "Listado de usuarios");
     }
 }

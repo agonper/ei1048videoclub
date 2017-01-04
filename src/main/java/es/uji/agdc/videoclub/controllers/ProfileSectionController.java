@@ -30,10 +30,6 @@ public class ProfileSectionController extends Controller {
     @FXML
     Button rentedMovies_button;
     @FXML
-    Button adminOptions_button;
-    @FXML
-    Button listOfUsers_button;
-    @FXML
     Button closeSession_button;
 
     private Stage personalDataStage = null;
@@ -52,11 +48,6 @@ public class ProfileSectionController extends Controller {
     private void initialize() {
         loggedUser = ApplicationStateData.getLoggedUser();
         username_lb.setText(loggedUser.getUsername());
-        if (loggedUser.isMember()) {
-            //TODO: Revisar validez
-            listOfUsers_button.setVisible(false);
-            adminOptions_button.setVisible(false);
-        }
     }
 
     @FXML
@@ -89,34 +80,6 @@ public class ProfileSectionController extends Controller {
         System.out.println("Rented movies");
     }
 
-    @FXML
-    public void showAdministrationPanel() {
-        System.out.println("Administration screen");
-    }
-
-    @FXML
-    public void showListOfUsers_Screen() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/app/mainSection/adminOptions/list_of_users.fxml"));
-        BorderPane page;
-        try {
-            page = (BorderPane) loader.load();
-            listOfUsersStage = new Stage();
-            listOfUsersStage.setTitle("Listado de usuarios");
-            listOfUsersStage.initModality(Modality.WINDOW_MODAL);
-            Scene scene = new Scene(page);
-            listOfUsersStage.setScene(scene);
-
-            UsersListController controller = loader.getController();
-            controller.setStage(listOfUsersStage);
-            controller.loadData();
-
-            listOfUsersStage.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void closeSession() {

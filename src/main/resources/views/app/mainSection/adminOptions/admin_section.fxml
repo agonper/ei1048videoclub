@@ -23,30 +23,31 @@
                 <RowConstraints valignment="CENTER" />
             </rowConstraints>
             <children>
-                <Button fx:id="mainSection_nonPaymentsSection_button" onAction="#showNonPaymentsSection" mnemonicParsing="false" text="Listado de usuarios morosos">
+                <Button fx:id="mainSection_nonPaymentsSection_button" mnemonicParsing="false" onAction="#showNonPaymentsSection" text="Listado de usuarios morosos">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin></Button>
-                <Button fx:id="mainSection_newUserSection_button" onAction="#showNewUserSection" mnemonicParsing="false" text="Introducir un nuevo socio" GridPane.columnIndex="1">
+                <Button fx:id="mainSection_newUserSection_button" mnemonicParsing="false" onAction="#showNewUserSection" text="Introducir un nuevo socio" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="mainSection_userEdit_button" onAction="#showUserEditSection" mnemonicParsing="false" text="Modificar un usuario" GridPane.columnIndex="2">
+                <Button fx:id="mainSection_userEdit_button" mnemonicParsing="false" onAction="#showUserEditSection" text="Modificar un usuario" GridPane.columnIndex="2">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="mainSection_movieInsertion_button" onAction="#showMovieInsertionSection" mnemonicParsing="false" text="Introducir una pelicula" GridPane.rowIndex="1">
+                <Button fx:id="mainSection_movieInsertion_button" mnemonicParsing="false" onAction="#showMovieInsertionSection" text="Introducir una pelicula" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="mainSection_movieEdit_button" onAction="#showMovieEditSection" mnemonicParsing="false" text="Modificar una pelicula" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Button fx:id="mainSection_movieEdit_button" mnemonicParsing="false" onAction="#showMovieEditSection" text="Modificar una pelicula" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
                 </Button>
+            <Button fx:id="mainSection_listOfUsers_button" onAction="#showListOfUsers" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Listado de usuarios" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             </children>
             <BorderPane.margin>
                 <Insets top="20.0" />

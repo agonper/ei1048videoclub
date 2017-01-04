@@ -48,17 +48,27 @@ public class UsersListController extends Controller {
         listOfUsersStage = stage;
     }
 
+    @FXML
+    public void initialize() {
+        loadData();
+    }
+
     public void loadData() {
         Stream<User> members = userService.findAllBy(UserQueryTypeMultiple.ROLE, "MEMBER");
         Stream<User> admins = userService.findAllBy(UserQueryTypeMultiple.ROLE, "ADMIN");
-        ObservableList<User> usersToTableView = FXCollections.observableArrayList();
+        ObservableList<User> usersToTableView = users_TableView.getItems();
+        usersToTableView.clear();
 
         Iterator<User> membersIterator = members.iterator();
         while (membersIterator.hasNext())
             usersToTableView.add(membersIterator.next());
 
+
         Iterator<User> adminsIterator = admins.iterator();
         while (adminsIterator.hasNext())
             usersToTableView.add(adminsIterator.next());
+
+
+        users_TableView.setItems(usersToTableView);
     }
 }
