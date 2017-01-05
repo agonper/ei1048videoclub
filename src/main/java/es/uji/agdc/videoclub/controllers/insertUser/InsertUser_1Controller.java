@@ -59,20 +59,6 @@ public class InsertUser_1Controller extends Controller implements Form {
         return false;
     }
 
-    private boolean isNumber(String string) {
-        char[] chars = string.toCharArray();
-        boolean isNumber = true;
-
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] < 48 || chars[i] > 57) {
-                isNumber = false;
-                break;
-            }
-        }
-
-        return isNumber;
-    }
-
     @FXML
     public void checkName_TextField() {
         if (checkName(user_Name_textField.getText())) {

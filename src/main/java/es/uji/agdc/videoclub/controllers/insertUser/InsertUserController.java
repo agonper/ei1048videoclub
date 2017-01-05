@@ -61,7 +61,7 @@ public class InsertUserController extends Controller implements RootController {
     }
 
     @FXML
-    public synchronized BorderPane changedPage() {
+    public BorderPane changedPage() {
         int newPage = insertUserPagination.getCurrentPageIndex();
         BorderPane loadedResource = null;
 
