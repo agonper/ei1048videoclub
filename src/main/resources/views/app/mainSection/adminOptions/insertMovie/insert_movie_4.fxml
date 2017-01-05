@@ -20,7 +20,7 @@
          <GridPane.margin>
             <Insets top="10.0" />
          </GridPane.margin></Label>
-      <TextArea fx:id="movieDescription_TextArea" prefHeight="209.0" prefWidth="181.0" GridPane.columnIndex="1" />
+      <TextArea fx:id="movieDescription_TextArea" onKeyReleased="#checkDescription_TextArea" prefHeight="209.0" prefWidth="181.0" wrapText="true" GridPane.columnIndex="1" />
    </children>
    <padding>
       <Insets bottom="60.0" top="20.0" />

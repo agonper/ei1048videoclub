@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -81,12 +80,16 @@ public class InsertMovie_2Controller extends Controller implements Form, RootCon
     }
 
     public void checkActorsList() {
-        if (actorsList_ListView.getItems().size() > 0)
+        if (actorsList_ListView.getItems().size() > 0) {
             actorsList_ListView.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
-
-        else
+            valid_listOfActors = true;
+        }
+        else {
             actorsList_ListView.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-
+            valid_listOfActors = false;
+        }
+        rootController.updateFormState(allFieldsValid(), 2);
+        rootController.finishedForm();
     }
 
     @Override

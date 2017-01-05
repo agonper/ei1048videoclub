@@ -1,6 +1,7 @@
 package es.uji.agdc.videoclub.helpers;
 
 import es.uji.agdc.videoclub.services.AuthenticationService;
+import es.uji.agdc.videoclub.services.MovieAssetService;
 import es.uji.agdc.videoclub.services.MovieService;
 import es.uji.agdc.videoclub.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,14 @@ public class Services {
     private static UserService userService;
     private static AuthenticationService authService;
     private static MovieService movieService;
+    private static MovieAssetService movieAssetService;
 
     @Autowired
-    public Services(UserService userService, AuthenticationService authService, MovieService movieService) {
+    public Services(UserService userService, AuthenticationService authService, MovieService movieService, MovieAssetService movieAssetService) {
         this.userService = userService;
         this.authService = authService;
         this.movieService = movieService;
+        this.movieAssetService = movieAssetService;
     }
 
     public static UserService getUserService() {
@@ -35,5 +38,9 @@ public class Services {
 
     public static MovieService getMovieService() {
         return Services.movieService;
+    }
+
+    public static MovieAssetService getMovieAssetService() {
+        return Services.movieAssetService;
     }
 }

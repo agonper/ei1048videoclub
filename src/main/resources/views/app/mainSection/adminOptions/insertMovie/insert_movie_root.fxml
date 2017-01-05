@@ -34,7 +34,7 @@
    <bottom>
       <BorderPane>
          <top>
-            <Pagination fx:id="movie_Pagination" maxPageIndicatorCount="4" onContextMenuRequested="#changedPage" pageCount="4" prefHeight="60.0" prefWidth="460.0" BorderPane.alignment="CENTER">
+            <Pagination fx:id="movie_Pagination" maxPageIndicatorCount="5" onContextMenuRequested="#changedPage" pageCount="5" prefHeight="60.0" prefWidth="460.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="10.0" top="20.0" />
                </BorderPane.margin></Pagination>

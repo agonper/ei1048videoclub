@@ -3,7 +3,13 @@ package es.uji.agdc.videoclub.controllers.insertMovie;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.models.Actor;
+import es.uji.agdc.videoclub.models.Director;
+import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
+import es.uji.agdc.videoclub.services.MovieAssetService;
+import es.uji.agdc.videoclub.services.MovieService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -12,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Created by daniel on 5/01/17.
@@ -30,26 +37,31 @@ public class InsertMovieController extends Controller implements RootController 
     private String movie_02 = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_2.fxml";
     private String movie_03 = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_3.fxml";
     private String movie_04 = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_4.fxml";
+    private String movie_05 = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_5.fxml";
 
     private Form movie_01_controller = null;
     private Form movie_02_controller = null;
     private Form movie_03_controller = null;
     private Form movie_04_controller = null;
+    private Form movie_05_controller = null;
 
     private GridPane movie_01_section = null;
     private GridPane movie_02_section = null;
     private GridPane movie_03_section = null;
     private GridPane movie_04_section = null;
+    private GridPane movie_05_section = null;
 
     private String[] data_movie_01 = null;
     private String[] data_movie_02 = null;
     private String[] data_movie_03 = null;
     private String[] data_movie_04 = null;
+    private String[] data_movie_05 = null;
 
     private boolean valid_01 = false;
     private boolean valid_02 = false;
     private boolean valid_03 = false;
     private boolean valid_04 = false;
+    private boolean valid_05 = false;
 
     private Movie movieToCreate;
 
@@ -62,6 +74,7 @@ public class InsertMovieController extends Controller implements RootController 
         loadResource(movie_02, 1);
         loadResource(movie_03, 2);
         loadResource(movie_04, 3);
+        loadResource(movie_05, 4);
     }
 
     @FXML
@@ -84,6 +97,10 @@ public class InsertMovieController extends Controller implements RootController 
 
             case 3:
                 data_movie_04 = movie_04_controller.getAllData();
+                break;
+
+            case 4:
+                data_movie_05 = movie_05_controller.getAllData();
                 break;
         }
 
@@ -123,6 +140,15 @@ public class InsertMovieController extends Controller implements RootController 
                 borderPane.setCenter(loadedResource);
                 actualPage = 3;
                 break;
+
+            case 4:
+                if(data_movie_05 != null)
+                    movie_05_controller.setAllData(data_movie_05);
+
+                loadedResource = movie_05_section;
+                borderPane.setCenter(loadedResource);
+                actualPage = 4;
+                break;
         }
 
         return loadedResource;
@@ -141,8 +167,13 @@ public class InsertMovieController extends Controller implements RootController 
             case 3:
                 valid_03 = allFieldsValid;
                 break;
+
             case 4:
                 valid_04 = allFieldsValid;
+                break;
+
+            case 5:
+                valid_05 = allFieldsValid;
                 break;
         }
     }
@@ -173,10 +204,17 @@ public class InsertMovieController extends Controller implements RootController 
                     movie_03_controller.setRootController(this);
                     movie_03_section = loadedSection;
                     break;
+
                 case 3:
                     movie_04_controller = loader.getController();
                     movie_04_controller.setRootController(this);
                     movie_04_section = loadedSection;
+                    break;
+
+                case 4:
+                    movie_05_controller = loader.getController();
+                    movie_05_controller.setRootController(this);
+                    movie_05_section = loadedSection;
                     break;
             }
         }
@@ -187,18 +225,79 @@ public class InsertMovieController extends Controller implements RootController 
 
     @FXML
     public void finishedForm() {
-        submitButton.setDisable(!(valid_01 && valid_02 && valid_03));
+        submitButton.setDisable(!(valid_01 && valid_02 && valid_03 && valid_04 && valid_05));
     }
 
     @FXML
     public void submitForm() {
         movieToCreate = new Movie();
-        System.out.println("Submit");
         setAllMovieData();
+        MovieService movieService = Services.getMovieService();
+        movieService.create(movieToCreate);
         super.stage.close();
     }
 
     private void setAllMovieData() {
-        //TODO: Finish method
+        MovieAssetService movieAssetService = Services.getMovieAssetService();
+
+        String[] page1 = movie_01_controller.getAllData();
+        movieToCreate.setTitle(page1[0]);
+        movieToCreate.setTitleOv(page1[1]);
+        movieToCreate.setYear(Integer.parseInt(page1[2]));
+        movieToCreate.setAvailableCopies(Integer.parseInt(page1[3]));
+
+        String[] page2 = movie_02_controller.getAllData();
+
+        for (int i = 0; i < page2.length; i++) {
+            String actor = page2[i];
+            Optional<Actor> searchedActor = movieAssetService.findActorByName(actor);
+
+            if (searchedActor.isPresent())
+                movieToCreate.addActor(searchedActor.get());
+
+            else {
+                //TODO: Create actor
+                //FIXME: Use the service to get an actor with id, provisional to test the view
+                Actor createdActor = new Actor(actor);
+                movieToCreate.addActor(createdActor);
+            }
+        }
+
+        String[] page3 = movie_03_controller.getAllData();
+
+        for (int i = 0; i < page3.length; i++) {
+            String director = page3[i];
+            Optional<Director> searchedDirector = movieAssetService.findDirectorByName(director);
+
+            if (searchedDirector.isPresent())
+                movieToCreate.addDirector(searchedDirector.get());
+
+            else {
+                //TODO: Create director
+                //FIXME: Use the service to get a director with id, provisional to test the view
+                Director createdDirector = new Director(director);
+                movieToCreate.addDirector(createdDirector);
+            }
+        }
+
+        String[] page4 = movie_04_controller.getAllData();
+        movieToCreate.setDescription(page4[0]);
+
+        String[] page5 = movie_05_controller.getAllData();
+
+        for (int i = 0; i < page5.length; i++) {
+            String genre = page5[i];
+            Optional<Genre> searchedGenre = movieAssetService.findGenreByName(genre);
+
+            if (searchedGenre.isPresent())
+                movieToCreate.addGenre(searchedGenre.get());
+
+            else {
+                //TODO: Create Genre
+                //FIXME: Use the service to get a genre with id, provisional to test the view
+                Genre createdGenre = new Genre(genre);
+                movieToCreate.addGenre(createdGenre);
+            }
+        }
     }
 }
