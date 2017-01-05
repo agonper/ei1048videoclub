@@ -3,7 +3,9 @@ package es.uji.agdc.videoclub.controllers.insertUser;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.models.utils.UserFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -11,6 +13,7 @@ import javafx.scene.control.Pagination;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * Created by daniel on 3/01/17.
@@ -44,7 +47,7 @@ public class InsertUserController extends Controller implements RootController {
     private boolean valid_02 = false;
     private boolean valid_03 = false;
 
-    private User userToCreate = new User();
+    private User userToCreate;
 
     private int actualPage = 0;
 
@@ -58,7 +61,7 @@ public class InsertUserController extends Controller implements RootController {
     }
 
     @FXML
-    public BorderPane changedPage() {
+    public synchronized BorderPane changedPage() {
         int newPage = insertUserPagination.getCurrentPageIndex();
         BorderPane loadedResource = null;
 
@@ -164,7 +167,25 @@ public class InsertUserController extends Controller implements RootController {
 
     @FXML
     public void submitForm() {
-        //TODO: Finish
-        System.out.println("Submit");
+        userToCreate = UserFactory.createMember();
+        setAllUserData();
+        Services.getUserService().create(userToCreate);
+        super.stage.close();
+    }
+
+    private void setAllUserData() {
+        String[] page1 = user_01_controller.getAllData();
+        userToCreate.setDni(page1[0]);
+        userToCreate.setName(page1[1]);
+        userToCreate.setAddress(page1[2]);
+
+        String[] page2 = user_02_controller.getAllData();
+        userToCreate.setPhone(Integer.parseInt(page2[0]));
+        userToCreate.setEmail(page2[1]);
+
+        String[] page3 = user_03_controller.getAllData();
+        userToCreate.setUsername(page3[0]);
+        userToCreate.setPassword(page3[1]);
+        userToCreate.setLastPayment(LocalDate.parse(page3[2]));
     }
 }

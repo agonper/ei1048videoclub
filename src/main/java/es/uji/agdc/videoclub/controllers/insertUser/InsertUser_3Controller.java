@@ -49,10 +49,7 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @FXML
     public void initialize() {
-        userLastPaymentDate_datePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue)
-                checkDate_datePicker();
-        });
+        userLastPaymentDate_datePicker.valueProperty().addListener(e -> checkDate_datePicker());
     }
 
     @FXML
@@ -125,20 +122,24 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @FXML
     public void checkDate_datePicker() {
-        if (checkDate(userLastPaymentDate_datePicker.getAccessibleText())) {
-            userLastPaymentDate_datePicker.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
-            valid_lastPaymentDate = true;
+        if (userLastPaymentDate_datePicker.getValue() != null && LocalDate.now().isAfter(userLastPaymentDate_datePicker.getValue())) {
+            if (checkDate(userLastPaymentDate_datePicker.getValue().toString())) {
+                userLastPaymentDate_datePicker.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
+                valid_lastPaymentDate = true;
+            }
+            else {
+                userLastPaymentDate_datePicker.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+                valid_lastPaymentDate = false;
+            }
+            rootController.updateFormState(allFieldsValid(), 3);
+            rootController.finishedForm();
         }
-        else {
+        else
             userLastPaymentDate_datePicker.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
-            valid_lastPaymentDate = false;
-        }
-        rootController.updateFormState(allFieldsValid(), 3);
-        rootController.finishedForm();
     }
 
     private boolean checkDate(String date) {
-        String DATE_PATTERN = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\\\d\\\\d)";
+        String DATE_PATTERN = "^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$";
 
         Pattern p = Pattern.compile(DATE_PATTERN);
 
@@ -152,7 +153,11 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @Override
     public String[] getAllData() {
-        return new String[] {user_username_textField.getText(), userPassword_passwordField.getText(), userLastPaymentDate_datePicker.getPromptText()};
+        if (userLastPaymentDate_datePicker.getValue() != null)
+            return new String[] {user_username_textField.getText(), userPassword_passwordField.getText(), userLastPaymentDate_datePicker.getValue().toString()};
+
+        else
+            return new String[] {user_username_textField.getText(), userPassword_passwordField.getText(), ""};
     }
 
     @Override

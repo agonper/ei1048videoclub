@@ -9,6 +9,8 @@ import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by daniel on 4/01/17.
  */
@@ -45,12 +47,12 @@ public class InsertUser_1Controller extends Controller implements Form {
 
     private boolean checkDNI(String dni) {
         if (dni.length() == 9) {
-            char dniLetter = dni.charAt(dni.length() - 1);
-            boolean dni_invalid_letter = !(dniLetter >= 65 || dniLetter <= 90) || !(dniLetter >= 97 || dniLetter <= 122);
-            boolean dni_invalid_number = !isNumber(dni.substring(0, dni.length() - 1));
-            boolean dni_invalid_format = dni_invalid_letter || dni_invalid_number;
+            String DNI_PATTERN = "(([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))";
+            Pattern p = Pattern.compile(DNI_PATTERN);
 
-            if (!dni_invalid_format && !userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent())
+            boolean dni_valid_format = p.matcher(dni).matches();
+
+            if (dni_valid_format && !userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent())
                 return true;
         }
 
