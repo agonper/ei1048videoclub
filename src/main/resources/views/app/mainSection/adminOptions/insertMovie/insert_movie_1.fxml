@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.insertMovie.InsertMovie_1Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.insertMovie.InsertMovie_1Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -27,4 +28,7 @@
       <TextField fx:id="movieYear_textField" onKeyReleased="#checkYear_TextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <TextField fx:id="movieCopies_textField" onKeyReleased="#checkCopies_TextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
    </children>
+   <padding>
+      <Insets bottom="40.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
 </GridPane>
