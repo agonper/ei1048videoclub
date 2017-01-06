@@ -24,16 +24,12 @@
     <center>
         <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <MenuButton fx:id="movieEditSearchBy_menuButton" mnemonicParsing="false" text="Título">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Título" />
-                        <MenuItem mnemonicParsing="false" text="Título VO" />
-                    </items>
+                <MenuButton fx:id="movieEditSearchBy_menuButton" mnemonicParsing="false">
                     <HBox.margin>
                         <Insets right="20.0" />
                     </HBox.margin>
                 </MenuButton>
-                <TextField fx:id="movieEditTitle_textField">
+                <TextField fx:id="movieEditTitle_textField" onKeyReleased="#checkTitle">
                     <HBox.margin>
                         <Insets right="20.0" />
                     </HBox.margin>
@@ -43,12 +39,12 @@
                   <Insets top="5.0" />
                </padding>
             </Label>
-            <TextField fx:id="movieEditYear_textField" prefHeight="26.0" prefWidth="70.0">
+            <TextField fx:id="movieEditYear_textField" onKeyReleased="#checkYear" prefHeight="26.0" prefWidth="70.0">
                <HBox.margin>
                   <Insets left="5.0" right="20.0" />
                </HBox.margin>
             </TextField>
-                <Button fx:id="movieEditSearchBy_button" mnemonicParsing="false" text="Buscar" />
+                <Button fx:id="movieEditSearchBy_button" onAction="#searchMovie" mnemonicParsing="false" text="Buscar" />
             </children>
             <padding>
                 <Insets top="20.0" />

@@ -13,6 +13,7 @@ import es.uji.agdc.videoclub.services.MovieService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -32,6 +33,8 @@ public class InsertMovieController extends Controller implements RootController 
     private BorderPane borderPane;
     @FXML
     private Button submitButton;
+    @FXML
+    private Label label;
 
     private String movie_01 = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_1.fxml";
     private String movie_02 = "/views/app/mainSection/adminOptions/insertMovie/insert_movie_2.fxml";
@@ -66,6 +69,42 @@ public class InsertMovieController extends Controller implements RootController 
     private Movie movieToCreate;
 
     private int actualPage = 0;
+    private boolean editing = false;
+
+
+    public void editMovie(Movie movie) {
+        editing = true;
+
+        data_movie_01 = new String[4];
+        data_movie_01[0] = movie.getTitle();
+        data_movie_01[1] = movie.getTitleOv();
+        data_movie_01[2] = String.valueOf(movie.getYear());
+        data_movie_01[3] = String.valueOf(movie.getAvailableCopies());
+
+        data_movie_02 = new String[movie.getActors().size()];
+
+        for (int i = 0; i < data_movie_02.length; i++)
+            data_movie_02[i] = movie.getActors().get(i).getName();
+
+
+        data_movie_03 = new String[movie.getDirectors().size()];
+
+        for (int i = 0; i < data_movie_03.length; i++)
+            data_movie_03[i] = movie.getDirectors().get(i).getName();
+
+
+        data_movie_04 = new String[1];
+        data_movie_04[0] = movie.getDescription();
+
+        data_movie_05 = new String[movie.getGenres().size()];
+
+        for (int i = 0; i < data_movie_05.length; i++)
+            data_movie_05[i] = movie.getGenres().get(i).getName();
+
+        initialize();
+        label.setText("Edición de una película");
+        stage.showAndWait();
+    }
 
     @FXML
     public void initialize() {
@@ -233,7 +272,13 @@ public class InsertMovieController extends Controller implements RootController 
         movieToCreate = new Movie();
         setAllMovieData();
         MovieService movieService = Services.getMovieService();
-        movieService.create(movieToCreate);
+        if (!editing)
+            movieService.create(movieToCreate);
+        else
+            movieService.update(movieToCreate);
+
+        System.out.println(movieService.findAll().count());
+
         super.stage.close();
     }
 
