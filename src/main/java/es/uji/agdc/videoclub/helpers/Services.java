@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Services {
 
-    //TODO: Test
     private static UserService userService;
     private static AuthenticationService authService;
     private static MovieService movieService;

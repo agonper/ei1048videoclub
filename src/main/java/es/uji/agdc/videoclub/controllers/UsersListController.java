@@ -1,18 +1,26 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.controllers.insertUser.InsertUserController;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserService;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.springframework.cglib.proxy.Callback;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 /**
@@ -40,13 +48,12 @@ public class UsersListController extends Controller {
     TableColumn username_TableColumn;
     @FXML
     TableColumn role_TableColumn;
+    @FXML
+    Button editUser_button;
+    @FXML
+    Button deleteUser_button;
 
-    private Stage listOfUsersStage;
     private UserService userService = Services.getUserService();
-
-    public void setStage(Stage stage) {
-        listOfUsersStage = stage;
-    }
 
     @FXML
     public void initialize() {
@@ -68,7 +75,78 @@ public class UsersListController extends Controller {
         while (adminsIterator.hasNext())
             usersToTableView.add(adminsIterator.next());
 
-
         users_TableView.setItems(usersToTableView);
+    }
+
+    @FXML
+    public void editSelectedUser() {
+        ObservableList<Integer> selectedIndices = users_TableView.getSelectionModel().getSelectedIndices();
+
+        if (selectedIndices.size() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Usuario no seleccionado");
+            alert.setHeaderText("Ha de seleccionarse un usuario para poder editarlo");
+            alert.showAndWait();
+        }
+        else if (selectedIndices.size() > 1) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Demasiados usuarios seleccionados");
+            alert.setHeaderText("Ha de seleccionarse un único usuario");
+            alert.showAndWait();
+        }
+        else {
+            int selectedIndex = selectedIndices.get(0);
+            User user = (User) users_TableView.getItems().get(selectedIndex);
+            editUser(user);
+        }
+    }
+
+    @FXML
+    public void deleteSelectedUser() {
+        ObservableList<Integer> selectedIndices = users_TableView.getSelectionModel().getSelectedIndices();
+
+        if (selectedIndices.size() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Usuario no seleccionado");
+            alert.setHeaderText("Ha de seleccionarse un usuario para poder borrarlo");
+            alert.showAndWait();
+        }
+        else if (selectedIndices.size() > 1) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Demasiados usuarios seleccionados");
+            alert.setHeaderText("Ha de seleccionarse un único usuario");
+            alert.showAndWait();
+        }
+        else {
+            int selectedIndex = selectedIndices.get(0);
+            User user = (User) users_TableView.getItems().get(selectedIndex);
+            deleteUser(user);
+        }
+    }
+
+    private void deleteUser(User user) {
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirmación de borrado");
+        confirmation.setHeaderText("¿Está seguro de querer eliminar el usuario seleccionado?");
+        confirmation.setContentText("Información del usuario: \n\n" +
+        "DNI: " + user.getDni() + "\n" +
+        "Nombre: " + user.getName() + "\n" +
+        "Nombre de usuario: " + user.getUsername() + "\n" +
+        "Email: " + user.getEmail() + "\n" +
+        "Teléfono: " + user.getPhone() + "\n" +
+        "Dirección: " + user.getAddress());
+
+        Optional<ButtonType> answer = confirmation.showAndWait();
+        if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
+            UserService service = Services.getUserService();
+            service.remove(user.getUsername());
+            //FIXME: Remove from the table if the Result of remove is Ok, and show an alert if not (f. ex. trying to delete an admin)
+            users_TableView.getItems().remove(user);
+        }
+    }
+
+    private void editUser(User user) {
+        System.out.println("Editing: " + user.toString());
+        //TODO: Call to edit window
     }
 }
