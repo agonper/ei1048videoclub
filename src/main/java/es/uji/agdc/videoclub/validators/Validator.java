@@ -76,6 +76,26 @@ public abstract class Validator<T extends AbstractEntity> {
         return fields == null || fields.isEmpty();
     }
 
+    /**
+     * Checks if a given string contains only numbers
+     * @param string
+     * @return
+     */
+    protected boolean isNumber(String string) {
+        //FIXME I think that this can be done by trying to parse the number an catching the exception
+        char[] chars = string.toCharArray();
+        boolean isNumber = true;
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] < 48 || chars[i] > 57) {
+                isNumber = false;
+                break;
+            }
+        }
+
+        return isNumber;
+    }
+
     private interface Checker<T> {
         Result check(T entity, Result result);
     }

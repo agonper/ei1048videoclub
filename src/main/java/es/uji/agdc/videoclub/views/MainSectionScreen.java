@@ -39,7 +39,7 @@ public class MainSectionScreen extends AbstractScreen {
     }
 
     private Pane loadMainSection() throws IOException {
-        Pane mainSection = super.loadScreen("/views/app/mainSection/mainSection.fxml");
+        Pane mainSection = super.loadScreen("/views/app/mainSection/main_section.fxml");
         return mainSection;
     }
 

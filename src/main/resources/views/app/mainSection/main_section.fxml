@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.MainSectionController">
+    <left>
+        <HBox>
+            <fx:include source="profile/profile_section.fxml" />
+            <Separator orientation="VERTICAL" />
+            <BorderPane.margin>
+                <Insets right="10.0" />
+            </BorderPane.margin>
+        </HBox>
+    </left>
+    <center>
+        <TabPane fx:id="tabs">
+            <Tab fx:id="searchTab" closable="false" text="Búsqueda de películas">
+                <BorderPane fx:id="mainSection_search_result_container">
+                    <top>
+                        <fx:include source="search_bar.fxml" />
+                    </top>
+                    <center>
+                        <fx:include source="search_section.fxml" />
+                    </center>
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" right="10.0" />
+                    </BorderPane.margin>
+                </BorderPane>
+            </Tab>
+            <Tab fx:id="adminTab" closable="false" text="Opciones administrativas">
+                <fx:include source="adminOptions/admin_section.fxml" />
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

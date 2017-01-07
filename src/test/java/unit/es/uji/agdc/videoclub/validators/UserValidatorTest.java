@@ -42,7 +42,7 @@ public class UserValidatorTest {
         user.setDni("");
         Result result = validator.validate(user);
         assertTrue(result.isError());
-        assertEquals("Result: ERROR(EMPTY_PARAMETER)[Dni]", result.toString());
+        assertEquals("Result: ERROR(EMPTY_PARAMETER)[DNI]", result.toString());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class UserValidatorTest {
         user.setDni(null);
         Result result = validator.validate(user);
         assertTrue(result.isError());
-        assertEquals("Result: ERROR(EMPTY_PARAMETER)[Dni]", result.toString());
+        assertEquals("Result: ERROR(EMPTY_PARAMETER)[DNI]", result.toString());
     }
 
     @After
