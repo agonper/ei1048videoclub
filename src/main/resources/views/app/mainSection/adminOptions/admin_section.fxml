@@ -32,7 +32,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="mainSection_userEdit_button" mnemonicParsing="false" onAction="#showUserEditSection" text="Modificar un usuario" GridPane.columnIndex="2">
+                <Button fx:id="mainSection_showListOfMovies_button" mnemonicParsing="false" onAction="#showListOfMovies" text="Listado de películas" GridPane.columnIndex="2">
                     <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
@@ -42,12 +42,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="mainSection_movieEdit_button" mnemonicParsing="false" onAction="#showMovieEditSection" text="Modificar una pelicula" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                    </GridPane.margin>
-                </Button>
-            <Button fx:id="mainSection_listOfUsers_button" onAction="#showListOfUsers" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Listado de usuarios" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="mainSection_listOfUsers_button" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showListOfUsers" text="Listado de usuarios" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             </children>
             <BorderPane.margin>
                 <Insets top="20.0" />

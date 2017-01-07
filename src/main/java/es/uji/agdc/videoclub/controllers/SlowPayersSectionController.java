@@ -48,7 +48,7 @@ public class SlowPayersSectionController extends Controller {
         LocalDate actualDate = LocalDate.now();
         LocalDate lastPayment = user.getLastPayment();
 
-        if (actualDate.minusMonths(1).isAfter(lastPayment))
+        if (lastPayment != null && actualDate.minusMonths(1).isAfter(lastPayment))
             return true;
 
         return false;

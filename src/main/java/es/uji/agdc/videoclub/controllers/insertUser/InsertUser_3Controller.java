@@ -43,7 +43,7 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     private boolean valid_username = false;
     private boolean valid_password = false;
-    private boolean valid_lastPaymentDate = false;
+    private boolean valid_lastPaymentDate = true;
 
     private InsertUserController rootController = null;
 
@@ -80,6 +80,8 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @FXML
     public void checkUsername_textField() {
+        checkDate_datePicker();
+        checkPassword_textField();
         if (checkUsername(user_username_textField.getText())) {
             user_username_textField.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
             valid_username = true;
@@ -101,6 +103,7 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @FXML
     public void checkPassword_textField() {
+        checkDate_datePicker();
         if (checkPassword(userPassword_passwordField.getText())) {
             userPassword_passwordField.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
             valid_password = true;
@@ -131,11 +134,19 @@ public class InsertUser_3Controller extends Controller implements Form {
                 userLastPaymentDate_datePicker.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
                 valid_lastPaymentDate = false;
             }
-            rootController.updateFormState(allFieldsValid(), 3);
-            rootController.finishedForm();
         }
-        else
+        else if (userLastPaymentDate_datePicker.getValue() == null) {
+            userLastPaymentDate_datePicker.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
+            valid_lastPaymentDate = true;
+        }
+
+        else {
             userLastPaymentDate_datePicker.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+            valid_lastPaymentDate = false;
+        }
+
+        rootController.updateFormState(allFieldsValid(), 3);
+        rootController.finishedForm();
     }
 
     private boolean checkDate(String date) {
@@ -143,7 +154,7 @@ public class InsertUser_3Controller extends Controller implements Form {
 
         Pattern p = Pattern.compile(DATE_PATTERN);
 
-        return p.matcher(date).matches();
+        return p.matcher(date).matches() || date.equals("");
     }
 
     @Override

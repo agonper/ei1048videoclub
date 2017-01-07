@@ -1,5 +1,12 @@
 package es.uji.agdc.videoclub.models;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.orm.hibernate4.support.OpenSessionInViewFilter;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,14 +26,17 @@ public class Movie extends AbstractEntity {
     @Column(nullable = false)
     private int year;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "movie_actors")
     private List<Actor> actors = new LinkedList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "movie_directors")
     private List<Director> directors = new LinkedList<>();
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "movie_genres")
     private List<Genre> genres = new LinkedList<>();
@@ -83,6 +93,7 @@ public class Movie extends AbstractEntity {
     }
 
     public List<Actor> getActors() {
+
         return actors;
     }
 

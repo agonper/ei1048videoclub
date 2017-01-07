@@ -186,6 +186,10 @@ public class InsertUserController extends Controller implements RootController {
         String[] page3 = user_03_controller.getAllData();
         userToCreate.setUsername(page3[0]);
         userToCreate.setPassword(page3[1]);
-        userToCreate.setLastPayment(LocalDate.parse(page3[2]));
+
+        if (page3[2].equals(""))
+            userToCreate.setLastPayment(null);
+        else
+            userToCreate.setLastPayment(LocalDate.parse(page3[2]));
     }
 }

@@ -5,7 +5,10 @@ import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.util.regex.Pattern;
 
 /**
@@ -23,6 +26,25 @@ public class InsertUser_2Controller extends Controller implements Form {
 
     private InsertUserController rootController = null;
 
+    @FXML
+    public void initialize() {
+        DecimalFormat format = new DecimalFormat( "#.0" );
+        TextFormatter onlyIntegers = new TextFormatter<>(c ->
+        {
+            if (c.getControlNewText().isEmpty())
+                return c;
+
+            ParsePosition parsePosition = new ParsePosition(0);
+            Object object = format.parse(c.getControlNewText(), parsePosition);
+
+            if (object == null || parsePosition.getIndex() < c.getControlNewText().length())
+                return null;
+
+            else
+                return c;
+        });
+        userPhoneNumber_textField.setTextFormatter(onlyIntegers);
+    }
 
     @FXML
     public void checkPhone_TextField() {
