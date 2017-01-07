@@ -5,7 +5,6 @@ import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.services.utils.Result;
-import es.uji.agdc.videoclub.services.utils.ResultBuilder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,24 +15,10 @@ import java.util.stream.IntStream;
  * Created by Alberto on 11/12/2016.
  */
 @Component
-public class MovieValidator implements Validator<Movie> {
+public class MovieValidator extends Validator<Movie> {
+
     @Override
-    public Result validate(Movie entity) {
-        Result emptyFieldsResult = checkIfHasEmptyFields(entity);
-        if (emptyFieldsResult.isError()) {
-            return emptyFieldsResult;
-        }
-
-        Result invalidFieldsResult = checkIfHasInvalidFields(entity);
-        if (invalidFieldsResult.isError()) {
-            return invalidFieldsResult;
-        }
-
-        return ResultBuilder.ok();
-    }
-
-    private Result checkIfHasEmptyFields(Movie movie) {
-        Result emptyError = ResultBuilder.error("EMPTY_PARAMETER");
+    protected Result checkIfHasEmptyFields(Movie movie, Result emptyError) {
         if (isFieldEmpty(movie.getTitle())) {
             emptyError.addField("Title");
         }
@@ -82,15 +67,11 @@ public class MovieValidator implements Validator<Movie> {
         if (isFieldEmpty(movie.getDescription())) {
             emptyError.addField("Description");
         }
-
-        if (emptyError.getFields().length > 0) {
-            return emptyError;
-        }
-        return ResultBuilder.ok();
+        return emptyError;
     }
 
-    private Result checkIfHasInvalidFields(Movie movie) {
-        Result invalidError = ResultBuilder.error("INVALID_PARAMETER");
+    @Override
+    protected Result checkIfHasInvalidFields(Movie movie, Result invalidError) {
 
         int actualYear = LocalDate.now().getYear();
         if (movie.getYear() < 1900 || movie.getYear() > actualYear) {
@@ -118,18 +99,7 @@ public class MovieValidator implements Validator<Movie> {
             invalidError.addField("AvailableCopies");
         }
 
-        if (invalidError.getFields().length > 0) {
-            return invalidError;
-        }
-
-        return ResultBuilder.ok();
+        return invalidError;
     }
 
-    private boolean isFieldEmpty(String field) {
-        return field == null || field.isEmpty();
-    }
-
-    private boolean isMultiFieldEmpty(List fields) {
-        return fields == null || fields.isEmpty();
-    }
 }
