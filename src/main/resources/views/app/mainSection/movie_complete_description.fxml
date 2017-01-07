@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.MovieCompleteDescriptionController">
    <top>
       <BorderPane prefHeight="110.0" prefWidth="460.0" BorderPane.alignment="CENTER">
          <top>
@@ -49,10 +49,10 @@
    <bottom>
       <BorderPane prefHeight="40.0" prefWidth="460.0" BorderPane.alignment="CENTER">
          <left>
-            <Button fx:id="movieData_close_button" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER" />
+            <Button fx:id="movieData_close_button" onAction="#closeWindow" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <Button fx:id="movieData_rent_button" mnemonicParsing="false" text="Alquilar" BorderPane.alignment="CENTER" />
+            <Button fx:id="movieData_rent_button" onAction="#rentMovie" mnemonicParsing="false" text="Alquilar" BorderPane.alignment="CENTER" />
          </right>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" />
