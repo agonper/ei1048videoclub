@@ -149,7 +149,7 @@ public class UsersListController extends Controller {
         try {
             BorderPane loaded = (BorderPane) loader.load();
             InsertUserController userController = (InsertUserController) loader.getController();
-            userController.editUser(user);
+            userController.editUser(user, "Edición de un usuario");
             stage = new Stage();
             stage.setTitle("Editar un usuario");
             stage.initModality(Modality.WINDOW_MODAL);

@@ -57,7 +57,7 @@ public class InsertUserController extends Controller implements RootController {
     private boolean editing = false;
 
 
-    public void editUser(User user) {
+    public void editUser(User user, String labelText) {
         editing = true;
 
         data_user_01 = new String[3];
@@ -72,9 +72,13 @@ public class InsertUserController extends Controller implements RootController {
         data_user_03 = new String[3];
         data_user_03[0] = user.getUsername();
         data_user_03[1] = user.getPassword();
-        data_user_03[2] = user.getLastPayment().toString();
 
-        label.setText("Edición de un usuario");
+        if (user.getLastPayment() != null)
+            data_user_03[2] = user.getLastPayment().toString();
+        else
+            data_user_03[2] = "";
+
+        label.setText(labelText);
 
         valid_01 = true;
         valid_02 = true;
@@ -204,7 +208,11 @@ public class InsertUserController extends Controller implements RootController {
     public void submitForm() {
         userToCreate = UserFactory.createMember();
         setAllUserData();
-        Services.getUserService().create(userToCreate);
+
+        if (!editing)
+            Services.getUserService().create(userToCreate);
+        else
+            Services.getUserService().update(userToCreate);
         super.stage.close();
     }
 

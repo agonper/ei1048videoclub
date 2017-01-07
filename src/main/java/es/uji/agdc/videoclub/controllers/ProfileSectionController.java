@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.controllers.insertUser.InsertUserController;
 import es.uji.agdc.videoclub.helpers.ApplicationState;
 import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.models.User;
@@ -53,7 +54,7 @@ public class ProfileSectionController extends Controller {
     @FXML
     public void showPersonalData_Screen() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/app/mainSection/profile/personal_data.fxml"));
+        loader.setLocation(getClass().getResource("/views/app/mainSection/adminOptions/insertUser/insert_user_root.fxml"));
         BorderPane page;
         try {
             page = (BorderPane) loader.load();
@@ -63,8 +64,8 @@ public class ProfileSectionController extends Controller {
             Scene scene = new Scene(page);
             personalDataStage.setScene(scene);
 
-            PersonalDataScreenController controller = loader.getController();
-            controller.setUserData(loggedUser);
+            InsertUserController controller = loader.getController();
+            controller.editUser(loggedUser, "Datos de la cuenta");
             controller.setStage(personalDataStage);
 
             personalDataStage.showAndWait();
