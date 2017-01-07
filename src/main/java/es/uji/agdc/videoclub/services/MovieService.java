@@ -38,9 +38,11 @@ public interface MovieService {
     Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String ...values);
 
     /**
-     * Provisional, for debugging purposes
+     * Finds all movies on the database without applying any filtering
      * @return A stream with all the movies of the database
+     * @deprecated Provisional, for debugging purposes
      */
+    @Deprecated
     Stream<Movie> findAll(); //FIXME Remove
 
     /**
