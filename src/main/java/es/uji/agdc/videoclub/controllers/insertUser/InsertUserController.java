@@ -9,6 +9,7 @@ import es.uji.agdc.videoclub.models.utils.UserFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.layout.BorderPane;
 
@@ -20,6 +21,8 @@ import java.time.LocalDate;
  */
 public class InsertUserController extends Controller implements RootController {
 
+    @FXML
+    private Label label;
     @FXML
     private Pagination insertUserPagination;
     @FXML
@@ -51,6 +54,38 @@ public class InsertUserController extends Controller implements RootController {
 
     private int actualPage = 0;
 
+    private boolean editing = false;
+
+
+    public void editUser(User user) {
+        editing = true;
+
+        data_user_01 = new String[3];
+        data_user_01[0] = user.getDni();
+        data_user_01[1] = user.getUsername();
+        data_user_01[2] = user.getAddress();
+
+        data_user_02 = new String[2];
+        data_user_02[0] = String.valueOf(user.getPhone());
+        data_user_02[1] = user.getEmail();
+
+        data_user_03 = new String[3];
+        data_user_03[0] = user.getUsername();
+        data_user_03[1] = user.getPassword();
+        data_user_03[2] = user.getLastPayment().toString();
+
+        label.setText("Edición de un usuario");
+
+        valid_01 = true;
+        valid_02 = true;
+        valid_03 = true;
+
+        finishedForm();
+    }
+
+    public boolean isEditing() {
+        return editing;
+    }
 
     @FXML
     public void initialize() {
@@ -66,9 +101,9 @@ public class InsertUserController extends Controller implements RootController {
         BorderPane loadedResource = null;
 
         switch (actualPage) {
-            case 0:
-                data_user_01 = user_01_controller.getAllData();
-                break;
+            //case 0:
+            //    data_user_01 = user_01_controller.getAllData();
+            //    break;
 
             case 1:
                 data_user_02 = user_02_controller.getAllData();

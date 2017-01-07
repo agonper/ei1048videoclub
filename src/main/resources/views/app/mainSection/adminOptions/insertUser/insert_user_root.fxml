@@ -15,7 +15,7 @@
    <top>
       <BorderPane prefHeight="97.0" prefWidth="460.0" BorderPane.alignment="CENTER">
          <top>
-            <Label text="Introducción de un nuevo socio" BorderPane.alignment="CENTER">
+            <Label fx:id="label" text="Introducción de un nuevo socio" BorderPane.alignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font></Label>

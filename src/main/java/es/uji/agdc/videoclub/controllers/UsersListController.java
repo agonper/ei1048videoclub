@@ -1,14 +1,22 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.controllers.insertMovie.InsertMovieController;
+import es.uji.agdc.videoclub.controllers.insertUser.InsertUserController;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -136,7 +144,25 @@ public class UsersListController extends Controller {
     }
 
     private void editUser(User user) {
-        System.out.println("Editing: " + user.toString());
-        //TODO: Call to edit window
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/app/mainSection/adminOptions/insertUser/insert_user_root.fxml"));
+        try {
+            BorderPane loaded = (BorderPane) loader.load();
+            InsertUserController userController = (InsertUserController) loader.getController();
+            userController.editUser(user);
+            stage = new Stage();
+            stage.setTitle("Editar un usuario");
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            Scene scene = new Scene(loaded);
+            stage.setScene(scene);
+
+            userController.setStage(stage);
+
+            stage.showAndWait();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -52,7 +52,7 @@ public class InsertUser_1Controller extends Controller implements Form {
 
             boolean dni_valid_format = p.matcher(dni).matches();
 
-            if (dni_valid_format && !userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent())
+            if (dni_valid_format && (!userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent() || rootController.isEditing()))
                 return true;
         }
 

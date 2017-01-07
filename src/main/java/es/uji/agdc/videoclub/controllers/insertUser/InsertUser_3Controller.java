@@ -95,7 +95,7 @@ public class InsertUser_3Controller extends Controller implements Form {
     }
 
     private boolean checkUsername(String username) {
-        if (username.length() < 4 || userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent())
+        if (username.length() < 4 || (userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent() && !rootController.isEditing()))
             return false;
 
         return true;
