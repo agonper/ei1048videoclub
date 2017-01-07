@@ -174,7 +174,7 @@ public class InsertMovie_1Controller extends Controller implements Form {
 
     @Override
     public void setAllData(String[] data) {
-        movieYear_textField.setText(data[0]);
+        movieTitle_textField.setText(data[0]);
         checkTitle_TextField();
 
         movieTitleVO_textField.setText(data[1]);

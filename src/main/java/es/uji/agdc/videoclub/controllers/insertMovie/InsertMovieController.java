@@ -101,9 +101,13 @@ public class InsertMovieController extends Controller implements RootController 
         for (int i = 0; i < data_movie_05.length; i++)
             data_movie_05[i] = movie.getGenres().get(i).getName();
 
-        initialize();
         label.setText("Edición de una película");
-        stage.showAndWait();
+        valid_01 = true;
+        valid_02 = true;
+        valid_03 = true;
+        valid_04 = true;
+        valid_05 = true;
+        finishedForm();
     }
 
     @FXML
@@ -122,9 +126,9 @@ public class InsertMovieController extends Controller implements RootController 
         GridPane loadedResource = null;
 
         switch (actualPage) {
-            case 0:
-                data_movie_01 = movie_01_controller.getAllData();
-                break;
+            //case 0:
+            //    data_movie_01 = movie_01_controller.getAllData();
+            //    break;
 
             case 1:
                 data_movie_02 = movie_02_controller.getAllData();
@@ -276,8 +280,6 @@ public class InsertMovieController extends Controller implements RootController 
             movieService.create(movieToCreate);
         else
             movieService.update(movieToCreate);
-
-        System.out.println(movieService.findAll().count());
 
         super.stage.close();
     }

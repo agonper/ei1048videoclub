@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.controllers.insertMovie.InsertMovieController;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.Actor;
 import es.uji.agdc.videoclub.models.Director;
@@ -8,9 +9,15 @@ import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.services.MovieService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -145,8 +152,29 @@ public class MoviesListController extends Controller {
         }
     }
 
+    Stage stage = null;
+
     private void editSelectedMovie(Movie movie) {
-        //TODO: Editar la película
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/app/mainSection/adminOptions/insertMovie/insert_movie_root.fxml"));
+        try {
+            BorderPane loaded = (BorderPane) loader.load();
+            InsertMovieController movieController = (InsertMovieController) loader.getController();
+            movieController.editMovie(movie);
+            stage = new Stage();
+            stage.setTitle("Editar una película");
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            Scene scene = new Scene(loaded);
+            stage.setScene(scene);
+
+            movieController.setStage(stage);
+
+            stage.showAndWait();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
