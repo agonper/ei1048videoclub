@@ -137,6 +137,17 @@ public class UserValidatorTest {
     }
 
     @Test
+    public void validate_multipleEmptyFields_isInvalid() throws Exception {
+        user.setDni("")
+            .setName("")
+            .setAddress("");
+        Result result = validator.validate(user);
+        assertTrue(result.isError());
+        assertEquals("EMPTY_PARAMETER", result.getMsg());
+        assertEquals(3, result.getFields().length);
+    }
+
+    @Test
     public void validate_shortDni_isInvalid() throws Exception {
         user.setDni("1061397N");
         Result result = validator.validate(user);
@@ -275,7 +286,7 @@ public class UserValidatorTest {
     }
 
     @Test
-    public void validate_noAtEmail_isInvalid() throws Exception {
+    public void validate_noAtInEmail_isInvalid() throws Exception {
         user.setEmail("aa.com");
         Result result = validator.validate(user);
         assertTrue(result.isError());
@@ -378,6 +389,18 @@ public class UserValidatorTest {
         Result result = validator.validate(user);
         assertTrue(result.isError());
         assertEquals("Result: ERROR(INVALID_PARAMETER)[Password]", result.toString());
+    }
+
+    @Test
+    public void validate_multipleInvalidFields_isInvalid() throws Exception {
+        user.setName("a")
+            .setDni("aaa4")
+            .setAddress("aaaaa")
+            .setLastPayment(LocalDate.now().plusDays(1));
+        Result result = validator.validate(user);
+        assertTrue(result.isError());
+        assertEquals("INVALID_PARAMETER", result.getMsg());
+        assertEquals(4, result.getFields().length);
     }
 
     @After
