@@ -8,6 +8,8 @@ import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import es.uji.agdc.videoclub.services.UserServiceDB;
 import es.uji.agdc.videoclub.services.utils.Result;
+import es.uji.agdc.videoclub.validators.UserValidator;
+import es.uji.agdc.videoclub.validators.Validator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +39,8 @@ public class UserServiceDBTest {
     public void setUp() throws Exception {
         repository = mock(UserRepository.class);
         encryptor = mock(PasswordEncryptor.class);
-        service = new UserServiceDB(repository, encryptor);
+        Validator<User> validator = new UserValidator();
+        service = new UserServiceDB(repository, encryptor, validator);
         user = new User()
                 .setDni("10614397N")
                 .setName("Paco Sánchez Díaz")
@@ -56,6 +59,15 @@ public class UserServiceDBTest {
         verify(encryptor, only()).hash(userPassword);
         verify(repository, only()).save(user);
         assertTrue(result.isOk());
+    }
+
+    @Test
+    public void create_inValidUser_saveNotCalledAndReturnsError() throws Exception {
+        user.setName("");
+        Result result = service.create(user);
+        verify(encryptor, never()).hash(anyString());
+        verify(repository, never()).save(user);
+        assertTrue(result.isError());
     }
 
     @Test

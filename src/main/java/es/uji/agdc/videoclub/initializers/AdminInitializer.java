@@ -20,7 +20,7 @@ import java.util.Optional;
 public class AdminInitializer {
     public static final String
             ADMIN_USERNAME = "admin",
-            ADMIN_DEFAULT_PASSWORD = "1234";
+            ADMIN_DEFAULT_PASSWORD = "12345678";
 
     private static Logger log = LoggerFactory.getLogger(AdminInitializer.class);
 
@@ -40,7 +40,7 @@ public class AdminInitializer {
                 .setPhone(693582471)
                 .setEmail("admin@videoclub.com")
                 .setUsername(ADMIN_USERNAME)
-                .setPassword("1234");
+                .setPassword(ADMIN_DEFAULT_PASSWORD);
 
         Optional<User> possibleAdmin = service.findBy(UserQueryTypeSingle.USERNAME, ADMIN_USERNAME);
         if (!possibleAdmin.isPresent()) {

@@ -5,6 +5,7 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
+import es.uji.agdc.videoclub.validators.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,17 @@ import java.util.stream.Stream;
  */
 @Service
 public class UserServiceDB implements UserService{
-    Logger log = LoggerFactory.getLogger(UserServiceDB.class);
+    private Logger log = LoggerFactory.getLogger(UserServiceDB.class);
 
     private final UserRepository repository;
     private final PasswordEncryptor encryptor;
+    private final Validator<User> validator;
 
     @Autowired
-    public UserServiceDB(UserRepository repository, PasswordEncryptor encryptor) {
+    public UserServiceDB(UserRepository repository, PasswordEncryptor encryptor, Validator<User> validator) {
         this.repository = repository;
         this.encryptor = encryptor;
+        this.validator = validator;
     }
 
     @Override
@@ -37,9 +40,12 @@ public class UserServiceDB implements UserService{
             return ResultBuilder.error("OLD_USER");
         }
 
-        try {
-            // FIXME Control all different edge cases
+        Result validatorResult = validator.validate(user);
+        if (validatorResult.isError()) {
+            return validatorResult;
+        }
 
+        try {
             user.setPassword(encryptor.hash(user.getPassword()));
             repository.save(user);
             return ResultBuilder.ok();
