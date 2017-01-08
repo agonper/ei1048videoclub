@@ -5,10 +5,7 @@ import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
-import es.uji.agdc.videoclub.services.MovieAssetService;
-import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
-import es.uji.agdc.videoclub.services.MovieService;
-import es.uji.agdc.videoclub.services.MovieServiceDB;
+import es.uji.agdc.videoclub.services.*;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.validators.MovieValidator;
 import es.uji.agdc.videoclub.validators.Validator;
@@ -245,6 +242,19 @@ public class MovieServiceDBTest {
         verify(movieRepository, never()).findByTitleIgnoreCaseAndYear(anyString(), anyInt());
         assertFalse(possibleMovie.isPresent());
     }
+
+    @Test
+    public void findAllBy_withNoValue_returnsEmptyStream() throws Exception {
+        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL);
+        assertEquals(0, allMoviesByNothing.count());
+    }
+
+    @Test(expected = Error.class)
+    public void findAllBy_withSentenceValue_returnsError() throws Exception {
+        service.findAllBy(MovieQueryTypeMultiple.ALL, "Some sentence");
+    }
+
+
 
     @After
     public void tearDown() throws Exception {

@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -85,6 +86,27 @@ public class MovieRepositoryTest {
         assertTrue(possibleMovie.isPresent());
         assertEquals(movie.getTitle(), possibleMovie.get().getTitle());
         assertEquals(movie.getYear(), possibleMovie.get().getYear());
+    }
+
+    @Test
+    public void findMovieByWordsInTitle_matchingCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByTitleContainsIgnoreCase("Capitán");
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInTitle_lowerCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByTitleContainsIgnoreCase("Capitán".toLowerCase());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInTitle_upperCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByTitleContainsIgnoreCase("Capitán".toUpperCase());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
     }
 
     @Test
