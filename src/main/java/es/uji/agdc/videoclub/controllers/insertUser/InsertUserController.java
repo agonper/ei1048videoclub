@@ -71,7 +71,7 @@ public class InsertUserController extends Controller implements RootController {
 
         data_user_03 = new String[3];
         data_user_03[0] = user.getUsername();
-        data_user_03[1] = user.getPassword();
+        data_user_03[1] = "";
 
         if (user.getLastPayment() != null)
             data_user_03[2] = user.getLastPayment().toString();
@@ -82,7 +82,7 @@ public class InsertUserController extends Controller implements RootController {
 
         valid_01 = true;
         valid_02 = true;
-        valid_03 = true;
+        valid_03 = false;
 
         finishedForm();
     }
