@@ -95,7 +95,7 @@ public class InsertUser_1Controller extends Controller implements Form {
     }
 
     private boolean checkAddress(String address) {
-        if (address.length() >= 5)
+        if (address.length() >= 10 && address.length() <= 100)
             return true;
 
         return false;

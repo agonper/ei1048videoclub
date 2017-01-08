@@ -95,7 +95,7 @@ public class InsertUser_3Controller extends Controller implements Form {
     }
 
     private boolean checkUsername(String username) {
-        if (username.length() < 4 || (userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent() && !rootController.isEditing()))
+        if (username.length() < 4 || (userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent() && !rootController.isEditing()) || username.length() > 20)
             return false;
 
         return true;
@@ -117,7 +117,7 @@ public class InsertUser_3Controller extends Controller implements Form {
     }
 
     private boolean checkPassword(String password) {
-        if (password.length() < 5)
+        if (password.length() < 8 || password.length() > 20)
             return false;
 
         return true;
@@ -125,7 +125,7 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @FXML
     public void checkDate_datePicker() {
-        if (userLastPaymentDate_datePicker.getValue() != null && LocalDate.now().isAfter(userLastPaymentDate_datePicker.getValue())) {
+        if (userLastPaymentDate_datePicker.getValue() != null && LocalDate.now().isAfter(userLastPaymentDate_datePicker.getValue()) && userLastPaymentDate_datePicker.getValue().getYear() > 1950) {
             if (checkDate(userLastPaymentDate_datePicker.getValue().toString())) {
                 userLastPaymentDate_datePicker.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
                 valid_lastPaymentDate = true;

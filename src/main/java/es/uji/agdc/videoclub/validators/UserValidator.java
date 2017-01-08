@@ -1,6 +1,7 @@
 package es.uji.agdc.videoclub.validators;
 
 import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.utils.Result;
 import org.springframework.stereotype.Component;
 
@@ -82,12 +83,16 @@ public class UserValidator extends Validator<User> {
     }
 
     private boolean isDni(String dni) {
-        if (dni.length() != 9) {
-            return false;
+        if (dni.length() == 9) {
+            String DNI_PATTERN = "(([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))";
+            Pattern p = Pattern.compile(DNI_PATTERN);
+
+            boolean dni_valid_format = p.matcher(dni).matches();
+
+            if (dni_valid_format)
+                return true;
         }
-        char dniLetter = dni.charAt(8);
-        boolean dni_invalid_letter = !(dniLetter >= 65 || dniLetter <= 90) || !(dniLetter >= 97 || dniLetter <= 122);
-        boolean dni_invalid_number = !isNumber(dni.substring(0, 8));
-        return !dni_invalid_letter && !dni_invalid_number;
+
+        return false;
     }
 }
