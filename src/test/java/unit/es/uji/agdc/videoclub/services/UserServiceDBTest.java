@@ -34,6 +34,7 @@ public class UserServiceDBTest {
     private UserService service;
 
     private User user;
+    private User secondaryUser;
 
     @Before
     public void setUp() throws Exception {
@@ -41,6 +42,7 @@ public class UserServiceDBTest {
         encryptor = mock(PasswordEncryptor.class);
         Validator<User> validator = new UserValidator();
         service = new UserServiceDB(repository, encryptor, validator);
+
         user = new User()
                 .setDni("10614397N")
                 .setName("Paco Sánchez Díaz")
@@ -50,6 +52,20 @@ public class UserServiceDBTest {
                 .setUsername("paquito69")
                 .setPassword("pacosd69")
                 .setRole(User.Role.MEMBER);
+
+        secondaryUser = new User()
+                .setDni("20614397N")
+                .setName("Paco Sánchez Díaz")
+                .setAddress("C/Falsa, 123, 1º")
+                .setPhone(693582471)
+                .setEmail("paco@hotmail.com")
+                .setUsername("paquito6")
+                .setPassword("pacosd69")
+                .setRole(User.Role.MEMBER);
+
+        when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(repository.findByDni(anyString())).thenReturn(Optional.empty());
     }
 
     @Test
@@ -57,7 +73,7 @@ public class UserServiceDBTest {
         String userPassword = user.getPassword();
         Result result = service.create(user);
         verify(encryptor, only()).hash(userPassword);
-        verify(repository, only()).save(user);
+        verify(repository, times(1)).save(user);
         assertTrue(result.isOk());
     }
 
@@ -68,6 +84,62 @@ public class UserServiceDBTest {
         verify(encryptor, never()).hash(anyString());
         verify(repository, never()).save(user);
         assertTrue(result.isError());
+    }
+
+    @Test
+    public void create_twoUsersWithoutCollisions_saveCalledAndReturnsOk() throws Exception {
+        service.create(user);
+
+        when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(repository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(repository.findByDni(user.getDni())).thenReturn(Optional.of(user));
+
+        Result result = service.create(secondaryUser);
+        verify(encryptor, times(2)).hash(anyString());
+        verify(repository, times(2)).save(any(User.class));
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void create_twoUsersWithDniCollision_saveCalledOnceAndReturnsError() throws Exception {
+        service.create(user);
+
+        when(repository.findByDni(user.getDni())).thenReturn(Optional.of(user));
+
+        secondaryUser.setDni(user.getDni());
+        Result result = service.create(secondaryUser);
+        verify(encryptor, times(1)).hash(anyString());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(USER_ALREADY_EXISTS)[DNI]", result.toString());
+    }
+
+    @Test
+    public void create_twoUsersWithUsernameCollision_saveCalledOnceAndReturnsError() throws Exception {
+        service.create(user);
+
+        when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+
+        secondaryUser.setUsername(user.getUsername());
+        Result result = service.create(secondaryUser);
+        verify(encryptor, times(1)).hash(anyString());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(USER_ALREADY_EXISTS)[Username]", result.toString());
+    }
+
+    @Test
+    public void create_twoUsersWithEmailCollision_saveCalledOnceAndReturnsError() throws Exception {
+        service.create(user);
+
+        when(repository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+
+        secondaryUser.setEmail(user.getEmail());
+        Result result = service.create(secondaryUser);
+        verify(encryptor, times(1)).hash(anyString());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(USER_ALREADY_EXISTS)[Email]", result.toString());
     }
 
     @Test
@@ -241,6 +313,7 @@ public class UserServiceDBTest {
         repository = null;
         service = null;
         user = null;
+        secondaryUser = null;
     }
 
 }

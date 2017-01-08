@@ -45,6 +45,23 @@ public class UserServiceDB implements UserService{
             return validatorResult;
         }
 
+        Result alreadyExists = ResultBuilder.error("USER_ALREADY_EXISTS");
+
+        Optional<User> userByDni = findBy(UserQueryTypeSingle.DNI, user.getDni());
+        if (userByDni.isPresent()) {
+            return alreadyExists.addField("DNI");
+        }
+
+        Optional<User> userByUsername = findBy(UserQueryTypeSingle.USERNAME, user.getUsername());
+        if (userByUsername.isPresent()) {
+            return alreadyExists.addField("Username");
+        }
+
+        Optional<User> userByEmail = findBy(UserQueryTypeSingle.EMAIL, user.getEmail());
+        if (userByEmail.isPresent()) {
+            return alreadyExists.addField("Email");
+        }
+
         try {
             user.setPassword(encryptor.hash(user.getPassword()));
             repository.save(user);
