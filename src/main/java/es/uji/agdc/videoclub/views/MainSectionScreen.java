@@ -1,8 +1,8 @@
 package es.uji.agdc.videoclub.views;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -31,16 +31,18 @@ public class MainSectionScreen extends AbstractScreen {
 
     private void buildMainSection() {
         try {
-            this.main_section = (BorderPane) loadMainSection();
+            this.main_section = loadMainSection();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Pane loadMainSection() throws IOException {
-        Pane mainSection = super.loadScreen("/views/app/mainSection/main_section.fxml");
-        return mainSection;
+    private BorderPane loadMainSection() throws IOException {
+        //return super.loadScreen("/views/app/mainSection/main_section.fxml");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/app/mainSection/main_section.fxml"));
+        return (BorderPane) loader.load();
     }
 
     private void showScene() {

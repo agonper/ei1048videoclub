@@ -3,15 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="300.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane minHeight="300.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.SearchController">
    <top>
       <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
-         <Label text="No se ha realizado ninguna búsqueda" BorderPane.alignment="CENTER">
+         <Label fx:id="search_label" text="No se ha realizado ninguna búsqueda" BorderPane.alignment="CENTER">
             <font>
                <Font size="24.0" />
             </font>
@@ -21,10 +20,6 @@
       </VBox>
    </top>
    <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <ListView prefHeight="400.0" prefWidth="780.0" />
-         </content>
-      </ScrollPane>
+      <ListView fx:id="searchResult_listView" prefHeight="400.0" prefWidth="780.0" />
    </center>
 </BorderPane>
