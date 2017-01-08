@@ -14,66 +14,57 @@ import java.util.regex.Pattern;
 public class UserValidator extends Validator<User> {
 
     @Override
-    protected Result checkIfHasEmptyFields(User entity, Result emptyError) {
+    protected Result checkIfHasEmptyFields(User user, Result emptyError) {
 
-        if (isFieldEmpty(entity.getDni()))
+        if (isFieldEmpty(user.getDni()))
             emptyError.addField("DNI");
 
-        if (isFieldEmpty(entity.getName()))
+        if (isFieldEmpty(user.getName()))
             emptyError.addField("Name");
 
-        if (isFieldEmpty(entity.getAddress()))
+        if (isFieldEmpty(user.getAddress()))
             emptyError.addField("Address");
 
-        if (isFieldEmpty(Integer.toString(entity.getPhone())))
-            emptyError.addField("Phone");
-
-        if (isFieldEmpty(entity.getEmail()))
+        if (isFieldEmpty(user.getEmail()))
             emptyError.addField("Email");
 
-        if (isFieldEmpty(entity.getUsername()))
+        if (isFieldEmpty(user.getUsername()))
             emptyError.addField("Username");
 
-        if (isFieldEmpty(entity.getPassword()))
+        if (isFieldEmpty(user.getPassword()))
             emptyError.addField("Password");
 
         return emptyError;
     }
 
     @Override
-    protected Result checkIfHasInvalidFields(User entity, Result invalidError) {
+    protected Result checkIfHasInvalidFields(User user, Result invalidError) {
 
-        boolean dni_incorrect_length = entity.getDni().length() != 9;
-        char dniLetter = entity.getDni().charAt(8);
-        boolean dni_invalid_letter = !(dniLetter >= 65 || dniLetter <= 90) || !(dniLetter >= 97 || dniLetter <= 122);
-        boolean dni_invalid_number = !isNumber(entity.getDni().substring(0, 8));
-        boolean dni_invalid_format = dni_invalid_letter || dni_invalid_number;
-
-        if (dni_incorrect_length || dni_invalid_format)
+        if (!isDni(user.getDni()))
             invalidError.addField("DNI");
 
-        if (entity.getName().length() < 2)
+        if (user.getName().length() < 2 || user.getName().length() > 50)
             invalidError.addField("Name");
 
         //FIXME: Encontrar un buen método para asegurar esto
-        if (entity.getAddress().length() < 5)
+        if (user.getAddress().length() < 10 || user.getAddress().length() > 100)
             invalidError.addField("Address");
 
-        if (entity.getPhone() < 111111111 || entity.getPhone() > 999999999)
+        if (user.getPhone() < 100000000 || user.getPhone() > 999999999)
             invalidError.addField("Phone");
 
-        if (!isEmail(entity.getEmail()))
+        if (!isEmail(user.getEmail()))
             invalidError.addField("Email");
 
-        int actualYear = LocalDate.now().getYear();
-        LocalDate lastPayment = entity.getLastPayment();
-        if (lastPayment != null && lastPayment.getYear() > 1950 && lastPayment.getYear() < actualYear)
+        LocalDate actualDate = LocalDate.now();
+        LocalDate lastPayment = user.getLastPayment();
+        if (lastPayment != null && (lastPayment.getYear() < 1950 || lastPayment.compareTo(actualDate) > 0))
             invalidError.addField("LastPayment");
 
-        if (entity.getUsername().length() < 4 && entity.getUsername().length() > 20)
+        if (user.getUsername().length() < 4 || user.getUsername().length() > 20)
             invalidError.addField("Username");
 
-        if (entity.getPassword().length() < 4 && entity.getPassword().length() > 20)
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 20)
             invalidError.addField("Password");
 
 
@@ -88,5 +79,15 @@ public class UserValidator extends Validator<User> {
         Pattern p = Pattern.compile(EMAIL_PATTERN);
 
         return p.matcher(email).matches();
+    }
+
+    private boolean isDni(String dni) {
+        if (dni.length() != 9) {
+            return false;
+        }
+        char dniLetter = dni.charAt(8);
+        boolean dni_invalid_letter = !(dniLetter >= 65 || dniLetter <= 90) || !(dniLetter >= 97 || dniLetter <= 122);
+        boolean dni_invalid_number = !isNumber(dni.substring(0, 8));
+        return !dni_invalid_letter && !dni_invalid_number;
     }
 }
