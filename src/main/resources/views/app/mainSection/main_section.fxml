@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
+
 <BorderPane fx:id="mainSection_root_container" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.MainSectionController">
     <left>
         <HBox>
@@ -32,12 +33,12 @@
                             <center>
                                 <TextField fx:id="searchBar_textField" BorderPane.alignment="CENTER">
                                     <BorderPane.margin>
-                                        <Insets left="80.0" />
+                                        <Insets left="40.0" />
                                     </BorderPane.margin>
                                 </TextField>
                             </center>
                             <right>
-                                <Button fx:id="searchBar_button" onAction="#searchMovies" mnemonicParsing="false" text="Buscar películas" BorderPane.alignment="CENTER">
+                                <Button fx:id="searchBar_button" mnemonicParsing="false" onAction="#searchMovies" text="Buscar películas" BorderPane.alignment="CENTER">
                                     <BorderPane.margin>
                                         <Insets left="40.0" right="80.0" />
                                     </BorderPane.margin>
@@ -46,6 +47,13 @@
                             <bottom>
                                 <Separator prefWidth="200.0" BorderPane.alignment="CENTER" />
                             </bottom>
+                     <left>
+                        <ChoiceBox fx:id="searchBy_ChoiceBox" onAction="#checkChoiceBox" prefHeight="26.0" prefWidth="130.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets left="40.0" />
+                           </BorderPane.margin>
+                        </ChoiceBox>
+                     </left>
                         </BorderPane>
                     </top>
                     <center>
@@ -62,7 +70,11 @@
                                 </VBox>
                             </top>
                             <center>
-                                <ListView fx:id="searchResult_listView" prefHeight="400.0" prefWidth="780.0" />
+                                <ScrollPane pannable="true">
+                           <content>
+                              <VBox fx:id="searchResult_VBox" alignment="TOP_CENTER" prefHeight="330.0" prefWidth="780.0" spacing="10.0" />
+                           </content>
+                                </ScrollPane>
                             </center>
                         </BorderPane>
                     </center>
