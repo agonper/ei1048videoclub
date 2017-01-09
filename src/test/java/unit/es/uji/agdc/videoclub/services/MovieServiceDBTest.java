@@ -705,6 +705,161 @@ public class MovieServiceDBTest {
         assertEquals(2, movies.count());
     }
 
+    @Test
+    public void findAllBy_allEmptyString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, "");
+
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_allNullString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, null);
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_allInvalidString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, " ");
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_allWithTitleOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String movieTitle = movie.getTitle();
+        String[] titleWords = movieTitle.split(" ");
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, movieTitle);
+
+        Arrays.stream(titleWords).forEach(word ->
+                verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(word));
+        assertEquals(movieTitle, movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_allWithActorOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String actorName = movie.getActors().get(0).getName();
+        String[] actorWords = actorName.split(" ");
+        Arrays.stream(actorWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(actorWords).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+        Arrays.stream(actorWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(actorWords).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, actorName);
+
+        Arrays.stream(actorWords).forEach(word ->
+                verify(movieRepository, times(1)).findByActors_NameContainsIgnoreCase(word));
+
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_allWithDirectorOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String directorName = movie.getDirectors().get(0).getName();
+        String[] directorWords = directorName.split(" ");
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, directorName);
+
+        Arrays.stream(directorWords).forEach(word ->
+                verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(word));
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_allWithGenreOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String genreName = movie.getGenres().get(0).getName();
+        String[] genreWords = genreName.split(" ");
+        Arrays.stream(genreWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(genreWords).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(genreWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(genreWords).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, genreName);
+
+        Arrays.stream(genreWords).forEach(word ->
+                verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(word));
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_allWithYearOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String movieYear = String.valueOf(movie.getYear());
+        String[] movieYearParts = movieYear.split(" ");
+        Arrays.stream(movieYearParts).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(movieYearParts).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(movieYearParts).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(movieYearParts).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(movieYearParts).forEach(word ->
+                when(movieRepository.findByYear(Integer.parseInt(word))).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, movieYear);
+
+        Arrays.stream(movieYearParts).forEach(word ->
+                verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(word));
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_allMultipleFields() throws Exception {
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().setYear(2001);
+        anotherMovie.setId(1L);
+
+        String query = String.format("%s %d", movie.getTitle(), anotherMovie.getYear());
+        String[] queryParts = query.split(" ");
+
+        Arrays.stream(queryParts).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+        Arrays.stream(queryParts).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(queryParts).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(queryParts).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+
+        when(movieRepository.findByYear(anotherMovie.getYear())).thenReturn(Stream.of(anotherMovie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, query);
+        assertEquals(2, movies.count());
+    }
+
     @After
     public void tearDown() throws Exception {
         service = null;

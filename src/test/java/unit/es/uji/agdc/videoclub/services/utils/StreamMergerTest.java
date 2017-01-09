@@ -184,6 +184,17 @@ public class StreamMergerTest {
         assertEquals(weigherEntityId, (long) mergedStreams.findFirst().get().getId());
     }
 
+    @Test
+    public void merge_multipleEmptyStreams_returnsEmptyStream() throws Exception {
+        int COUNT = 10;
+        IntStream.range(0, COUNT).forEach(i ->
+                streamMerger.addStream(Stream.empty()));
+
+        Stream<AbstractEntity> mergedStreams = streamMerger.merge();
+
+        assertEquals(0, mergedStreams.count());
+    }
+
     @After
     public void tearDown() throws Exception {
         streamMerger = null;

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -163,6 +162,13 @@ public class MovieServiceDB implements MovieService{
                 addGenresSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
             case YEAR:
+                addYearSearchToStreamMerger(values, movieStreamMerger);
+                return movieStreamMerger.merge();
+            case ALL:
+                addTitleSearchToStreamMerger(values, movieStreamMerger);
+                addActorsSearchToStreamMerger(values, movieStreamMerger);
+                addDirectorsSearchToStreamMerger(values, movieStreamMerger);
+                addGenresSearchToStreamMerger(values, movieStreamMerger);
                 addYearSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
         }
