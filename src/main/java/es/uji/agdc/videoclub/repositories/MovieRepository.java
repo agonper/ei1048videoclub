@@ -45,4 +45,12 @@ public interface MovieRepository extends CrudRepositoryJ8<Movie, Long> {
      * the provided statement
      */
     Stream<Movie> findByDirectors_NameContainsIgnoreCase(String string);
+
+    /**
+     * Tries to find movies based on a string that appears on the name of its genres
+     * @param string The string that has to appear in the genre name
+     * @return A filled {@link Stream} containing {@link Movie} that match
+     * the provided statement
+     */
+    Stream<Movie> findByGenres_NameContainsIgnoreCase(String string);
 }
