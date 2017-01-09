@@ -61,6 +61,7 @@ public class MovieServiceDBTest {
         when(movieRepository.findByActors_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByDirectors_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByGenres_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
+        when(movieRepository.findByYear(anyInt())).thenReturn(Stream.empty());
         when(movieRepository.findAll()).thenReturn(Stream.empty());
 
         when(assetService.findActorByName(anyString())).thenReturn(Optional.empty());
@@ -622,8 +623,6 @@ public class MovieServiceDBTest {
 
     @Test
     public void findAllBy_yearEmptyString_returnsNoRecords() throws Exception {
-        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.empty());
-
         Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, "");
 
         assertEquals(0, movies.count());
@@ -632,8 +631,6 @@ public class MovieServiceDBTest {
 
     @Test
     public void findAllBy_yearNullString_returnsNoRecords() throws Exception {
-        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.empty());
-
         Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, null);
 
         assertEquals(0, movies.count());
@@ -641,11 +638,71 @@ public class MovieServiceDBTest {
 
     @Test
     public void findAllBy_yearInvalidString_returnsNoRecords() throws Exception {
-        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.empty());
-
         Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, " ");
 
         assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_matchingYear_returnsOneRecord() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.of(movie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, String.valueOf(movie.getYear()));
+
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_invalidYear_returnsOneRecord() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.of(movie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, "dos mil once");
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_withYearAndString_returnsOneRecord() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.of(movie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, String.format("Something %d", movie.getYear()));
+
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_withYearMatchingMultiple_returnsMultipleRecords() throws Exception {
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().setYear(this.movie.getYear());
+        anotherMovie.setId(1L);
+
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.of(movie, anotherMovie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, String.valueOf(movie.getYear()));
+
+        assertEquals(2, movies.count());
+    }
+
+    @Test
+    public void findAllBy_withMultipleYearMatchingMultiple_returnsMultipleRecords() throws Exception {
+        movie.setId(0L);
+
+        int movieYear = movie.getYear();
+        int anotherMovieYear = movieYear - 1;
+        Movie anotherMovie = new Movie().setYear(anotherMovieYear);
+        anotherMovie.setId(1L);
+
+        when(movieRepository.findByYear(movieYear)).thenReturn(Stream.of(movie));
+        when(movieRepository.findByYear(anotherMovieYear)).thenReturn(Stream.of(anotherMovie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR,
+                String.format("%d %d", movieYear, anotherMovieYear));
+
+        assertEquals(2, movies.count());
     }
 
     @After

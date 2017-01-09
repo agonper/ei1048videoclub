@@ -162,6 +162,9 @@ public class MovieServiceDB implements MovieService{
             case GENRES:
                 addGenresSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
+            case YEAR:
+                addYearSearchToStreamMerger(values, movieStreamMerger);
+                return movieStreamMerger.merge();
         }
 
         return Stream.empty();
@@ -189,6 +192,23 @@ public class MovieServiceDB implements MovieService{
         Arrays.stream(values)
                 .map(value -> movieRepository.findByGenres_NameContainsIgnoreCase(value))
                 .forEach(streamMerger::addStream);
+    }
+
+    private void addYearSearchToStreamMerger(String[] values, StreamMerger<Movie> streamMerger) {
+        Arrays.stream(values)
+                .filter(this::isInt)
+                .map(Integer::parseInt)
+                .map(value -> movieRepository.findByYear(value))
+                .forEach(streamMerger::addStream);
+    }
+
+    private boolean isInt(String string) {
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     @Override
