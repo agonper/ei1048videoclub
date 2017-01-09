@@ -7,26 +7,18 @@
 
 <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.ResultController">
    <children>
-      <Label fx:id="title_searchResult" text="Título">
+      <Label fx:id="title_searchResult" prefHeight="66.0" prefWidth="149.0" text="Título">
          <HBox.margin>
             <Insets right="40.0" />
          </HBox.margin></Label>
-       <Label fx:id="titleVO_searchResult" text="Título VO">
-         <HBox.margin>
-            <Insets right="40.0" />
-         </HBox.margin></Label>
-       <Label fx:id="year_searchResult" text="Año">
-         <HBox.margin>
-            <Insets right="40.0" />
-         </HBox.margin></Label>
-       <Label fx:id="genres_searchResult" text="Géneros">
-           <HBox.margin>
-               <Insets right="100.0" />
-           </HBox.margin></Label>
        
-      <Button onAction="#fullSection" mnemonicParsing="false" text="Acceder a la sección completa">
+      <Button mnemonicParsing="false" onAction="#fullSection" text="Acceder a la sección completa">
          <HBox.margin>
             <Insets left="10.0" right="20.0" />
          </HBox.margin></Button>
+       <Button fx:id="rentMovie_button" mnemonicParsing="false" onAction="#rentMovie" text="Reservar película (X disponibles)">
+           <HBox.margin>
+               <Insets left="10.0" right="20.0" />
+           </HBox.margin></Button>
    </children>
 </HBox>

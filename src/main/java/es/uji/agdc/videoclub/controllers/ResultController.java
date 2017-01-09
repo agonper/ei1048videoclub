@@ -2,6 +2,7 @@ package es.uji.agdc.videoclub.controllers;
 
 import es.uji.agdc.videoclub.models.Movie;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
@@ -12,19 +13,18 @@ public class ResultController extends Controller {
     @FXML
     private Label title_searchResult;
     @FXML
-    private Label titleVO_searchResult;
-    @FXML
-    private Label year_searchResult;
-    @FXML
-    private Label genres_searchResult;
+    private Button rentMovie_button;
+
 
     private Movie movie;
 
 
     @FXML
     public void initialize() {
-        title_searchResult.setText(movie.getTitle());
-        titleVO_searchResult.setText(movie.getTitleOv());
+        title_searchResult.setText(movie.getTitle() + ": " + movie.getTitleOv());
+        rentMovie_button.setText("Reservar película (" + movie.getAvailableCopies() + " disponibles)");
+        if (movie.getAvailableCopies() == 0)
+            rentMovie_button.setDisable(true);
     }
 
     public void setMovie(Movie movie) {
@@ -35,5 +35,10 @@ public class ResultController extends Controller {
     public void fullSection() {
         //TODO: Link to the full section of the movie
         System.out.println("Full section: " + movie.getTitle());
+    }
+
+    @FXML
+    public void rentMovie() {
+        //TODO: Do the rent action
     }
 }

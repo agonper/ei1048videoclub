@@ -75,10 +75,27 @@ public class ProfileSectionController extends Controller {
         }
     }
 
-    //TODO: Finish controller
     @FXML
     public void showRentedMovies_Screen() {
-        System.out.println("Rented movies");
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/app/mainSection/profile/rented_movies.fxml"));
+        BorderPane page;
+        try {
+            page = (BorderPane) loader.load();
+            rentedMoviesStage = new Stage();
+            rentedMoviesStage.setTitle("Películas alquiladas");
+            rentedMoviesStage.initModality(Modality.WINDOW_MODAL);
+            Scene scene = new Scene(page);
+            rentedMoviesStage.setScene(scene);
+
+            RentedMoviesController controller = loader.getController();
+            controller.setStage(rentedMoviesStage);
+
+            rentedMoviesStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
