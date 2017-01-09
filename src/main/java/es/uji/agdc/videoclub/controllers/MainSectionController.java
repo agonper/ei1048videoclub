@@ -106,31 +106,27 @@ public class MainSectionController extends Controller {
 
     private void searchBy(MovieQueryTypeMultiple element) {
         String searchedBy = searchBar_textField.getText();
-        String[] elements = searchedBy.split(" ");
 
         searchResult_VBox.getChildren().clear();
 
-        for (int i = 0; i < elements.length; i++) {
-            String word = elements[i];
-            Iterator<Movie> movies = movieService.findAllBy(element, word).iterator();
+        Iterator<Movie> movies = movieService.findAllBy(element, searchedBy).iterator();
 
-            while (movies.hasNext())
-                searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
-
+        while (movies.hasNext()) {
+            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
         }
-
     }
 
     private HBox generateSearchContainer(Movie movie) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/app/mainSection/search_result.fxml"));
 
         try {
+            loader.setLocation(getClass().getResource("/views/app/mainSection/search_result.fxml"));
             HBox resultContainer = (HBox) loader.load();
             resultContainer.setStyle("-fx-border-width: 1px; -fx-border-color: black");
 
             ResultController controller = loader.getController();
             controller.setMovie(movie);
+            controller.initState();
 
             return resultContainer;
         } catch (IOException e) {

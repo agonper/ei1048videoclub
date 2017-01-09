@@ -19,16 +19,15 @@ public class ResultController extends Controller {
     private Movie movie;
 
 
-    @FXML
-    public void initialize() {
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public void initState() {
         title_searchResult.setText(movie.getTitle() + ": " + movie.getTitleOv());
         rentMovie_button.setText("Reservar película (" + movie.getAvailableCopies() + " disponibles)");
         if (movie.getAvailableCopies() == 0)
             rentMovie_button.setDisable(true);
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
     }
 
     @FXML
