@@ -67,31 +67,31 @@ public class MainSectionController extends Controller {
 
             switch (searchBy_ChoiceBox.getValue()) {
                 case "Título":
-                    searchByTitle();
+                    searchBy(MovieQueryTypeMultiple.TITLE);
                     break;
 
                 case "Título VO":
-                    searchByTitleVO();
+                    //searchBy(MovieQueryTypeMultiple.TITLE_VO);
                     break;
 
                 case "Año":
-                    searchByYear();
+                    searchBy(MovieQueryTypeMultiple.YEAR);
                     break;
 
                 case "Actor":
-                    searchByActors();
+                    searchBy(MovieQueryTypeMultiple.ACTORS);
                     break;
 
                 case "Director":
-                    searchByDirector();
+                    searchBy(MovieQueryTypeMultiple.DIRECTORS);
                     break;
 
                 case "Género":
-                    searchByGenre();
+                    searchBy(MovieQueryTypeMultiple.GENRES);
                     break;
 
                 case "Por cualquiera":
-                    searchByAllFields();
+                    searchBy(MovieQueryTypeMultiple.ALL);
                     break;
             }
 
@@ -104,78 +104,21 @@ public class MainSectionController extends Controller {
             searchBar_button.setDisable(false);
     }
 
-    private void searchByTitle() {
-        //TODO: Search by words, not by the full string
+    private void searchBy(MovieQueryTypeMultiple element) {
         String searchedBy = searchBar_textField.getText();
+        String[] elements = searchedBy.split(" ");
+
         searchResult_VBox.getChildren().clear();
 
-        Iterator<Movie> movies = movieService.findAllBy(MovieQueryTypeMultiple.TITLE, searchedBy).iterator();
+        for (int i = 0; i < elements.length; i++) {
+            String word = elements[i];
+            Iterator<Movie> movies = movieService.findAllBy(element, word).iterator();
 
-        while (movies.hasNext())
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
-    }
+            while (movies.hasNext())
+                searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
 
-    private void searchByTitleVO() {
-        //TODO: Search by words, not by the full string
-        String searchedBy = searchBar_textField.getText();
-        searchResult_VBox.getChildren().clear();
+        }
 
-        //TODO: Terminate, lack of search by TITLE_VO
-    }
-
-    private void searchByYear() {
-        //TODO: Search by words, not by the full string
-        String searchedBy = searchBar_textField.getText();
-        searchResult_VBox.getChildren().clear();
-
-        Iterator<Movie> movies = movieService.findAllBy(MovieQueryTypeMultiple.YEAR, searchedBy).iterator();
-
-        while (movies.hasNext())
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
-    }
-
-    private void searchByActors() {
-        //TODO: Search by words, not by the full string
-        String searchedBy = searchBar_textField.getText();
-        searchResult_VBox.getChildren().clear();
-
-        Iterator<Movie> movies = movieService.findAllBy(MovieQueryTypeMultiple.ACTORS, searchedBy).iterator();
-
-        while (movies.hasNext())
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
-    }
-
-    private void searchByDirector() {
-        //TODO: Search by words, not by the full string
-        String searchedBy = searchBar_textField.getText();
-        searchResult_VBox.getChildren().clear();
-
-        Iterator<Movie> movies = movieService.findAllBy(MovieQueryTypeMultiple.DIRECTORS, searchedBy).iterator();
-
-        while (movies.hasNext())
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
-    }
-
-    private void searchByGenre() {
-        //TODO: Search by words, not by the full string
-        String searchedBy = searchBar_textField.getText();
-        searchResult_VBox.getChildren().clear();
-
-        Iterator<Movie> movies = movieService.findAllBy(MovieQueryTypeMultiple.GENRES, searchedBy).iterator();
-
-        while (movies.hasNext())
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
-    }
-
-    private void searchByAllFields() {
-        //TODO: Search by words, not by the full string
-        String searchedBy = searchBar_textField.getText();
-        searchResult_VBox.getChildren().clear();
-
-        Iterator<Movie> movies = movieService.findAllBy(MovieQueryTypeMultiple.ALL, searchedBy).iterator();
-
-        while (movies.hasNext())
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
     }
 
     private HBox generateSearchContainer(Movie movie) {

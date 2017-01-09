@@ -7,10 +7,11 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.RentedMoviesController">
    <top>
       <VBox alignment="TOP_CENTER" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="TOP_CENTER">
          <children>
@@ -28,22 +29,31 @@
          </children>
       </VBox>
    </top>
-   <bottom>
-      <Button fx:id="rentedMovies_close_button" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER_RIGHT">
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="10.0" right="20.0" top="10.0" />
-         </BorderPane.margin></Button>
-   </bottom>
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="rentedMovies_TableView" onMouseClicked="#refreshButtons" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="rentedMoviesTitle_tableColumn" prefWidth="100.0" text="Titulo" />
-          <TableColumn fx:id="rentedMoviesAccess_tableColumn" prefWidth="110.0" text="Acceso" />
-            <TableColumn fx:id="rentedMoviesMarkAsView_tableColumn" prefWidth="150.0" text="Marcar como vista" />
+          <TableColumn fx:id="rentedMoviesTitle_tableColumn" editable="false" prefWidth="145.0" text="Título" />
+            <TableColumn fx:id="rentedMoviesTitleVO_tableColumn" editable="false" prefWidth="142.0" text="Título VO" />
+           <TableColumn fx:id="rentedMoviesYear_tableColumn" editable="false" prefWidth="72.0" text="Año" />
         </columns>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
          </BorderPane.margin>
       </TableView>
    </center>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="returnMovie" disable="true" mnemonicParsing="false" onAction="#returnMovie" prefHeight="26.0" prefWidth="140.0" text="Devolver película">
+               <HBox.margin>
+                  <Insets bottom="10.0" right="80.0" />
+               </HBox.margin></Button>
+            <Button fx:id="viewMovie" disable="true" mnemonicParsing="false" onAction="#viewMovie" prefHeight="26.0" prefWidth="100.0" text="Ver película">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="40.0" right="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

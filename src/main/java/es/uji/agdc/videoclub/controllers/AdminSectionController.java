@@ -3,6 +3,7 @@ package es.uji.agdc.videoclub.controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -68,18 +69,8 @@ public class AdminSectionController extends Controller {
     }
 
     @FXML
-    public void showUserEditSection() {
-        loadSection(userEditSection, userEditStage, "Edición de un usuario");
-    }
-
-    @FXML
     public void showMovieInsertionSection() {
         loadSection(movieInsertionSection, movieInsertionStage, "Inserción de una película");
-    }
-
-    @FXML
-    public void showMovieEditSection() {
-        loadSection(movieEditSection, movieEditStage, "Edición de una película");
     }
 
     @FXML
@@ -90,5 +81,14 @@ public class AdminSectionController extends Controller {
     @FXML
     public void showListOfMovies() {
         loadSection(listOfMoviesSection, listOfMoviesStage, "Listado de películas");
+    }
+
+    @FXML
+    public void cleanOldRents() {
+        //TODO: Clean old rents
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Devolución automática de películas");
+        alert.setHeaderText("Se ha realizado la devolución de copias en alquileres antiguos de forma satisfactoria.");
+        alert.showAndWait();
     }
 }
