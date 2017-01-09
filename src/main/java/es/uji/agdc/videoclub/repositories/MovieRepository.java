@@ -37,7 +37,6 @@ public interface MovieRepository extends CrudRepositoryJ8<Movie, Long> {
      */
     Stream<Movie> findByActors_NameContainsIgnoreCase(String string);
 
-
     /**
      * Tries to find movies based on a string that appears on the name of its directors
      * @param string The string that has to appear in the director name
@@ -53,4 +52,12 @@ public interface MovieRepository extends CrudRepositoryJ8<Movie, Long> {
      * the provided statement
      */
     Stream<Movie> findByGenres_NameContainsIgnoreCase(String string);
+
+    /**
+     * Tries to find movies based on the year they been launched
+     * @param year The year in which the movie has been launched
+     * @return A filled {@link Stream} containing {@link Movie} that match
+     * the provided statement
+     */
+    Stream<Movie> findByYear(int year);
 }

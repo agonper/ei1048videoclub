@@ -172,6 +172,13 @@ public class MovieRepositoryTest {
     }
 
     @Test
+    public void findMovieByYear_upperCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByYear(movie.getYear());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
     public void modifyMovie() throws Exception {
         Movie savedMovie = repository.save(movie);
         savedMovie.addActor(new Actor("Sebastian Stan")).setAvailableCopies(4);
