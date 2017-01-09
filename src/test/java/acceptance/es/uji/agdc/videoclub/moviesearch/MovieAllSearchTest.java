@@ -118,8 +118,8 @@ public class MovieAllSearchTest {
         List<Movie> movieList = movies.collect(Collectors.toList());
         movieList.stream().forEach(System.out::println);
         assertEquals(5, movieList.size());
-        assertEquals(movieOne.getTitle(), movieList.get(0).getTitle());
-        assertEquals(movieTwo.getTitle(), movieList.get(1).getTitle());
+        assertEquals(movieTwo.getTitle(), movieList.get(0).getTitle());
+        assertEquals(movieOne.getTitle(), movieList.get(1).getTitle());
         assertEquals(movieFour.getTitle(), movieList.get(2).getTitle());
         assertEquals(movieThree.getTitle(), movieList.get(3).getTitle());
         assertEquals(movieFive.getTitle(), movieList.get(4).getTitle());
