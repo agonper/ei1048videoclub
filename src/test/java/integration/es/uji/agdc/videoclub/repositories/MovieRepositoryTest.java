@@ -10,7 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -106,6 +105,27 @@ public class MovieRepositoryTest {
     public void findMovieByWordsInTitle_upperCase() throws Exception {
         repository.save(movie);
         Stream<Movie> movies = repository.findByTitleContainsIgnoreCase("Capitán".toUpperCase());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInActorName_matchingCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByActors_NameContainsIgnoreCase("Chris");
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInActorName_lowerCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByActors_NameContainsIgnoreCase("Chris".toLowerCase());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInActorName_upperCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByActors_NameContainsIgnoreCase("Chris".toUpperCase());
         assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
     }
 

@@ -1,6 +1,8 @@
 package es.uji.agdc.videoclub.repositories;
 
 import es.uji.agdc.videoclub.models.Movie;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,4 +28,12 @@ public interface MovieRepository extends CrudRepositoryJ8<Movie, Long> {
      * the provided statement
      */
     Stream<Movie> findByTitleContainsIgnoreCase(String string);
+
+    /**
+     * Tries to find movies based on a string that appears on the name of its actors
+     * @param string The string that has to appear in the title
+     * @return A filled {@link Stream} containing {@link Movie} that match
+     * the provided statement
+     */
+    Stream<Movie> findByActors_NameContainsIgnoreCase(String string);
 }
