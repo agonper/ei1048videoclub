@@ -148,23 +148,38 @@ public class MovieServiceDB implements MovieService{
             return Stream.empty();
         }
 
-        StreamMerger<Movie> movieStreamMerger;
+        StreamMerger<Movie> movieStreamMerger = new StreamMerger<>();
         switch (query) {
             case TITLE:
-                movieStreamMerger = new StreamMerger<>();
-                Arrays.stream(values)
-                        .map((value) -> movieRepository.findByTitleContainsIgnoreCase(value))
-                        .forEach(movieStreamMerger::addStream);
+                addTitleSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
             case ACTORS:
-                movieStreamMerger = new StreamMerger<>();
-                Arrays.stream(values)
-                        .map((value) -> movieRepository.findByActors_NameContainsIgnoreCase(value))
-                        .forEach(movieStreamMerger::addStream);
+                addActorsSearchToStreamMerger(values, movieStreamMerger);
+                return movieStreamMerger.merge();
+            case DIRECTORS:
+                addDirectorsSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
         }
 
         return Stream.empty();
+    }
+
+    private void addTitleSearchToStreamMerger(String[] values, StreamMerger<Movie> streamMerger) {
+        Arrays.stream(values)
+                .map((value) -> movieRepository.findByTitleContainsIgnoreCase(value))
+                .forEach(streamMerger::addStream);
+    }
+
+    private void addActorsSearchToStreamMerger(String[] values, StreamMerger<Movie> streamMerger) {
+        Arrays.stream(values)
+                .map((value) -> movieRepository.findByActors_NameContainsIgnoreCase(value))
+                .forEach(streamMerger::addStream);
+    }
+
+    private void addDirectorsSearchToStreamMerger(String[] values, StreamMerger<Movie> streamMerger) {
+        Arrays.stream(values)
+                .map(value -> movieRepository.findByDirectors_NameContainsIgnoreCase(value))
+                .forEach(streamMerger::addStream);
     }
 
     @Override

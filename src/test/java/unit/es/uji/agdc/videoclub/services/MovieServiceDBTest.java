@@ -59,6 +59,7 @@ public class MovieServiceDBTest {
                 .thenReturn(Optional.empty());
         when(movieRepository.findByTitleContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByActors_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
+        when(movieRepository.findByDirectors_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findAll()).thenReturn(Stream.empty());
 
         when(assetService.findActorByName(anyString())).thenReturn(Optional.empty());
@@ -397,6 +398,77 @@ public class MovieServiceDBTest {
 
         verify(movieRepository, times(1)).findByActors_NameContainsIgnoreCase(actorWords[0]);
         verify(movieRepository, times(1)).findByActors_NameContainsIgnoreCase(actorWords[1]);
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_directorsWithOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String[] directorWords = movie.getDirectors().get(0).getName().split(" ");
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, directorWords[0]);
+
+        verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(directorWords[0]);
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_directorsWithAllWords_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String directorName = movie.getDirectors().get(0).getName();
+        String[] directorWords = directorName.split(" ");
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, directorName);
+
+        Arrays.stream(directorWords).forEach(word ->
+                verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(word));
+
+        List<Movie> movieList = movies.collect(Collectors.toList());
+        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
+        assertEquals(1, movieList.size());
+    }
+
+    @Test
+    public void findAllBy_multipleMoviesWithSameDirectorMatching_returnsBothMovies() throws Exception {
+        Director firstDirector = movie.getDirectors().get(0);
+        String directorName = firstDirector.getName();
+        String[] directorWords = directorName.split(" ");
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().addDirector(firstDirector);
+        anotherMovie.setId(1L);
+
+        Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie, anotherMovie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, directorWords[0]);
+
+        verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(directorWords[0]);
+        assertEquals(2, movies.count());
+    }
+
+    @Test
+    public void findAllBy_multipleMoviesWithDifferentDirectorMatching_returnsBothMoviesSortedByDescendingMatchNumber() throws Exception {
+        Director firstDirector = movie.getDirectors().get(0);
+        String directorName = firstDirector.getName();
+        String[] directorWords = directorName.split(" ");
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().addDirector(new Director(directorWords[0]));
+        anotherMovie.setId(1L);
+
+        when(movieRepository.findByDirectors_NameContainsIgnoreCase(directorWords[0])).thenReturn(Stream.of(movie, anotherMovie));
+        when(movieRepository.findByDirectors_NameContainsIgnoreCase(directorWords[1])).thenReturn(Stream.of(movie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS,
+                String.format("%s %s", directorWords[0], directorWords[1]));
+
+        verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(directorWords[0]);
+        verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(directorWords[1]);
         assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
     }
 
