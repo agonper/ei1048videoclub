@@ -163,6 +163,17 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_year() throws Exception {
+        service.create(movie);
+
+        int movieYear = movie.getYear();
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR,
+                String.valueOf(movieYear));
+
+        assertEquals(movieYear, movies.findFirst().get().getYear());
+    }
+
+    @Test
     public void findAll() throws Exception {
         service.create(movie);
         Stream<Movie> allMovies = service.findAll();
