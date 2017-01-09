@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,6 +41,7 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
+    @Transactional
     public Result create(Movie movie) {
 
         Result ALREADY_EXISTS = ResultBuilder.error("MOVIE_ALREADY_EXISTS");
@@ -59,8 +62,9 @@ public class MovieServiceDB implements MovieService{
 
         cleanupAssets(movie);
 
-        Movie savedMovie = movieRepository.save(movie);
-        log.info("Movie saved with ID: " + savedMovie.getId());
+        Movie savedMovieWithAssets = movieRepository.save(movie);
+
+        log.info("Movie saved with ID: " + savedMovieWithAssets.getId());
         return ResultBuilder.ok();
     }
 

@@ -1,5 +1,8 @@
 package es.uji.agdc.videoclub.models;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -37,6 +40,12 @@ public class Director extends AbstractEntity {
 
     public List<Movie> getMovies() {
         return movies;
+    }
+
+    public Director addMovie(Movie movie) {
+        List<Movie> movies = getMovies();
+        movies.add(movie);
+        return this;
     }
 
     @Override
