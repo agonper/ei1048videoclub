@@ -166,6 +166,7 @@ public class MovieServiceDB implements MovieService{
                 return movieStreamMerger.merge();
             case ALL:
                 addTitleSearchToStreamMerger(values, movieStreamMerger);
+                addTitleOvSearchToStreamMerger(values, movieStreamMerger);
                 addActorsSearchToStreamMerger(values, movieStreamMerger);
                 addDirectorsSearchToStreamMerger(values, movieStreamMerger);
                 addGenresSearchToStreamMerger(values, movieStreamMerger);
@@ -179,6 +180,12 @@ public class MovieServiceDB implements MovieService{
     private void addTitleSearchToStreamMerger(String[] values, StreamMerger<Movie> streamMerger) {
         Arrays.stream(values)
                 .map((value) -> movieRepository.findByTitleContainsIgnoreCase(value))
+                .forEach(streamMerger::addStream);
+    }
+
+    private void addTitleOvSearchToStreamMerger(String[] values, StreamMerger<Movie> streamMerger) {
+        Arrays.stream(values)
+                .map((value) -> movieRepository.findByTitleOvContainsIgnoreCase(value))
                 .forEach(streamMerger::addStream);
     }
 

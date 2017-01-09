@@ -58,6 +58,7 @@ public class MovieServiceDBTest {
         when(movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()))
                 .thenReturn(Optional.empty());
         when(movieRepository.findByTitleContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
+        when(movieRepository.findByTitleOvContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByActors_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByDirectors_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByGenres_NameContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
@@ -735,6 +736,8 @@ public class MovieServiceDBTest {
         Arrays.stream(titleWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
         Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(titleWords).forEach(word ->
                 when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(titleWords).forEach(word ->
                 when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
@@ -749,12 +752,37 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_allWithTitleOvOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String movieTitleOv = movie.getTitleOv();
+        String[] titleOvWords = movieTitleOv.split(" ");
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByGenres_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, movieTitleOv);
+
+        Arrays.stream(titleOvWords).forEach(word ->
+                verify(movieRepository, times(1)).findByTitleOvContainsIgnoreCase(word));
+        assertEquals(movieTitleOv, movies.findFirst().get().getTitleOv());
+    }
+
+    @Test
     public void findAllBy_allWithActorOneWord_returnsAMovie() throws Exception {
         movie.setId(0L);
         String actorName = movie.getActors().get(0).getName();
         String[] actorWords = actorName.split(" ");
         Arrays.stream(actorWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(actorWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(actorWords).forEach(word ->
                 when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
         Arrays.stream(actorWords).forEach(word ->
@@ -778,6 +806,8 @@ public class MovieServiceDBTest {
         Arrays.stream(directorWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(directorWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(directorWords).forEach(word ->
                 when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(directorWords).forEach(word ->
                 when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
@@ -799,6 +829,8 @@ public class MovieServiceDBTest {
         Arrays.stream(genreWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(genreWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(genreWords).forEach(word ->
                 when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(genreWords).forEach(word ->
                 when(movieRepository.findByDirectors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
@@ -819,6 +851,8 @@ public class MovieServiceDBTest {
         String[] movieYearParts = movieYear.split(" ");
         Arrays.stream(movieYearParts).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.empty()));
+        Arrays.stream(movieYearParts).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(movieYearParts).forEach(word ->
                 when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(movieYearParts).forEach(word ->
@@ -847,6 +881,8 @@ public class MovieServiceDBTest {
 
         Arrays.stream(queryParts).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+        Arrays.stream(queryParts).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(queryParts).forEach(word ->
                 when(movieRepository.findByActors_NameContainsIgnoreCase(word)).thenReturn(Stream.empty()));
         Arrays.stream(queryParts).forEach(word ->
