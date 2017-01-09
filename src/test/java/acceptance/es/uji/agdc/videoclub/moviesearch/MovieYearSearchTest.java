@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @Transactional
-public class MovieActorsSearchTest {
+public class MovieYearSearchTest {
 
     @Autowired
     private MovieService service;
@@ -56,8 +56,8 @@ public class MovieActorsSearchTest {
                 .setTitle("Capitán F")
                 .setTitleOv("Arrow Captain F")
                 .setYear(1987)
-                .addActor(new Actor("Sr. Q"))
-                .addActor(new Actor("Lambda Gómez"))
+                .addActor(new Actor("Chris Evans"))
+                .addActor(new Actor("Hayley Atwell"))
                 .addDirector(new Director("Joe Johnston"))
                 .addGenre(new Genre("Comedy"))
                 .addGenre(new Genre("Drama"))
@@ -68,63 +68,43 @@ public class MovieActorsSearchTest {
     }
 
     @Test
-    public void findAll_withActorsByName_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
-        // Given multiple movies stored on the system
+    public void findAll_withNoMatchingYear_returnsNoRecord() throws Exception {
+        // Given two different movies on the database that have different years
         service.create(movie);
         service.create(anotherMovie);
 
-        // When we try to find a movie by actor name
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "Chris");
+        // When the system performs a with a completely different year
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, "1980");
 
-        // Then the system returns the only movie with that actor
-        List<Movie> movieList = movies.collect(Collectors.toList());
-        assertEquals(1, movieList.size());
-        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
+        // Assert that it returns none of them
+        assertEquals(0, movies.count());
     }
 
     @Test
-    public void findAll_withActorsBySurname_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
-        // Given multiple movies stored on the system
+    public void findAll_withMatchingYear_returnsOneRecord() throws Exception {
+        // Given two different movies on the database that have different years
         service.create(movie);
         service.create(anotherMovie);
 
-        // When we try to find a movie by actor surname
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "Evans");
+        // When the system performs a query to search one them
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, "2011");
 
-        // Then the system returns the only movie with that actor
-        List<Movie> movieList = movies.collect(Collectors.toList());
-        assertEquals(1, movieList.size());
-        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
+        // Assert that it returns the one that matches with that year
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
     }
 
     @Test
-    public void findAll_withActorsByFullName_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
-        // Given multiple movies stored on the system
-        service.create(movie);
-        service.create(anotherMovie);
-
-        // When we try to find a movie by actor full name
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "Chris Evans");
-
-        // Then the system returns the only movie with that actor
-        List<Movie> movieList = movies.collect(Collectors.toList());
-        assertEquals(1, movieList.size());
-        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
-    }
-
-    @Test
-    public void findAll_withNoActorName_returnsEmptyListOfMovies() throws Exception {
-        // Given two different movies on the database that have a similar actor name
+    public void findAll_withNoTitle_returnsEmptyListOfMovies() throws Exception {
+        // Given two different movies on the database that have different years
         service.create(movie);
         service.create(anotherMovie);
 
         // When the system performs an empty query
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "");
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, "");
 
         // Assert that it returns an empty list
         assertEquals(0, movies.count());
     }
-
     @After
     public void tearDown() throws Exception {
         movie = null;

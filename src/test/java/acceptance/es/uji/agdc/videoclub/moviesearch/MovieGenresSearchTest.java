@@ -51,7 +51,7 @@ public class MovieGenresSearchTest {
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
                         "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
                         "hace más que otro. Todas estas borrascas que nos suceden son.")
-                .setAvailableCopies(3);
+                .setAvailableCopies(6);
 
         anotherMovie = new Movie()
                 .setTitle("Capitán F")
@@ -65,7 +65,7 @@ public class MovieGenresSearchTest {
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
                         "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
                         "hace más que otro. Todas estas borrascas que nos suceden son.")
-                .setAvailableCopies(3);
+                .setAvailableCopies(4);
     }
 
     @Test
@@ -106,10 +106,10 @@ public class MovieGenresSearchTest {
         service.create(movie);
         service.create(anotherMovie);
 
-        // When the system performs a query to search them
+        // When the system performs an empty query
         Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, "");
 
-        // Assert that it returns both of them ordered by matching
+        // Assert that it returns an empty list
         assertEquals(0, movies.count());
     }
 
