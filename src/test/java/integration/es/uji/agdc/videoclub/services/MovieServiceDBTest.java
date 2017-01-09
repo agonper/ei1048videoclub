@@ -127,6 +127,15 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_titleOv() throws Exception {
+        service.create(movie);
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV,
+                movie.getTitleOv().split(" ")[0]);
+
+        assertEquals(movie.getTitleOv(), movies.findFirst().get().getTitleOv());
+    }
+
+    @Test
     public void findAllBy_actors() throws Exception {
         service.create(movie);
 
