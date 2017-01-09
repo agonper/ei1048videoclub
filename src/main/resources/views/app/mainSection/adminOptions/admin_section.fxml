@@ -43,6 +43,7 @@
                     </GridPane.margin>
                 </Button>
             <Button fx:id="mainSection_listOfUsers_button" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showListOfUsers" text="Listado de usuarios" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Button fx:id="mainSection_cleanOldRents_button" alignment="CENTER" mnemonicParsing="false" onAction="#cleanOldRents" text="Limpiar alquileres antiguos" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             </children>
             <BorderPane.margin>
                 <Insets top="20.0" />
