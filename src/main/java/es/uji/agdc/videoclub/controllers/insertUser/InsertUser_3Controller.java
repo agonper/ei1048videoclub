@@ -3,16 +3,15 @@ package es.uji.agdc.videoclub.controllers.insertUser;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.awt.event.ComponentEvent;
@@ -38,6 +37,8 @@ public class InsertUser_3Controller extends Controller implements Form {
     private TextField userPassword_passwordField;
     @FXML
     private DatePicker userLastPaymentDate_datePicker;
+    @FXML
+    private Label date_label;
 
     private UserService userService = Services.getUserService();
 
@@ -50,6 +51,11 @@ public class InsertUser_3Controller extends Controller implements Form {
     @FXML
     public void initialize() {
         userLastPaymentDate_datePicker.valueProperty().addListener(e -> checkDate_datePicker());
+        User loggedUser = ApplicationStateData.getLoggedUser();
+        if (loggedUser.isMember()) {
+            gridPane.getChildren().remove(userLastPaymentDate_datePicker);
+            gridPane.getChildren().remove(date_label);
+        }
     }
 
     @FXML
