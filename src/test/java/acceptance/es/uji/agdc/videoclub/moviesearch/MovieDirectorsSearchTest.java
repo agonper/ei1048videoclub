@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @Transactional
-public class MovieActorsSearchTest {
+public class MovieDirectorsSearchTest {
 
     @Autowired
     private MovieService service;
@@ -44,7 +44,7 @@ public class MovieActorsSearchTest {
                 .setYear(2011)
                 .addActor(new Actor("Chris Evans"))
                 .addActor(new Actor("Hayley Atwell"))
-                .addDirector(new Director("Joe Johnston"))
+                .addDirector(new Director("Chris Evans"))
                 .addGenre(new Genre("Comedy"))
                 .addGenre(new Genre("Drama"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
@@ -58,7 +58,7 @@ public class MovieActorsSearchTest {
                 .setYear(1987)
                 .addActor(new Actor("Sr. Q"))
                 .addActor(new Actor("Lambda Gómez"))
-                .addDirector(new Director("Joe Johnston"))
+                .addDirector(new Director("Cristóbal Ignacio Evans Hurtado"))
                 .addGenre(new Genre("Comedy"))
                 .addGenre(new Genre("Drama"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
@@ -68,33 +68,34 @@ public class MovieActorsSearchTest {
     }
 
     @Test
-    public void findAll_withActorsByName_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
-        // Given multiple movies stored on the system
-        service.create(movie);
-        service.create(anotherMovie);
-
-        // When we try to find a movie by actor name
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "Chris");
-
-        // Then the system returns the only movie with that actor
-        List<Movie> movieList = movies.collect(Collectors.toList());
-        assertEquals(1, movieList.size());
-        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
-    }
-
-    @Test
     public void findAll_withActorsBySurname_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
         // Given multiple movies stored on the system
         service.create(movie);
         service.create(anotherMovie);
 
-        // When we try to find a movie by actor surname
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "Evans");
+        // When we try to find a movie by director surname
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "Cristóbal");
 
-        // Then the system returns the only movie with that actor
+        // Then the system returns the only movie with that director
         List<Movie> movieList = movies.collect(Collectors.toList());
         assertEquals(1, movieList.size());
+        assertEquals(anotherMovie.getTitle(), movieList.get(0).getTitle());
+    }
+
+    @Test
+    public void findAll_withDirectorsBySurnameLowerCase_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
+        // Given multiple movies stored on the system
+        service.create(movie);
+        service.create(anotherMovie);
+
+        // When we try to find a movie by director name
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "evans");
+
+        // Then the system returns the only movie with that director
+        List<Movie> movieList = movies.collect(Collectors.toList());
+        assertEquals(2, movieList.size());
         assertEquals(movie.getTitle(), movieList.get(0).getTitle());
+        assertEquals(anotherMovie.getTitle(), movieList.get(1).getTitle());
     }
 
     @Test
@@ -103,23 +104,24 @@ public class MovieActorsSearchTest {
         service.create(movie);
         service.create(anotherMovie);
 
-        // When we try to find a movie by actor full name
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "Chris Evans");
+        // When we try to find a movie by director full name
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "Chris Evans");
 
-        // Then the system returns the only movie with that actor
+        // Then the system returns the only movie with that director
         List<Movie> movieList = movies.collect(Collectors.toList());
-        assertEquals(1, movieList.size());
+        assertEquals(2, movieList.size());
         assertEquals(movie.getTitle(), movieList.get(0).getTitle());
+        assertEquals(anotherMovie.getTitle(), movieList.get(1).getTitle());
     }
 
     @Test
     public void findAll_withNoActorName_returnsEmptyListOfMovies() throws Exception {
-        // Given two different movies on the database that have a similar actor name
+        // Given two different movies on the database that have a similar director name
         service.create(movie);
         service.create(anotherMovie);
 
         // When the system performs a query to search them
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "");
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "");
 
         // Assert that it returns both of them ordered by matching
         assertEquals(0, movies.count());
