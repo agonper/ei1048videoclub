@@ -174,6 +174,16 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_all() throws Exception {
+        service.create(movie);
+
+        String query = String.format("%s %d", movie.getTitle(), movie.getYear());
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ALL, query);
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
     public void findAll() throws Exception {
         service.create(movie);
         Stream<Movie> allMovies = service.findAll();
