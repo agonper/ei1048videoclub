@@ -251,17 +251,25 @@ public class MovieServiceDBTest {
     }
 
     @Test
-    public void findAllBy_withNoTextValue_returnsEmptyStream() throws Exception {
-        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL, "");
+    public void findAllBy_titleEmptyString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, "");
 
-        assertEquals(0, allMoviesByNothing.count());
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_titleNullString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, null);
+
+        assertEquals(0, movies.count());
     }
 
     @Test
-    public void findAllBy_withNoWordsInTextValue_returnsEmptyStream() throws Exception {
-        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL, " ");
+    public void findAllBy_titleInvalidString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, " ");
 
-        assertEquals(0, allMoviesByNothing.count());
+        assertEquals(0, movies.count());
     }
 
     @Test
@@ -329,6 +337,28 @@ public class MovieServiceDBTest {
         verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
         verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[1]);
         assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_actorsEmptyString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "");
+
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_actorsNullString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, null);
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_actorsInvalidString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, " ");
+
+        assertEquals(0, movies.count());
     }
 
     @Test
@@ -403,6 +433,28 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_directorsEmptyString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "");
+
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_directorsNullString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, null);
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_directorsInvalidString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, " ");
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
     public void findAllBy_directorsWithOneWord_returnsAMovie() throws Exception {
         movie.setId(0L);
         String[] directorWords = movie.getDirectors().get(0).getName().split(" ");
@@ -471,6 +523,28 @@ public class MovieServiceDBTest {
         verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(directorWords[0]);
         verify(movieRepository, times(1)).findByDirectors_NameContainsIgnoreCase(directorWords[1]);
         assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_genresEmptyString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, "");
+
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_genresNullString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, null);
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_genresInvalidString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, " ");
+
+        assertEquals(0, movies.count());
     }
 
     @Test
@@ -544,6 +618,34 @@ public class MovieServiceDBTest {
         verify(movieRepository, times(1)).findByGenres_NameContainsIgnoreCase(genreWords[0]);
         verify(movieRepository, times(1)).findByGenres_NameContainsIgnoreCase(genreWords[1]);
         assertEquals(anotherMovie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_yearEmptyString_returnsNoRecords() throws Exception {
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.empty());
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, "");
+
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_yearNullString_returnsNoRecords() throws Exception {
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.empty());
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, null);
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_yearInvalidString_returnsNoRecords() throws Exception {
+        when(movieRepository.findByYear(movie.getYear())).thenReturn(Stream.empty());
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.YEAR, " ");
+
+        assertEquals(0, movies.count());
     }
 
     @After
