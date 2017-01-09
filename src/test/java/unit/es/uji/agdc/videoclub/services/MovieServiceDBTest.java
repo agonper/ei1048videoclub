@@ -46,7 +46,7 @@ public class MovieServiceDBTest {
                     .addActor(new Actor("Chris Evans"))
                     .addActor(new Actor("Hayley Atwell"))
                 .addDirector(new Director("Joe Johnston"))
-                    .addGenre(new Genre("Family comedy"))
+                    .addGenre(new Genre("Comedy"))
                     .addGenre(new Genre("Drama"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
                         "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
@@ -166,17 +166,17 @@ public class MovieServiceDBTest {
 
     @Test
     public void create_addsExistingGenre_returnsOk() throws Exception {
-        Genre genre = new Genre("Family comedy".toLowerCase());
-        when(assetService.findGenreByName("Family comedy")).thenReturn(Optional.of(genre));
+        Genre genre = new Genre("Comedy".toLowerCase());
+        when(assetService.findGenreByName("Comedy")).thenReturn(Optional.of(genre));
         service.create(movie);
         assertTrue(movie.getGenres().stream().anyMatch(genre1 -> genre1.getName().equals(genre.getName())));
     }
 
     @Test
     public void create_addsMultipleExistingGenres_returnsOk() throws Exception {
-        Genre genre1 = new Genre("Family comedy".toLowerCase());
+        Genre genre1 = new Genre("Comedy".toLowerCase());
         Genre genre2 = new Genre("Drama".toLowerCase());
-        when(assetService.findGenreByName("Family comedy")).thenReturn(Optional.of(genre1));
+        when(assetService.findGenreByName("Comedy")).thenReturn(Optional.of(genre1));
         when(assetService.findGenreByName("Drama")).thenReturn(Optional.of(genre2));
         service.create(movie);
         assertTrue(movie.getGenres().stream()
@@ -527,21 +527,23 @@ public class MovieServiceDBTest {
     public void findAllBy_multipleMoviesWithDifferentGenreMatching_returnsBothMoviesSortedByDescendingMatchNumber() throws Exception {
         Genre firstGenre = movie.getGenres().get(0);
         String genreName = firstGenre.getName();
-        String[] genreWords = genreName.split(" ");
-        movie.setId(0L);
 
-        Movie anotherMovie = new Movie().addGenre(new Genre(genreWords[0]));
+        String anotherGenreName = String.format("Family %s", genreName);
+        Movie anotherMovie = new Movie().addGenre(new Genre(anotherGenreName)).setTitle("A family comedy");
         anotherMovie.setId(1L);
 
-        when(movieRepository.findByGenres_NameContainsIgnoreCase(genreWords[0])).thenReturn(Stream.of(movie, anotherMovie));
-        when(movieRepository.findByGenres_NameContainsIgnoreCase(genreWords[1])).thenReturn(Stream.of(movie));
+        String[] genreWords = anotherGenreName.split(" ");
+        movie.setId(0L);
+
+        when(movieRepository.findByGenres_NameContainsIgnoreCase(genreWords[0])).thenReturn(Stream.of(anotherMovie));
+        when(movieRepository.findByGenres_NameContainsIgnoreCase(genreWords[1])).thenReturn(Stream.of(movie, anotherMovie));
 
         Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES,
-                String.format("%s %s", genreWords[0], genreWords[1]));
+                anotherGenreName);
 
         verify(movieRepository, times(1)).findByGenres_NameContainsIgnoreCase(genreWords[0]);
         verify(movieRepository, times(1)).findByGenres_NameContainsIgnoreCase(genreWords[1]);
-        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+        assertEquals(anotherMovie.getTitle(), movies.findFirst().get().getTitle());
     }
 
     @After
