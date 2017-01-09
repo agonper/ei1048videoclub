@@ -139,6 +139,18 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_directors() throws Exception {
+        service.create(movie);
+
+        String directorName = movie.getDirectors().get(0).getName();
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS,
+                directorName.split(" ")[0]);
+
+        assertTrue(movies.findFirst().get().getDirectors().stream()
+                .anyMatch(director -> director.getName().equals(directorName)));
+    }
+
+    @Test
     public void findAll() throws Exception {
         service.create(movie);
         Stream<Movie> allMovies = service.findAll();
