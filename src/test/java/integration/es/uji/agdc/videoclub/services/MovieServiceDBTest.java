@@ -6,6 +6,7 @@ import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
+import es.uji.agdc.videoclub.services.MovieQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
 import es.uji.agdc.videoclub.services.MovieService;
 import org.junit.After;
@@ -77,6 +78,15 @@ public class MovieServiceDBTest {
         Optional<Movie> possibleMovie =
                 service.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movie.getTitle(), String.valueOf(movie.getYear()));
         assertTrue(possibleMovie.isPresent());
+    }
+
+    @Test
+    public void findAllBy_title() throws Exception {
+        service.create(movie);
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE,
+                movie.getTitle().split(" ")[0]);
+
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
     }
 
     @Test

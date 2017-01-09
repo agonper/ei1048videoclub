@@ -32,10 +32,10 @@ public interface MovieService {
     /**
      * Finds a set of movies that match the given query and params
      * @param query One of {@link MovieQueryTypeMultiple}
-     * @param values Comma-separated list of parameters that have to be matched
+     * @param text Sentence that has to be partially matched
      * @return A {@link Stream} containing every {@link Movie} that matched the query. An empty one if no result was found
      */
-    Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String[] values);
+    Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String text);
 
     /**
      * Finds all movies on the database without applying any filtering

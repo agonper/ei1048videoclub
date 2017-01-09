@@ -130,16 +130,19 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
-    public Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String[] values) {
+    public Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String text) {
 
-        if (values.length == 0) {
-            log.warn(String.format("findAllBy(%s): Called without values", query.toString()));
+        if (text == null || text.isEmpty()) {
+            log.warn(String.format("findAllBy(%s): Called without text", query.toString()));
             return Stream.empty();
         }
 
-        Arrays.stream(values).forEach((value) -> {
-            if (value.split(" ").length > 1) throw new Error("Each value has to be a word. No spaces are allowed");
-        });
+        String[] values = text.split(" ");
+
+        if (values.length == 0) {
+            log.warn(String.format("findAllBy(%s): Called without words", query.toString()));
+            return Stream.empty();
+        }
 
         switch (query) {
             case TITLE:

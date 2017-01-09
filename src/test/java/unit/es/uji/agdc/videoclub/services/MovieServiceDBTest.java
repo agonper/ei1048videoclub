@@ -247,14 +247,17 @@ public class MovieServiceDBTest {
     }
 
     @Test
-    public void findAllBy_withNoValue_returnsEmptyStream() throws Exception {
-        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL, new String[] {});
+    public void findAllBy_withNoTextValue_returnsEmptyStream() throws Exception {
+        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL, "");
+
         assertEquals(0, allMoviesByNothing.count());
     }
 
-    @Test(expected = Error.class)
-    public void findAllBy_withSentenceValue_returnsError() throws Exception {
-        service.findAllBy(MovieQueryTypeMultiple.ALL, new String[] {"Some sentence"});
+    @Test
+    public void findAllBy_withNoWordsInTextValue_returnsEmptyStream() throws Exception {
+        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL, " ");
+
+        assertEquals(0, allMoviesByNothing.count());
     }
 
     @Test
@@ -264,7 +267,7 @@ public class MovieServiceDBTest {
         Arrays.stream(titleWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
 
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, new String[] {titleWords[0]});
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, titleWords[0]);
 
         verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
         assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
@@ -277,7 +280,7 @@ public class MovieServiceDBTest {
         Arrays.stream(titleWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
 
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, titleWords);
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, movie.getTitle());
 
         Arrays.stream(titleWords).forEach(word ->
                 verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(word));
@@ -298,7 +301,7 @@ public class MovieServiceDBTest {
         Arrays.stream(titleWords).forEach(word ->
                 when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie, anotherMovie)));
 
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, new String[] {titleWords[0]});
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, titleWords[0]);
 
         verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
         assertEquals(2, movies.count());
@@ -316,7 +319,8 @@ public class MovieServiceDBTest {
         when(movieRepository.findByTitleContainsIgnoreCase(titleWords[0])).thenReturn(Stream.of(movie, anotherMovie));
         when(movieRepository.findByTitleContainsIgnoreCase(titleWords[1])).thenReturn(Stream.of(movie));
 
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, new String[] {titleWords[0], titleWords[1]});
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE,
+                String.format("%s %s", titleWords[0], titleWords[1]));
 
         verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
         verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[1]);
