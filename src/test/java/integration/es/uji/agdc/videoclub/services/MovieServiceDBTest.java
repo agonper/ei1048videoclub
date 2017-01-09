@@ -5,6 +5,9 @@ import es.uji.agdc.videoclub.models.Actor;
 import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
+import es.uji.agdc.videoclub.repositories.ActorRepository;
+import es.uji.agdc.videoclub.repositories.DirectorRepository;
+import es.uji.agdc.videoclub.repositories.GenreRepository;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.MovieQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
@@ -37,7 +40,17 @@ public class MovieServiceDBTest {
     @Autowired
     private MovieRepository repository;
 
+    @Autowired
+    private ActorRepository actorRepository;
+
+    @Autowired
+    private DirectorRepository directorRepository;
+
+    @Autowired
+    private GenreRepository genreRepository;
+
     private Movie movie;
+    private Movie anotherMovie;
 
     @Before
     public void setUp() throws Exception {
@@ -45,6 +58,20 @@ public class MovieServiceDBTest {
                 .setTitle("Capitán América")
                 .setTitleOv("Captain America")
                 .setYear(2011)
+                .addActor(new Actor("Chris Evans"))
+                .addActor(new Actor("Hayley Atwell"))
+                .addDirector(new Director("Joe Johnston"))
+                .addGenre(new Genre("Comedy"))
+                .addGenre(new Genre("Drama"))
+                .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
+                        "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
+                        "hace más que otro. Todas estas borrascas que nos suceden son.")
+                .setAvailableCopies(3);
+
+        anotherMovie = new Movie()
+                .setTitle("Capitán F")
+                .setTitleOv("Arrow Captain F")
+                .setYear(1987)
                 .addActor(new Actor("Chris Evans"))
                 .addActor(new Actor("Hayley Atwell"))
                 .addDirector(new Director("Joe Johnston"))
@@ -70,6 +97,16 @@ public class MovieServiceDBTest {
         assertEquals(this.movie.getGenres().size(), recoveredMovie.getGenres().size());
         assertEquals(this.movie.getDescription(), recoveredMovie.getDescription());
         assertEquals(this.movie.getDescription(), recoveredMovie.getDescription());
+    }
+
+    @Test
+    public void create_sharingResources() throws Exception {
+        service.create(movie);
+        service.create(anotherMovie);
+
+        assertEquals(2, actorRepository.count());
+        assertEquals(1, directorRepository.count());
+        assertEquals(2, genreRepository.count());
     }
 
     @Test
@@ -100,6 +137,7 @@ public class MovieServiceDBTest {
     @After
     public void tearDown() throws Exception {
         movie = null;
+        anotherMovie = null;
     }
 
 }
