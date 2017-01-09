@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -28,12 +29,6 @@
          </children>
       </VBox>
    </top>
-   <bottom>
-      <Button fx:id="rentedMovies_close_button" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER_RIGHT">
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="10.0" right="20.0" top="10.0" />
-         </BorderPane.margin></Button>
-   </bottom>
    <center>
       <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
@@ -46,4 +41,19 @@
          </BorderPane.margin>
       </TableView>
    </center>
+   <bottom>
+      <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" text="Cerrar">
+               <HBox.margin>
+                  <Insets bottom="10.0" right="75.0" />
+               </HBox.margin></Button>
+            <Button mnemonicParsing="false" text="Ver película seleccionada">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="40.0" right="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

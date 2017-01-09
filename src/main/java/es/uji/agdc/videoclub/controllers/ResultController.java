@@ -34,5 +34,6 @@ public class ResultController extends Controller {
     @FXML
     public void fullSection() {
         //TODO: Link to the full section of the movie
+        System.out.println("Full section: " + movie.getTitle());
     }
 }
