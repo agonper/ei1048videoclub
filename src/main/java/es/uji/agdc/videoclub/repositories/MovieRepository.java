@@ -30,6 +30,14 @@ public interface MovieRepository extends CrudRepositoryJ8<Movie, Long> {
     Stream<Movie> findByTitleContainsIgnoreCase(String string);
 
     /**
+     * Tries to find movies based on a string that appears on its title in original version
+     * @param string The string that has to appear in the title in original version
+     * @return A filled {@link Stream} containing {@link Movie} that match
+     * the provided statement
+     */
+    Stream<Movie> findByTitleOvContainsIgnoreCase(String string);
+
+    /**
      * Tries to find movies based on a string that appears on the name of its actors
      * @param string The string that has to appear in the actor name
      * @return A filled {@link Stream} containing {@link Movie} that match
