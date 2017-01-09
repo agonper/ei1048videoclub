@@ -144,11 +144,18 @@ public class MovieServiceDB implements MovieService{
             return Stream.empty();
         }
 
+        StreamMerger<Movie> movieStreamMerger;
         switch (query) {
             case TITLE:
-                StreamMerger<Movie> movieStreamMerger = new StreamMerger<>();
+                movieStreamMerger = new StreamMerger<>();
                 Arrays.stream(values)
                         .map((value) -> movieRepository.findByTitleContainsIgnoreCase(value))
+                        .forEach(movieStreamMerger::addStream);
+                return movieStreamMerger.merge();
+            case ACTORS:
+                movieStreamMerger = new StreamMerger<>();
+                Arrays.stream(values)
+                        .map((value) -> movieRepository.findByActors_NameContainsIgnoreCase(value))
                         .forEach(movieStreamMerger::addStream);
                 return movieStreamMerger.merge();
         }
