@@ -130,6 +130,27 @@ public class MovieRepositoryTest {
     }
 
     @Test
+    public void findMovieByWordsInDirectorName_matchingCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByDirectors_NameContainsIgnoreCase("Joe");
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInDirectorName_lowerCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByDirectors_NameContainsIgnoreCase("Joe".toLowerCase());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findMovieByWordsInDirectorName_upperCase() throws Exception {
+        repository.save(movie);
+        Stream<Movie> movies = repository.findByDirectors_NameContainsIgnoreCase("Joe".toUpperCase());
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
     public void modifyMovie() throws Exception {
         Movie savedMovie = repository.save(movie);
         savedMovie.addActor(new Actor("Sebastian Stan")).setAvailableCopies(4);
