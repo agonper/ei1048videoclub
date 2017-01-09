@@ -49,10 +49,10 @@
    <bottom>
       <BorderPane prefHeight="40.0" prefWidth="460.0" BorderPane.alignment="CENTER">
          <left>
-            <Button fx:id="movieData_close_button" onAction="#closeWindow" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="CENTER" />
+            <Button fx:id="movieData_close_button" mnemonicParsing="false" onAction="#closeWindow" text="Cerrar" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <Button fx:id="movieData_rent_button" onAction="#rentMovie" mnemonicParsing="false" text="Alquilar" BorderPane.alignment="CENTER" />
+            <Button fx:id="movieData_rent_button" mnemonicParsing="false" onAction="#rentMovie" text="Alquilar" BorderPane.alignment="CENTER" />
          </right>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" />
@@ -84,7 +84,7 @@
                         <Insets bottom="5.0" left="10.0" />
                      </VBox.margin>
                   </Label>
-                  <TextArea fx:id="movieData_description_textArea" editable="false" prefHeight="200.0" prefWidth="200.0">
+                  <TextArea fx:id="movieData_description_textArea" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true">
                      <VBox.margin>
                         <Insets bottom="20.0" left="10.0" />
                      </VBox.margin>

@@ -276,6 +276,7 @@ public class InsertMovieController extends Controller implements RootController 
         movieToCreate = new Movie();
         setAllMovieData();
         MovieService movieService = Services.getMovieService();
+
         if (!editing)
             movieService.create(movieToCreate);
         else
@@ -285,66 +286,38 @@ public class InsertMovieController extends Controller implements RootController 
     }
 
     private void setAllMovieData() {
-        MovieAssetService movieAssetService = Services.getMovieAssetService();
-
         String[] page1 = movie_01_controller.getAllData();
-        movieToCreate.setTitle(page1[0]);
-        movieToCreate.setTitleOv(page1[1]);
-        movieToCreate.setYear(Integer.parseInt(page1[2]));
-        movieToCreate.setAvailableCopies(Integer.parseInt(page1[3]));
+
+        movieToCreate = movieToCreate.setTitle(page1[0])
+                .setTitleOv(page1[1])
+                .setYear(Integer.parseInt(page1[2]))
+                .setAvailableCopies(Integer.parseInt(page1[3]));
 
         String[] page2 = movie_02_controller.getAllData();
 
         for (int i = 0; i < page2.length; i++) {
             String actor = page2[i];
-            Optional<Actor> searchedActor = movieAssetService.findActorByName(actor);
 
-            if (searchedActor.isPresent())
-                movieToCreate.addActor(searchedActor.get());
-
-            else {
-                //TODO: Create actor
-                //FIXME: Use the service to get an actor with id, provisional to test the view
-                Actor createdActor = new Actor(actor);
-                movieToCreate.addActor(createdActor);
-            }
+            movieToCreate = movieToCreate.addActor(new Actor(actor));
         }
 
         String[] page3 = movie_03_controller.getAllData();
 
         for (int i = 0; i < page3.length; i++) {
             String director = page3[i];
-            Optional<Director> searchedDirector = movieAssetService.findDirectorByName(director);
 
-            if (searchedDirector.isPresent())
-                movieToCreate.addDirector(searchedDirector.get());
-
-            else {
-                //TODO: Create director
-                //FIXME: Use the service to get a director with id, provisional to test the view
-                Director createdDirector = new Director(director);
-                movieToCreate.addDirector(createdDirector);
-            }
+            movieToCreate = movieToCreate.addDirector(new Director(director));
         }
 
         String[] page4 = movie_04_controller.getAllData();
-        movieToCreate.setDescription(page4[0]);
+        movieToCreate = movieToCreate.setDescription(page4[0]);
 
         String[] page5 = movie_05_controller.getAllData();
 
         for (int i = 0; i < page5.length; i++) {
             String genre = page5[i];
-            Optional<Genre> searchedGenre = movieAssetService.findGenreByName(genre);
 
-            if (searchedGenre.isPresent())
-                movieToCreate.addGenre(searchedGenre.get());
-
-            else {
-                //TODO: Create Genre
-                //FIXME: Use the service to get a genre with id, provisional to test the view
-                Genre createdGenre = new Genre(genre);
-                movieToCreate.addGenre(createdGenre);
-            }
+            movieToCreate = movieToCreate.addGenre(new Genre(genre));
         }
     }
 }
