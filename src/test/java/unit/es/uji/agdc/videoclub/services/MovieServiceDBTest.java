@@ -13,7 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -245,16 +248,80 @@ public class MovieServiceDBTest {
 
     @Test
     public void findAllBy_withNoValue_returnsEmptyStream() throws Exception {
-        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL);
+        Stream<Movie> allMoviesByNothing = service.findAllBy(MovieQueryTypeMultiple.ALL, new String[] {});
         assertEquals(0, allMoviesByNothing.count());
     }
 
     @Test(expected = Error.class)
     public void findAllBy_withSentenceValue_returnsError() throws Exception {
-        service.findAllBy(MovieQueryTypeMultiple.ALL, "Some sentence");
+        service.findAllBy(MovieQueryTypeMultiple.ALL, new String[] {"Some sentence"});
     }
 
+    @Test
+    public void findAllBy_titleWithOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String[] titleWords = movie.getTitle().split(" ");
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
 
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, new String[] {titleWords[0]});
+
+        verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
+
+    @Test
+    public void findAllBy_titleWithAllWords_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String[] titleWords = movie.getTitle().split(" ");
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, titleWords);
+
+        Arrays.stream(titleWords).forEach(word ->
+                verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(word));
+
+        List<Movie> movieList = movies.collect(Collectors.toList());
+        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
+        assertEquals(1, movieList.size());
+    }
+
+    @Test
+    public void findAllBy_multipleMoviesWithSameTitleMatching_returnsBothMovies() throws Exception {
+        String[] titleWords = movie.getTitle().split(" ");
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().setTitle(movie.getTitle());
+        anotherMovie.setId(1L);
+
+        Arrays.stream(titleWords).forEach(word ->
+                when(movieRepository.findByTitleContainsIgnoreCase(word)).thenReturn(Stream.of(movie, anotherMovie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, new String[] {titleWords[0]});
+
+        verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
+        assertEquals(2, movies.count());
+    }
+
+    @Test
+    public void findAllBy_multipleMoviesWithDifferentTitleMatching_returnsBothMoviesSortedByDescendingMatchNumber() throws Exception {
+        String[] titleWords = movie.getTitle().split(" ");
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().setTitle(titleWords[0]);
+        anotherMovie.setId(1L);
+
+
+        when(movieRepository.findByTitleContainsIgnoreCase(titleWords[0])).thenReturn(Stream.of(movie, anotherMovie));
+        when(movieRepository.findByTitleContainsIgnoreCase(titleWords[1])).thenReturn(Stream.of(movie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE, new String[] {titleWords[0], titleWords[1]});
+
+        verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[0]);
+        verify(movieRepository, times(1)).findByTitleContainsIgnoreCase(titleWords[1]);
+        assertEquals(movie.getTitle(), movies.findFirst().get().getTitle());
+    }
 
     @After
     public void tearDown() throws Exception {

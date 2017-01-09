@@ -1,5 +1,7 @@
 package es.uji.agdc.videoclub.models;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +22,9 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity {
+
+    private static Logger log = LoggerFactory.getLogger(AbstractEntity.class);
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -33,6 +38,12 @@ public abstract class AbstractEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public AbstractEntity setId(Long id) {
+        log.warn("setId() called. Only call setId() while testing");
+        this.id = id;
+        return this;
     }
 
     public LocalDateTime getCreatedAt() {

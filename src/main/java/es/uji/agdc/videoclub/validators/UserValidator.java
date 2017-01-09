@@ -1,7 +1,6 @@
 package es.uji.agdc.videoclub.validators;
 
 import es.uji.agdc.videoclub.models.User;
-import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.utils.Result;
 import org.springframework.stereotype.Component;
 

@@ -7,6 +7,7 @@ import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
+import es.uji.agdc.videoclub.services.utils.StreamMerger;
 import es.uji.agdc.videoclub.validators.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,7 +130,7 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
-    public Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String... values) {
+    public Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String[] values) {
 
         if (values.length == 0) {
             log.warn(String.format("findAllBy(%s): Called without values", query.toString()));
@@ -139,6 +140,15 @@ public class MovieServiceDB implements MovieService{
         Arrays.stream(values).forEach((value) -> {
             if (value.split(" ").length > 1) throw new Error("Each value has to be a word. No spaces are allowed");
         });
+
+        switch (query) {
+            case TITLE:
+                StreamMerger<Movie> movieStreamMerger = new StreamMerger<>();
+                Arrays.stream(values)
+                        .map((value) -> movieRepository.findByTitleContainsIgnoreCase(value))
+                        .forEach(movieStreamMerger::addStream);
+                return movieStreamMerger.merge();
+        }
 
         return Stream.empty();
     }
