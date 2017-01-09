@@ -39,8 +39,11 @@ public class MovieCompleteDescriptionController extends Controller {
     private Movie movie = null;
 
 
-    @FXML
-    public void initialize() {
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public void initWindow() {
         if (movie != null) {
             movieData_title_label.setText(movie.getTitle());
             movieData_titleVO_label.setText(movie.getTitleOv());
@@ -105,10 +108,6 @@ public class MovieCompleteDescriptionController extends Controller {
 
             movieData_rent_button.setDisable(movie.getAvailableCopies() <= 0);
         }
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
     }
 
     @FXML
