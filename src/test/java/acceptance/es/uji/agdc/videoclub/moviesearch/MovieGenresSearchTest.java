@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Alberto on 11/12/2016.
@@ -28,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @Transactional
-public class MovieDirectorsSearchTest {
+public class MovieGenresSearchTest {
 
     @Autowired
     private MovieService service;
@@ -45,8 +46,8 @@ public class MovieDirectorsSearchTest {
                 .addActor(new Actor("Chris Evans"))
                 .addActor(new Actor("Hayley Atwell"))
                 .addDirector(new Director("Chris Evans"))
-                .addGenre(new Genre("Comedy"))
-                .addGenre(new Genre("Drama"))
+                .addGenre(new Genre("Acción"))
+                .addGenre(new Genre("Comedia"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
                         "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
                         "hace más que otro. Todas estas borrascas que nos suceden son.")
@@ -59,8 +60,8 @@ public class MovieDirectorsSearchTest {
                 .addActor(new Actor("Sr. Q"))
                 .addActor(new Actor("Lambda Gómez"))
                 .addDirector(new Director("Cristóbal Ignacio Evans Hurtado"))
-                .addGenre(new Genre("Comedy"))
-                .addGenre(new Genre("Drama"))
+                .addGenre(new Genre("Misterio"))
+                .addGenre(new Genre("Comedia"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
                         "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
                         "hace más que otro. Todas estas borrascas que nos suceden son.")
@@ -68,60 +69,45 @@ public class MovieDirectorsSearchTest {
     }
 
     @Test
-    public void findAll_withDirectorsBySurname_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
+    public void findAll_withGenreLowerCase_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
         // Given multiple movies stored on the system
         service.create(movie);
         service.create(anotherMovie);
 
-        // When we try to find a movie by director surname
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "Cristóbal");
+        // When we try to find a movie by genre
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, "comedia");
 
-        // Then the system returns the only movie with that director
-        List<Movie> movieList = movies.collect(Collectors.toList());
-        assertEquals(1, movieList.size());
-        assertEquals(anotherMovie.getTitle(), movieList.get(0).getTitle());
-    }
-
-    @Test
-    public void findAll_withDirectorsBySurnameLowerCase_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
-        // Given multiple movies stored on the system
-        service.create(movie);
-        service.create(anotherMovie);
-
-        // When we try to find a movie by director name
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "evans");
-
-        // Then the system returns the only movie with that director
+        // Then the system returns the movies with that genre
         List<Movie> movieList = movies.collect(Collectors.toList());
         assertEquals(2, movieList.size());
-        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
-        assertEquals(anotherMovie.getTitle(), movieList.get(1).getTitle());
+        assertTrue(movieList.stream().allMatch(movie1 ->
+                movie1.getTitle().equals(movie.getTitle()) || movie1.getTitle().equals(anotherMovie.getTitle())));
     }
 
     @Test
-    public void findAll_withDirectorsByFullName_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
+    public void findAll_withGenreMatchingCase_returnsAllFullAndPartialMatchingMoviesOrdered() throws Exception {
         // Given multiple movies stored on the system
         service.create(movie);
         service.create(anotherMovie);
 
-        // When we try to find a movie by director full name
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "Chris Evans");
+        // When we try to find a movie by genre
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, "Comedia");
 
-        // Then the system returns the only movie with that director
+        // Then the system returns the movies with that genre
         List<Movie> movieList = movies.collect(Collectors.toList());
         assertEquals(2, movieList.size());
-        assertEquals(movie.getTitle(), movieList.get(0).getTitle());
-        assertEquals(anotherMovie.getTitle(), movieList.get(1).getTitle());
+        assertTrue(movieList.stream().allMatch(movie1 ->
+                movie1.getTitle().equals(movie.getTitle()) || movie1.getTitle().equals(anotherMovie.getTitle())));
     }
 
     @Test
-    public void findAll_withNoDirectorName_returnsEmptyListOfMovies() throws Exception {
+    public void findAll_withNoGenreName_returnsEmptyListOfMovies() throws Exception {
         // Given two different movies on the database that have a similar director name
         service.create(movie);
         service.create(anotherMovie);
 
         // When the system performs a query to search them
-        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.DIRECTORS, "");
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.GENRES, "");
 
         // Assert that it returns both of them ordered by matching
         assertEquals(0, movies.count());
