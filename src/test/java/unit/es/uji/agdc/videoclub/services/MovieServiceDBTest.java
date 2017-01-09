@@ -342,6 +342,95 @@ public class MovieServiceDBTest {
     }
 
     @Test
+    public void findAllBy_titleOvEmptyString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV, "");
+
+        assertEquals(0, movies.count());
+    }
+
+
+    @Test
+    public void findAllBy_titleOvNullString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV, null);
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_titleOvInvalidString_returnsNoRecords() throws Exception {
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV, " ");
+
+        assertEquals(0, movies.count());
+    }
+
+    @Test
+    public void findAllBy_titleOvWithOneWord_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String[] titleOvWords = movie.getTitleOv().split(" ");
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV, titleOvWords[0]);
+
+        verify(movieRepository, times(1)).findByTitleOvContainsIgnoreCase(titleOvWords[0]);
+        assertEquals(movie.getTitleOv(), movies.findFirst().get().getTitleOv());
+    }
+
+    @Test
+    public void findAllBy_titleOvWithAllWords_returnsAMovie() throws Exception {
+        movie.setId(0L);
+        String[] titleOvWords = movie.getTitleOv().split(" ");
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.of(movie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV, movie.getTitleOv());
+
+        Arrays.stream(titleOvWords).forEach(word ->
+                verify(movieRepository, times(1)).findByTitleOvContainsIgnoreCase(word));
+
+        List<Movie> movieList = movies.collect(Collectors.toList());
+        assertEquals(movie.getTitleOv(), movieList.get(0).getTitleOv());
+        assertEquals(1, movieList.size());
+    }
+
+    @Test
+    public void findAllBy_multipleMoviesWithSameTitleOvMatching_returnsBothMovies() throws Exception {
+        String[] titleOvWords = movie.getTitleOv().split(" ");
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().setTitleOv(movie.getTitleOv());
+        anotherMovie.setId(1L);
+
+        Arrays.stream(titleOvWords).forEach(word ->
+                when(movieRepository.findByTitleOvContainsIgnoreCase(word)).thenReturn(Stream.of(movie, anotherMovie)));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV, titleOvWords[0]);
+
+        verify(movieRepository, times(1)).findByTitleOvContainsIgnoreCase(titleOvWords[0]);
+        assertEquals(2, movies.count());
+    }
+
+    @Test
+    public void findAllBy_multipleMoviesWithDifferentTitleOvMatching_returnsBothMoviesSortedByDescendingMatchNumber() throws Exception {
+        String[] titleOvWords = movie.getTitleOv().split(" ");
+        movie.setId(0L);
+
+        Movie anotherMovie = new Movie().setTitleOv(titleOvWords[0]);
+        anotherMovie.setId(1L);
+
+
+        when(movieRepository.findByTitleOvContainsIgnoreCase(titleOvWords[0])).thenReturn(Stream.of(movie, anotherMovie));
+        when(movieRepository.findByTitleOvContainsIgnoreCase(titleOvWords[1])).thenReturn(Stream.of(movie));
+
+        Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.TITLE_OV,
+                String.format("%s %s", titleOvWords[0], titleOvWords[1]));
+
+        verify(movieRepository, times(1)).findByTitleOvContainsIgnoreCase(titleOvWords[0]);
+        verify(movieRepository, times(1)).findByTitleOvContainsIgnoreCase(titleOvWords[1]);
+        assertEquals(movie.getTitleOv(), movies.findFirst().get().getTitleOv());
+    }
+
+    @Test
     public void findAllBy_actorsEmptyString_returnsNoRecords() throws Exception {
         Stream<Movie> movies = service.findAllBy(MovieQueryTypeMultiple.ACTORS, "");
 

@@ -152,6 +152,9 @@ public class MovieServiceDB implements MovieService{
             case TITLE:
                 addTitleSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
+            case TITLE_OV:
+                addTitleOvSearchToStreamMerger(values, movieStreamMerger);
+                return movieStreamMerger.merge();
             case ACTORS:
                 addActorsSearchToStreamMerger(values, movieStreamMerger);
                 return movieStreamMerger.merge();
