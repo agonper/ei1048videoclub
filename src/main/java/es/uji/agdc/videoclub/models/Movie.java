@@ -87,6 +87,10 @@ public class Movie extends AbstractEntity {
         return availableCopies;
     }
 
+    public int getActualAvailableCopies() {
+        return availableCopies - getVisualizationLinks().size();
+    }
+
     public Movie setAvailableCopies(int availableCopies) {
         this.availableCopies = availableCopies;
         return this;
