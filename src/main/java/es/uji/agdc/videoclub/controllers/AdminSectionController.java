@@ -93,7 +93,6 @@ public class AdminSectionController extends Controller {
     @FXML
     public void cleanOldRents() {
         //TODO: Clean old rents
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Devolución automática de películas");
         alert.setHeaderText("Se ha realizado la devolución de copias en alquileres antiguos de forma satisfactoria.");
