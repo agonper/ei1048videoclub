@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -87,6 +88,16 @@ public class VisualizationLinkRepositoryTest {
                 visualizationLinkRepository.findByToken(visualizationLink.getToken());
 
         assertTrue(savedVisualizationLink.isPresent());
+    }
+
+    @Test
+    public void findVisualizationLinksByMovieId() throws Exception {
+        visualizationLinkRepository.save(visualizationLink);
+
+        Stream<VisualizationLink> visualizationLinks =
+                visualizationLinkRepository.findByMovie_Id(visualizationLink.getMovie().getId());
+
+        assertEquals(1, visualizationLinks.count());
     }
 
     @Test
