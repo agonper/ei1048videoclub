@@ -1,7 +1,12 @@
 package es.uji.agdc.videoclub.models;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * User entity, from the business domain
@@ -40,6 +45,10 @@ public class User extends AbstractEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private Role role;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "user")
+    private List<VisualizationLink> visualizationLinks = new LinkedList<>();
 
     public String getDni() {
         return dni;
@@ -119,6 +128,16 @@ public class User extends AbstractEntity {
 
     public User setRole(Role role) {
         this.role = role;
+        return this;
+    }
+
+    public List<VisualizationLink> getVisualizationLinks() {
+        return visualizationLinks;
+    }
+
+    public User addVisualizationLink(VisualizationLink link) {
+        List<VisualizationLink> visualizationLinks = getVisualizationLinks();
+        visualizationLinks.add(link);
         return this;
     }
 

@@ -43,6 +43,10 @@ public class Movie extends AbstractEntity {
     @Column(nullable = false)
     private int availableCopies;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "movie")
+    private List<VisualizationLink> visualizationLinks = new LinkedList<>();
+
     public String getTitle() {
         return title;
     }
@@ -134,6 +138,16 @@ public class Movie extends AbstractEntity {
         List<Genre> genres = getGenres();
         genres.add(genre);
         genre.addMovie(this);
+        return this;
+    }
+
+    public List<VisualizationLink> getVisualizationLinks() {
+        return visualizationLinks;
+    }
+
+    public Movie addVisualizationLink(VisualizationLink link) {
+        List<VisualizationLink> visualizationLinks = getVisualizationLinks();
+        visualizationLinks.add(link);
         return this;
     }
 
