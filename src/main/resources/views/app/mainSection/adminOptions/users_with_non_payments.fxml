@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.collections.FXCollections?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.SlowPayersSectionController">
    <center>
       <TableView fx:id="slowPayers_TableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -40,9 +40,9 @@
                 </cellValueFactory>
             </TableColumn>
 
-            <TableColumn fx:id="slowPayers_LastPaymentDate_tableColumn" prefWidth="201.0" text="Fecha del último pago">
+            <TableColumn fx:id="slowPayers_months_tableColumn" prefWidth="201.0" text="Meses que adeudan">
                 <cellValueFactory>
-                    <PropertyValueFactory property="lastPayment" />
+                    <PropertyValueFactory property="unpaidMonths" />
                 </cellValueFactory>
             </TableColumn>
         </columns>
@@ -72,7 +72,7 @@
       </VBox>
    </top>
    <bottom>
-      <Button fx:id="slowPayers_close_button" onAction="#closeWindow" mnemonicParsing="false" text="Cerrar" BorderPane.alignment="TOP_RIGHT">
+      <Button fx:id="slowPayers_close_button" mnemonicParsing="false" onAction="#closeWindow" text="Cerrar" BorderPane.alignment="TOP_RIGHT">
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" />
          </BorderPane.margin>
