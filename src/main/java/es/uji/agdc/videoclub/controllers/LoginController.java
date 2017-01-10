@@ -60,8 +60,6 @@ public class LoginController extends Controller {
         boolean voidUsername = introducedUsername.trim().equals("");
         boolean voidPassword = introducedPassword.trim().equals("");
 
-        //TODO: Search a better method than dialogs (more like the web forms)
-
         if (voidUsername) {
             Alert voidUsername_Alert = AlertFactory.create_voidUsername_Alert();
             login_UsernameTextfield.clear();

@@ -6,6 +6,7 @@ import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -137,9 +138,17 @@ public class UsersListController extends Controller {
         Optional<ButtonType> answer = confirmation.showAndWait();
         if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
             UserService service = Services.getUserService();
-            service.remove(user.getUsername());
-            //FIXME: Remove from the table if the Result of remove is Ok, and show an alert if not (f. ex. trying to delete an admin)
-            users_TableView.getItems().remove(user);
+            Result result = service.remove(user.getUsername());
+
+            if (result.isOk())
+                users_TableView.getItems().remove(user);
+
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error al eliminar el usuario");
+                alert.setHeaderText("No se ha podido eliminar al usuario, por un error en el sistema o por ser un usuario administrador.");
+            }
+
         }
     }
 

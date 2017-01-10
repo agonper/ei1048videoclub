@@ -1,5 +1,9 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.services.VisualizationLinkQueryTypeMultiple;
+import es.uji.agdc.videoclub.services.VisualizationLinkQueryTypeSimple;
+import es.uji.agdc.videoclub.services.VisualizationLinkService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
@@ -33,6 +38,8 @@ public class AdminSectionController extends Controller {
     private String movieEditSection = "/views/app/mainSection/adminOptions/editMovie/edit_movie.fxml";
     private String listOfUsersSection = "/views/app/mainSection/adminOptions/list_of_users.fxml";
     private String listOfMoviesSection = "/views/app/mainSection/adminOptions/list_of_movies.fxml";
+
+    private VisualizationLinkService visualizationLinkService = Services.getVisualizationLinkService();
 
 
     private void loadSection(String resource, Stage stage, String title) {
@@ -86,6 +93,7 @@ public class AdminSectionController extends Controller {
     @FXML
     public void cleanOldRents() {
         //TODO: Clean old rents
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Devolución automática de películas");
         alert.setHeaderText("Se ha realizado la devolución de copias en alquileres antiguos de forma satisfactoria.");
