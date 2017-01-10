@@ -88,6 +88,16 @@ public class VisualizationLinkServiceDBTest {
         assertEquals(movie.getTitle(), links.findFirst().get().getMovie().getTitle());
     }
 
+    @Test
+    public void findAllBy_user() throws Exception {
+        linkService.create(visualizationLink);
+
+        Stream<VisualizationLink> links =
+                linkService.findAllBy(VisualizationLinkQueryTypeMultiple.USER, user.getId().toString());
+
+        assertEquals(user.getUsername(), links.findFirst().get().getUser().getUsername());
+    }
+
     @After
     public void tearDown() throws Exception {
         user = null;
