@@ -3,6 +3,9 @@ package es.uji.agdc.videoclub.controllers.insertUser;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
+import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -25,6 +28,8 @@ public class InsertUser_2Controller extends Controller implements Form {
     private boolean valid_email = false;
 
     private InsertUserController rootController = null;
+
+    private UserService userService = Services.getUserService();
 
     @FXML
     public void initialize() {
@@ -98,7 +103,7 @@ public class InsertUser_2Controller extends Controller implements Form {
 
         Pattern p = Pattern.compile(EMAIL_PATTERN);
 
-        return p.matcher(email).matches();
+        return p.matcher(email).matches() && !userService.findBy(UserQueryTypeSingle.EMAIL, email).isPresent();
     }
 
     @Override
