@@ -162,7 +162,7 @@ public class VisualizationLinkServiceDBTest {
 
     @Test
     public void findBy_tokenNullToken_returnsEmptyOptional() throws Exception {
-        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, null);
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN);
 
         verify(repository, never()).findByToken(anyString());
 
@@ -179,8 +179,19 @@ public class VisualizationLinkServiceDBTest {
     }
 
     @Test
+    public void findBy_tokenWithOneParam_returnsEmptyOptional() throws Exception {
+        try {
+            service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, "a");
+            fail();
+        } catch (Error e) {
+            verify(repository, never()).findByToken(anyString());
+            assertEquals("MISSING_USER_ID", e.getMessage());
+        }
+    }
+
+    @Test
     public void findBy_tokenNoMatchingToken_returnsEmptyOptional() throws Exception {
-        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, "a");
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, "a", user.getId().toString());
 
         verify(repository, times(1)).findByToken(anyString());
 
@@ -188,16 +199,30 @@ public class VisualizationLinkServiceDBTest {
     }
 
     @Test
-    public void findBy_tokenExistingToken_returnsLink() throws Exception {
+    public void findBy_tokenExistingTokenForUserLink_returnsLink() throws Exception {
         String token = link.getToken();
         when(repository.findByToken(token)).thenReturn(Optional.of(link));
 
-        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, token);
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, token, user.getId().toString());
 
         verify(repository, times(1)).findByToken(anyString());
 
         assertTrue(possibleLink.isPresent());
         assertEquals(token, possibleLink.get().getToken());
+    }
+
+    @Test
+    public void findBy_tokenExistingTokenForDifferentUserLink_returnsLink() throws Exception {
+        String token = link.getToken();
+        when(repository.findByToken(token)).thenReturn(Optional.of(link));
+
+        try {
+            service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, token, "1");
+            fail();
+        } catch (Error e) {
+            verify(repository, times(1)).findByToken(anyString());
+            assertEquals("FOREIGN_LINK", e.getMessage());
+        }
     }
 
     @Test

@@ -25,11 +25,11 @@ public interface VisualizationLinkService {
     /**
      * Tries to find a visualization link by the specified field
      * @param field The field that has to be looked at
-     * @param value The value of the field that has to be matched
+     * @param values The values of the field that has to be matched
      * @return A filled {@link Optional} with the {@link VisualizationLink} that was found
      * or an empty one if no {@link VisualizationLink} was found
      */
-    Optional<VisualizationLink> findBy(VisualizationLinkQueryTypeSimple field, String value);
+    Optional<VisualizationLink> findBy(VisualizationLinkQueryTypeSimple field, String ...values);
 
     /**
      * Tries to find a list of visualization links by the specified field

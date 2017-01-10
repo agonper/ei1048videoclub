@@ -91,15 +91,32 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
     }
 
     @Override
-    public Optional<VisualizationLink> findBy(VisualizationLinkQueryTypeSimple field, String value) {
-        if (isEmpty(value)) {
-            log.warn(String.format("findBy(%s): called with empty value", field));
+    public Optional<VisualizationLink> findBy(VisualizationLinkQueryTypeSimple field, String ...values) {
+        if (values.length == 0) {
+            log.error(String.format("findBy(%s): called with no values", field));
+            return Optional.empty();
+        }
+        if (isEmpty(values[0])) {
+            log.warn(String.format("findBy(%s): called with first value empty", field));
             return Optional.empty();
         }
 
         switch (field) {
             case TOKEN:
-                return repository.findByToken(value);
+                if (values.length != 2) {
+                    log.error(String.format("findBy(%s): called with unexpected number of values", field));
+                    throw new Error("MISSING_USER_ID");
+                }
+                String token = values[0];
+                String userId = values[1];
+
+                Optional<VisualizationLink> possibleLink = repository.findByToken(token);
+                if (!possibleLink.isPresent()) return Optional.empty();
+
+                VisualizationLink link = possibleLink.get();
+                if (!userId.equals(link.getUser().getId().toString()))
+                    throw new Error("FOREIGN_LINK");
+                return possibleLink;
             default:
                 throw new Error("Unimplemented");
         }

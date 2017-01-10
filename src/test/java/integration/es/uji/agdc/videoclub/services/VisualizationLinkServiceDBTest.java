@@ -80,7 +80,7 @@ public class VisualizationLinkServiceDBTest {
     public void findBy_token() throws Exception {
         linkService.create(visualizationLink);
 
-        Optional<VisualizationLink> possibleLink = linkService.findBy(VisualizationLinkQueryTypeSimple.TOKEN, visualizationLink.getToken());
+        Optional<VisualizationLink> possibleLink = linkService.findBy(VisualizationLinkQueryTypeSimple.TOKEN, visualizationLink.getToken(), user.getId().toString());
 
         assertEquals(visualizationLink.getToken(), possibleLink.get().getToken());
     }
