@@ -1,5 +1,7 @@
 package es.uji.agdc.videoclub.repositories;
 
+import es.uji.agdc.videoclub.models.Movie;
+import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.VisualizationLink;
 import java.util.stream.Stream;
 
@@ -33,4 +35,14 @@ public interface VisualizationLinkRepository extends CrudRepositoryJ8<Visualizat
      * or an empty one if no {@link VisualizationLink} was found
      */
     Stream<VisualizationLink> findByUser_Id(long userId);
+
+
+    /**
+     * Tries to find a visualization link by a user and a movie
+     * @param user the user of the link
+     * @param movie the movie of the link
+     * @return A filled {@link Optional} with the {@link Optional} that was found
+     * or an empty one if no {@link VisualizationLink} was found
+     */
+    Optional<VisualizationLink> findByUserAndMovie(User user, Movie movie);
 }
