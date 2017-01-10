@@ -7,6 +7,7 @@ import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.services.MovieService;
+import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -271,8 +272,16 @@ public class MoviesListController extends Controller {
         Optional<ButtonType> answer = confirmation.showAndWait();
         if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
             MovieService service = Services.getMovieService();
-            //FIXME: Remove from the table if the Result of remove is Ok, and show an alert if not
-            service.remove(movie.getTitle(), movie.getYear());
+            Result result = service.remove(movie.getTitle(), movie.getYear());
+
+            if (result.isOk())
+                movies_TableView.getItems().remove(movie);
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error al eliminar la película");
+                alert.setHeaderText("No se ha podido eliminar la película por un error en el sistema.");
+                alert.showAndWait();
+            }
         }
     }
 }

@@ -1,16 +1,25 @@
 package es.uji.agdc.videoclub.controllers;
 
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
+import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.Movie;
+import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.models.VisualizationLink;
+import es.uji.agdc.videoclub.services.MovieService;
+import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Created by daniel on 8/01/17.
@@ -60,6 +69,23 @@ public class ResultController extends Controller {
 
     @FXML
     public void rentMovie() {
-        //TODO: Do the rent action
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirmación de alquiler");
+        confirmationAlert.setHeaderText("¿Está seguro de querer alquilar la película?");
+        Optional<ButtonType> answer = confirmationAlert.showAndWait();
+
+        if (answer.get().getButtonData().isDefaultButton()) {
+            User loggedUser = ApplicationStateData.getLoggedUser();
+            VisualizationLink link = new VisualizationLink(loggedUser, movie);
+            movie.setAvailableCopies(movie.getAvailableCopies() - 1);
+
+            UserService userService = Services.getUserService();
+            MovieService movieService = Services.getMovieService();
+
+            userService.update(loggedUser);
+            movieService.update(movie);
+
+            initState();
+        }
     }
 }

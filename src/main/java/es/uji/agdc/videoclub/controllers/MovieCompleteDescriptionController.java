@@ -4,7 +4,9 @@ import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.models.VisualizationLink;
 import es.uji.agdc.videoclub.services.MovieService;
+import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -117,10 +119,15 @@ public class MovieCompleteDescriptionController extends Controller {
 
     @FXML
     public void rentMovie() {
-        //TODO: Finish method, add rent action
+        if (movie != null && movie.getAvailableCopies() > 0) {
+            User loggedUser = ApplicationStateData.getLoggedUser();
+            VisualizationLink link = new VisualizationLink(loggedUser, movie);
+            movie.setAvailableCopies(movie.getAvailableCopies() - 1);
 
-        //MovieService movieService = Services.getMovieService();
-        //movie.setAvailableCopies(movie.getAvailableCopies() - 1);
-        //movieService.update(movie);
+            MovieService movieService = Services.getMovieService();
+            movieService.update(movie);
+            UserService userService = Services.getUserService();
+            userService.update(loggedUser);
+        }
     }
 }

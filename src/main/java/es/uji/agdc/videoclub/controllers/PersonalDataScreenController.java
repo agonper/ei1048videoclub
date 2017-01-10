@@ -153,9 +153,6 @@ public class PersonalDataScreenController extends Controller {
             if (validationResult.isOk())
                 userService.update(editedUser);
 
-            else {
-                //TODO: Blame the user
-            }
         }
     }
 

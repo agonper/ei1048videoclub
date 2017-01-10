@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.RentedMoviesController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.RentedMoviesController">
    <top>
       <VBox alignment="TOP_CENTER" prefHeight="60.0" prefWidth="600.0" BorderPane.alignment="TOP_CENTER">
          <children>
@@ -32,9 +32,10 @@
    <center>
       <TableView fx:id="rentedMovies_TableView" onMouseClicked="#refreshButtons" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="rentedMoviesTitle_tableColumn" editable="false" prefWidth="145.0" text="Título" />
-            <TableColumn fx:id="rentedMoviesTitleVO_tableColumn" editable="false" prefWidth="142.0" text="Título VO" />
-           <TableColumn fx:id="rentedMoviesYear_tableColumn" editable="false" prefWidth="72.0" text="Año" />
+          <TableColumn fx:id="rentedMoviesTitle_tableColumn" editable="false" prefWidth="91.0" text="Título" />
+            <TableColumn fx:id="rentedMoviesTitleVO_tableColumn" editable="false" prefWidth="89.0" text="Título VO" />
+           <TableColumn fx:id="rentedMoviesYear_tableColumn" editable="false" prefWidth="84.0" text="Año" />
+           <TableColumn fx:id="rentedMoviesRentDate_tableColumn" editable="false" prefWidth="165.0" text="Fecha de alquiler" />
         </columns>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
