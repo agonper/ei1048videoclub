@@ -7,6 +7,7 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.VisualizationLink;
 import es.uji.agdc.videoclub.services.MovieService;
 import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.VisualizationLinkService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -76,7 +77,9 @@ public class ResultController extends Controller {
 
         if (answer.get().getButtonData().isDefaultButton()) {
             User loggedUser = ApplicationStateData.getLoggedUser();
+            VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
+            service.create(link);
             movie.setAvailableCopies(movie.getAvailableCopies() - 1);
 
             UserService userService = Services.getUserService();

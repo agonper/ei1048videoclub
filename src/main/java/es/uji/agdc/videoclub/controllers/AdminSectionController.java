@@ -1,9 +1,10 @@
 package es.uji.agdc.videoclub.controllers;
 
 import es.uji.agdc.videoclub.helpers.Services;
-import es.uji.agdc.videoclub.services.VisualizationLinkQueryTypeMultiple;
-import es.uji.agdc.videoclub.services.VisualizationLinkQueryTypeSimple;
-import es.uji.agdc.videoclub.services.VisualizationLinkService;
+import es.uji.agdc.videoclub.models.Movie;
+import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.models.VisualizationLink;
+import es.uji.agdc.videoclub.services.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by daniel on 3/01/17.
@@ -92,10 +100,58 @@ public class AdminSectionController extends Controller {
 
     @FXML
     public void cleanOldRents() {
-        //TODO: Clean old rents
+        //TODO: Test
+        int deletedRents = 0;
+        LinkedList<String> tokens = new LinkedList<>();
+
+        UserService service = Services.getUserService();
+
+        Stream<User> users = service.findAllBy(UserQueryTypeMultiple.ROLE, User.Role.MEMBER.toString());
+        Iterator<User> userIterator = users.iterator();
+
+        while (userIterator.hasNext()) {
+            User user = userIterator.next();
+            List<VisualizationLink> links = user.getVisualizationLinks();
+
+            for (VisualizationLink link : links) {
+                LocalDateTime createdAt = link.getExpeditionDate();
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime movieRentDeadline = now.minusDays(2L);
+
+                if (movieRentDeadline.isAfter(createdAt) || movieRentDeadline.isEqual(createdAt)) {
+                    deletedRents++;
+                    tokens.add(link.getToken());
+                    user.getVisualizationLinks().remove(link);
+                    Movie movie = link.getMovie();
+                    movie.getVisualizationLinks().remove(link);
+                    movie.setAvailableCopies(movie.getAvailableCopies() + 1);
+                }
+            }
+        }
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Devolución automática de películas");
         alert.setHeaderText("Se ha realizado la devolución de copias en alquileres antiguos de forma satisfactoria.");
+
+        if (deletedRents > 0) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Se ha eliminado un total de ");
+            builder.append(deletedRents);
+            builder.append(" películas.\n");
+            builder.append("Los códigos asociados a dichos alquileres son:\n\n");
+
+            for (String token : tokens) {
+                builder.append(token);
+                builder.append("\n");
+            }
+
+            alert.setContentText(builder.toString());
+        }
+
+        else
+            alert.setContentText("No se ha eliminado ningún alquiler.");
+
+
         alert.showAndWait();
     }
 }

@@ -2,18 +2,27 @@ package es.uji.agdc.videoclub.controllers;
 
 import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.models.Movie;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.VisualizationLink;
 import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.VisualizationLinkService;
+import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableIntegerValue;
 import javafx.beans.value.ObservableStringValue;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -247,12 +256,17 @@ public class RentedMoviesController extends Controller {
             Optional<ButtonType> answer = alert.showAndWait();
 
             if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
-                User loggedUser = ApplicationStateData.getLoggedUser();
+                VisualizationLinkService service = Services.getVisualizationLinkService();
+                Result result = service.remove(selected.getToken());
 
-                if (loggedUser.getVisualizationLinks().remove(selected)) {
-                    UserService userService = Services.getUserService();
-                    userService.update(loggedUser);
+                if (result.isOk())
                     rentedMovies_TableView.getItems().remove(selectedIndex);
+
+                else {
+                    Alert alert1 = new Alert(Alert.AlertType.ERROR);
+                    alert1.setTitle("Error al devolver la película");
+                    alert1.setHeaderText("Ha habido un error interno al devolver la película. Vuelva a intentarlo.");
+                    alert1.showAndWait();
                 }
             }
         }
@@ -273,7 +287,24 @@ public class RentedMoviesController extends Controller {
             alert.showAndWait();
         }
         else {
-            //TODO: Call view movie window
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/views/app/mainSection/profile/movie_view.fxml"));
+
+            try {
+                BorderPane movieViewContainer = loader.load();
+                MovieViewController controller = loader.getController();
+                controller.stage = new Stage();
+                controller.stage.initModality(Modality.WINDOW_MODAL);
+                Scene scene = new Scene(movieViewContainer);
+                controller.stage.setScene(scene);
+                VisualizationLink selectedMovie = (VisualizationLink) rentedMovies_TableView.getSelectionModel().getSelectedItems().get(0);
+                controller.setMovie(selectedMovie.getMovie());
+                controller.initView();
+                controller.stage.showAndWait();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
