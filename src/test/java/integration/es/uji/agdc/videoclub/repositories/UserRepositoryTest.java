@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -26,13 +27,14 @@ import static org.junit.Assert.*;
 @Transactional
 public class UserRepositoryTest {
 
-    private static User user;
+    private User user;
+    private User anotherUser;
 
     @Autowired
     private UserRepository userRepository;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         user = UserFactory.createMember()
                 .setDni("10614397N")
                 .setName("Paco Sánchez Díaz")
@@ -40,6 +42,15 @@ public class UserRepositoryTest {
                 .setPhone(693582471)
                 .setEmail("pacosd@hotmail.com")
                 .setUsername("paquito69")
+                .setPassword("pacosd69");
+
+        anotherUser = UserFactory.createMember()
+                .setDni("20614397N")
+                .setName("Paco Sánchez Díaz")
+                .setAddress("C/Falsa, 123, 1º")
+                .setPhone(693582471)
+                .setEmail("paco@hotmail.com")
+                .setUsername("paquito")
                 .setPassword("pacosd69");
     }
 
@@ -78,6 +89,59 @@ public class UserRepositoryTest {
     }
 
     @Test
+    public void findDefaulters_oneDefaulter() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1).minusDays(1));
+        userRepository.save(user);
+        Stream<User> defaulters = userRepository.findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(1, defaulters.count());
+    }
+
+    @Test
+    public void findDefaulters_oneDefaulterAndOnePayer() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1).minusDays(1));
+        userRepository.save(user);
+        anotherUser.setLastPayment(LocalDate.now());
+        userRepository.save(anotherUser);
+        Stream<User> defaulters = userRepository.findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(1, defaulters.count());
+    }
+
+    @Test
+    public void findDefaulters_oneDefaulterAndOneWithNoPaymentDate() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1).minusDays(1));
+        userRepository.save(user);
+        userRepository.save(anotherUser);
+        Stream<User> defaulters = userRepository.findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(1, defaulters.count());
+    }
+
+    @Test
+    public void findDefaulters_oneDefaulterFromLastYear() throws Exception {
+        user.setLastPayment(LocalDate.now().minusYears(1));
+        userRepository.save(user);
+        Stream<User> defaulters = userRepository.findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(1, defaulters.count());
+    }
+
+    @Test
+    public void findDefaulters_noDefaulters() throws Exception {
+        user.setLastPayment(LocalDate.now());
+        userRepository.save(user);
+        Stream<User> defaulters = userRepository.findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(0, defaulters.count());
+    }
+
+    @Test
+    public void findDefaulters_moreThanOneDefaulter() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1).minusDays(1));
+        userRepository.save(user);
+        anotherUser.setLastPayment(LocalDate.now().minusYears(1));
+        userRepository.save(anotherUser);
+        Stream<User> defaulters = userRepository.findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(2, defaulters.count());
+    }
+
+    @Test
     public void updateUser() throws Exception {
         User savedUser = userRepository.save(user);
         String newName = "Paco Sánchez García";
@@ -94,8 +158,9 @@ public class UserRepositoryTest {
         assertFalse(noUser.isPresent());
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         user = null;
+        anotherUser = null;
     }
 }

@@ -1,7 +1,9 @@
 package es.uji.agdc.videoclub.repositories;
 
 import es.uji.agdc.videoclub.models.User;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -34,7 +36,14 @@ public interface UserRepository extends CrudRepositoryJ8<User, Long> {
     /**
      * Search for a users by a given role. If no user is found and empty {@link Stream} is returned.
      * @param role One of the types declared at {@link User.Role}
-     * @return An stream with the users that have the given role
+     * @return A stream with the users that have the given role
      */
     Stream<User> findByRole(User.Role role);
+
+    /**
+     * Search for all users whose last payment date dates from before a given date
+     * @param date the date to pick up as reference for the query
+     * @return A stream with the users that meet the given condition
+     */
+    Stream<User> findByLastPaymentBefore(LocalDate date);
 }
