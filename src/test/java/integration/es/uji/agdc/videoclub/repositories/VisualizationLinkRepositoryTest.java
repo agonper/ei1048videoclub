@@ -37,7 +37,7 @@ public class VisualizationLinkRepositoryTest {
     private MovieService movieService;
 
     @Autowired
-    private VisualizationLinkRepository visualizationLinkRepository;
+    private VisualizationLinkRepository repository;
 
     private User user;
     private Movie movie;
@@ -76,47 +76,59 @@ public class VisualizationLinkRepositoryTest {
 
     @Test
     public void createVisualizationLink() throws Exception {
-        VisualizationLink savedVisualizationLink = visualizationLinkRepository.save(visualizationLink);
+        VisualizationLink savedVisualizationLink = repository.save(visualizationLink);
         assertNotNull(savedVisualizationLink.getId());
     }
 
     @Test
     public void findVisualizationLinkByToken() throws Exception {
-        visualizationLinkRepository.save(visualizationLink);
+        repository.save(visualizationLink);
 
         Optional<VisualizationLink> savedVisualizationLink =
-                visualizationLinkRepository.findByToken(visualizationLink.getToken());
+                repository.findByToken(visualizationLink.getToken());
 
         assertTrue(savedVisualizationLink.isPresent());
     }
 
     @Test
     public void findVisualizationLinksByMovieId() throws Exception {
-        visualizationLinkRepository.save(visualizationLink);
+        repository.save(visualizationLink);
 
         Stream<VisualizationLink> visualizationLinks =
-                visualizationLinkRepository.findByMovie_Id(visualizationLink.getMovie().getId());
+                repository.findByMovie_Id(visualizationLink.getMovie().getId());
 
         assertEquals(1, visualizationLinks.count());
     }
 
     @Test
     public void findVisualizationLinksByUserId() throws Exception {
-        visualizationLinkRepository.save(visualizationLink);
+        repository.save(visualizationLink);
 
         Stream<VisualizationLink> visualizationLinks =
-                visualizationLinkRepository.findByUser_Id(visualizationLink.getUser().getId());
+                repository.findByUser_Id(visualizationLink.getUser().getId());
 
         assertEquals(1, visualizationLinks.count());
     }
 
     @Test
+    public void findVisualizationLinkByUserAndMovie() throws Exception {
+        repository.save(visualizationLink);
+
+        Optional<VisualizationLink> possibleLink =
+                repository.findByUserAndMovie(user, movie);
+
+        assertTrue(possibleLink.isPresent());
+        assertEquals(user.getUsername(), possibleLink.get().getUser().getUsername());
+        assertEquals(movie.getTitle(), possibleLink.get().getMovie().getTitle());
+    }
+
+    @Test
     public void updateVisualizationLink() throws Exception {
-        VisualizationLink savedVisualizationLink = visualizationLinkRepository.save(visualizationLink);
+        VisualizationLink savedVisualizationLink = repository.save(visualizationLink);
 
         LocalDateTime expeditionDate = LocalDateTime.now();
         savedVisualizationLink.setExpeditionDate(expeditionDate);
-        VisualizationLink modifiedVisualizationLink = visualizationLinkRepository.save(savedVisualizationLink);
+        VisualizationLink modifiedVisualizationLink = repository.save(savedVisualizationLink);
 
         System.out.println(modifiedVisualizationLink);
 
@@ -125,10 +137,10 @@ public class VisualizationLinkRepositoryTest {
 
     @Test
     public void deleteVisualizationLink() throws Exception {
-        VisualizationLink savedVisualizationLink = visualizationLinkRepository.save(visualizationLink);
-        visualizationLinkRepository.delete(savedVisualizationLink);
+        VisualizationLink savedVisualizationLink = repository.save(visualizationLink);
+        repository.delete(savedVisualizationLink);
         Optional<VisualizationLink> noVisualizationLink =
-                visualizationLinkRepository.findByToken(visualizationLink.getToken());
+                repository.findByToken(visualizationLink.getToken());
         assertFalse(noVisualizationLink.isPresent());
     }
 

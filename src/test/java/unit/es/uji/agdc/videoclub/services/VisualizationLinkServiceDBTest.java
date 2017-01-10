@@ -44,6 +44,8 @@ public class VisualizationLinkServiceDBTest {
         when(movieService.findBy(any(), anyString())).thenReturn(Optional.empty());
 
         when(repository.findByMovie_Id(anyLong())).thenReturn(Stream.empty());
+        when(repository.findByUser_Id(anyLong())).thenReturn(Stream.empty());
+        when(repository.findByUserAndMovie(any(), any())).thenReturn(Optional.empty());
 
         user = new User();
         user.setId(0L);
@@ -63,6 +65,9 @@ public class VisualizationLinkServiceDBTest {
 
         verify(userService, only()).findBy(UserQueryTypeSingle.ID, user.getId().toString());
         verify(movieService, only()).findBy(MovieQueryTypeSingle.ID, movie.getId().toString());
+        verify(repository, times(1)).findByMovie_Id(movie.getId());
+        verify(repository, times(1)).findByUserAndMovie(any(), any());
+
         assertTrue(result.isOk());
     }
 
@@ -133,12 +138,25 @@ public class VisualizationLinkServiceDBTest {
     }
 
     @Test
-    public void create_movieWithNoCopies() throws Exception {
-        /*movie.setAvailableCopies(0);
+    public void create_userWithMatchingLink_returnsError() throws Exception {
+        when(repository.findByUserAndMovie(any(), any())).thenReturn(Optional.of(new VisualizationLink(user, movie)));
         Result result = service.create(link);
 
+        verify(repository, times(1)).findByUserAndMovie(any(), any());
+
         assertTrue(result.isError());
-        assertEquals("NO_COPIES_AVAILABLE", result.getMsg());*/
+        assertEquals("ALREADY_WATCHING", result.getMsg());
+    }
+
+    @Test
+    public void create_movieWithNoCopies_returnsError() throws Exception {
+        when(repository.findByMovie_Id(movie.getId())).thenReturn(Stream.of(new VisualizationLink(user, movie)));
+        Result result = service.create(link);
+
+        verify(repository, times(1)).findByMovie_Id(movie.getId());
+
+        assertTrue(result.isError());
+        assertEquals("NO_COPIES_AVAILABLE", result.getMsg());
     }
 
     @Test
@@ -189,6 +207,58 @@ public class VisualizationLinkServiceDBTest {
                 service.findAllBy(VisualizationLinkQueryTypeMultiple.MOVIE, "0");
 
         verify(repository, only()).findByMovie_Id(anyLong());
+
+        assertEquals(1, links.count());
+    }
+
+    @Test
+    public void findAllBy_userNullId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, null);
+
+        verify(repository, never()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userEmptyId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "");
+
+        verify(repository, never()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userInvalidId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "id");
+
+        verify(repository, never()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userNoMatchingId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "0");
+
+        verify(repository, only()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userMatchingId_returnsEmptyStream() throws Exception {
+        when(repository.findByUser_Id(0)).thenReturn(Stream.of(link));
+
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "0");
+
+        verify(repository, only()).findByUser_Id(anyLong());
 
         assertEquals(1, links.count());
     }
