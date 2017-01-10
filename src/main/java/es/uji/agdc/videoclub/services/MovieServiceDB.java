@@ -133,6 +133,7 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
+    @Transactional
     public Stream<Movie> findAllBy(MovieQueryTypeMultiple query, String text) {
 
         if (text == null || text.isEmpty()) {
