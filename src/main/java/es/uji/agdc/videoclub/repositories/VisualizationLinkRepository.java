@@ -25,4 +25,12 @@ public interface VisualizationLinkRepository extends CrudRepositoryJ8<Visualizat
      * or an empty one if no {@link VisualizationLink} was found
      */
     Stream<VisualizationLink> findByMovie_Id(long movieId);
+
+    /**
+     * Tries to find visualization links via their user
+     * @param userId the id of the user of the visualization links
+     * @return A filled {@link Stream} that contains the visualization links that match the statement
+     * or an empty one if no {@link VisualizationLink} was found
+     */
+    Stream<VisualizationLink> findByUser_Id(long userId);
 }

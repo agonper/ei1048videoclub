@@ -101,6 +101,16 @@ public class VisualizationLinkRepositoryTest {
     }
 
     @Test
+    public void findVisualizationLinksByUserId() throws Exception {
+        visualizationLinkRepository.save(visualizationLink);
+
+        Stream<VisualizationLink> visualizationLinks =
+                visualizationLinkRepository.findByUser_Id(visualizationLink.getUser().getId());
+
+        assertEquals(1, visualizationLinks.count());
+    }
+
+    @Test
     public void updateVisualizationLink() throws Exception {
         VisualizationLink savedVisualizationLink = visualizationLinkRepository.save(visualizationLink);
 

@@ -65,8 +65,33 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
     }
 
     @Override
-    public Stream<VisualizationLink> findAllBy(VisualizationLinkQueryTypeSimple field, String value) {
-        throw new Error("Unimplemented");
+    public Stream<VisualizationLink> findAllBy(VisualizationLinkQueryTypeMultiple field, String value) {
+        if (isEmpty(value)) return Stream.empty();
+
+        switch (field) {
+            case MOVIE:
+                return findIfValidMovieId(value);
+            default:
+                throw new Error("Unimplemented");
+        }
+    }
+
+    private Stream<VisualizationLink> findIfValidMovieId(String id) {
+        if (!isLong(id)) return Stream.empty();
+        return repository.findByMovie_Id(Long.parseLong(id));
+    }
+
+    private boolean isLong(String string) {
+        try {
+            Long.parseLong(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean isEmpty(String string) {
+        return string == null || string.isEmpty();
     }
 
     @Override
