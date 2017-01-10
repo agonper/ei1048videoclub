@@ -6,6 +6,8 @@ import es.uji.agdc.videoclub.models.VisualizationLink;
 import es.uji.agdc.videoclub.repositories.VisualizationLinkRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.stream.Stream;
  */
 @Service
 public class VisualizationLinkServiceDB implements VisualizationLinkService {
+
+    private static Logger log = LoggerFactory.getLogger(VisualizationLinkServiceDB.class);
 
     private UserService userService;
     private MovieService movieService;
@@ -38,44 +42,75 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
 
         User user = visualizationLink.getUser();
         Result userNotFound = ResultBuilder.error("USER_NOT_FOUND");
-        if (user.isNew()) return userNotFound;
+        if (user.isNew()) {
+            log.warn("create(): Called with unsaved user");
+            return userNotFound;
+        }
 
         Optional<User> possibleUser = userService.findBy(UserQueryTypeSingle.ID, user.getId().toString());
-        if (!possibleUser.isPresent()) return userNotFound;
+        if (!possibleUser.isPresent()) {
+            log.warn("create(): Called with non-existing userId: " + user.getId());
+            return userNotFound;
+        }
 
         Movie movie = visualizationLink.getMovie();
         Result movieNotFound = ResultBuilder.error("MOVIE_NOT_FOUND");
-        if (movie.isNew()) return movieNotFound;
+        if (movie.isNew()) {
+            log.warn("create(): Called with unsaved movie");
+            return movieNotFound;
+        }
 
         Optional<Movie> possibleMovie = movieService.findBy(MovieQueryTypeSingle.ID, movie.getId().toString());
-        if (!possibleMovie.isPresent()) return movieNotFound;
+        if (!possibleMovie.isPresent()) {
+            log.warn("create(): Called with non-existing movie: " + movie.getId());
+            return movieNotFound;
+        }
 
         LocalDateTime expeditionDate = visualizationLink.getExpeditionDate();
-        if (expeditionDate == null || expeditionDate.compareTo(LocalDateTime.now()) > 0)
+        if (expeditionDate == null || expeditionDate.compareTo(LocalDateTime.now()) > 0) {
+            log.warn("create(): Called with invalid expedition date");
             return ResultBuilder.error("INVALID_EXPEDITION_DATE");
+        }
 
         long linksCount = repository.findByMovie_Id(movie.getId()).count();
 
         Optional<VisualizationLink> possibleLink = repository.findByUserAndMovie(user, movie);
-        if (possibleLink.isPresent())
+        if (possibleLink.isPresent()) {
+            log.warn(String.format("create(): User: %s was already watching movie: %s", user.getUsername(), movie.getTitle()));
             return ResultBuilder.error("ALREADY_WATCHING");
+        }
 
         if (linksCount >= movie.getAvailableCopies())
             return ResultBuilder.error("NO_COPIES_AVAILABLE");
 
-        repository.save(visualizationLink);
+        VisualizationLink link = repository.save(visualizationLink);
+        log.info(String.format("create(): Link (%s) created for user: %s and movie: %s", (link != null) ?
+                link.getToken() : "virtual", user.getUsername(), movie.getTitle()));
 
         return ResultBuilder.ok();
     }
 
     @Override
     public Optional<VisualizationLink> findBy(VisualizationLinkQueryTypeSimple field, String value) {
-        throw new Error("Unimplemented");
+        if (isEmpty(value)) {
+            log.warn(String.format("findBy(%s): called with empty value", field));
+            return Optional.empty();
+        }
+
+        switch (field) {
+            case TOKEN:
+                return repository.findByToken(value);
+            default:
+                throw new Error("Unimplemented");
+        }
     }
 
     @Override
     public Stream<VisualizationLink> findAllBy(VisualizationLinkQueryTypeMultiple field, String value) {
-        if (isEmpty(value)) return Stream.empty();
+        if (isEmpty(value)) {
+            log.warn(String.format("findAllBy(%s): called with empty value", field));
+            return Stream.empty();
+        }
 
         switch (field) {
             case MOVIE:

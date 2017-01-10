@@ -3,10 +3,7 @@ package integration.es.uji.agdc.videoclub.services;
 import es.uji.agdc.videoclub.Main;
 import es.uji.agdc.videoclub.models.*;
 import es.uji.agdc.videoclub.models.utils.UserFactory;
-import es.uji.agdc.videoclub.services.MovieService;
-import es.uji.agdc.videoclub.services.UserService;
-import es.uji.agdc.videoclub.services.VisualizationLinkQueryTypeMultiple;
-import es.uji.agdc.videoclub.services.VisualizationLinkService;
+import es.uji.agdc.videoclub.services.*;
 import es.uji.agdc.videoclub.services.utils.Result;
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
@@ -76,6 +74,15 @@ public class VisualizationLinkServiceDBTest {
     public void create() throws Exception {
         Result result = linkService.create(visualizationLink);
         assertTrue(result.isOk());
+    }
+
+    @Test
+    public void findBy_token() throws Exception {
+        linkService.create(visualizationLink);
+
+        Optional<VisualizationLink> possibleLink = linkService.findBy(VisualizationLinkQueryTypeSimple.TOKEN, visualizationLink.getToken());
+
+        assertEquals(visualizationLink.getToken(), possibleLink.get().getToken());
     }
 
     @Test

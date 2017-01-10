@@ -43,6 +43,7 @@ public class VisualizationLinkServiceDBTest {
         when(userService.findBy(any(), anyString())).thenReturn(Optional.empty());
         when(movieService.findBy(any(), anyString())).thenReturn(Optional.empty());
 
+        when(repository.findByToken(anyString())).thenReturn(Optional.empty());
         when(repository.findByMovie_Id(anyLong())).thenReturn(Stream.empty());
         when(repository.findByUser_Id(anyLong())).thenReturn(Stream.empty());
         when(repository.findByUserAndMovie(any(), any())).thenReturn(Optional.empty());
@@ -157,6 +158,46 @@ public class VisualizationLinkServiceDBTest {
 
         assertTrue(result.isError());
         assertEquals("NO_COPIES_AVAILABLE", result.getMsg());
+    }
+
+    @Test
+    public void findBy_tokenNullToken_returnsEmptyOptional() throws Exception {
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, null);
+
+        verify(repository, never()).findByToken(anyString());
+
+        assertFalse(possibleLink.isPresent());
+    }
+
+    @Test
+    public void findBy_tokenEmptyToken_returnsEmptyOptional() throws Exception {
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, "");
+
+        verify(repository, never()).findByToken(anyString());
+
+        assertFalse(possibleLink.isPresent());
+    }
+
+    @Test
+    public void findBy_tokenNoMatchingToken_returnsEmptyOptional() throws Exception {
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, "a");
+
+        verify(repository, times(1)).findByToken(anyString());
+
+        assertFalse(possibleLink.isPresent());
+    }
+
+    @Test
+    public void findBy_tokenExistingToken_returnsLink() throws Exception {
+        String token = link.getToken();
+        when(repository.findByToken(token)).thenReturn(Optional.of(link));
+
+        Optional<VisualizationLink> possibleLink = service.findBy(VisualizationLinkQueryTypeSimple.TOKEN, token);
+
+        verify(repository, times(1)).findByToken(anyString());
+
+        assertTrue(possibleLink.isPresent());
+        assertEquals(token, possibleLink.get().getToken());
     }
 
     @Test
