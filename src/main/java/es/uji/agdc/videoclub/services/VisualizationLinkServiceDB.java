@@ -54,6 +54,15 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
         if (expeditionDate == null || expeditionDate.compareTo(LocalDateTime.now()) > 0)
             return ResultBuilder.error("INVALID_EXPEDITION_DATE");
 
+        long linksCount = repository.findByMovie_Id(movie.getId()).count();
+
+        Optional<VisualizationLink> possibleLink = repository.findByUserAndMovie(user, movie);
+        if (possibleLink.isPresent())
+            return ResultBuilder.error("ALREADY_WATCHING");
+
+        if (linksCount >= movie.getAvailableCopies())
+            return ResultBuilder.error("NO_COPIES_AVAILABLE");
+
         repository.save(visualizationLink);
 
         return ResultBuilder.ok();
