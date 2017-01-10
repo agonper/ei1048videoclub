@@ -38,7 +38,7 @@ public interface VisualizationLinkService {
      * @return A filled {@link Stream} with the {@link VisualizationLink} that were found
      * or an empty one if no {@link VisualizationLink} was found
      */
-    Stream<VisualizationLink> findAllBy(VisualizationLinkQueryTypeSimple field, String value);
+    Stream<VisualizationLink> findAllBy(VisualizationLinkQueryTypeMultiple field, String value);
 
     /**
      * Removes an existing visualization link
