@@ -1,9 +1,7 @@
 package es.uji.agdc.videoclub.initializers;
 
-import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.*;
 import es.uji.agdc.videoclub.models.utils.UserFactory;
-import es.uji.agdc.videoclub.services.MovieService;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import org.slf4j.Logger;
@@ -49,6 +47,5 @@ public class AdminInitializer {
             log.info("No default admin was found, creating one");
             service.create(superAdmin);
         }
-
     }
 }

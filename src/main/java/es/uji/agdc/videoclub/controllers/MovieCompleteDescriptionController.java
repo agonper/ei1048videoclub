@@ -7,6 +7,7 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.VisualizationLink;
 import es.uji.agdc.videoclub.services.MovieService;
 import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.VisualizationLinkService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -121,7 +122,9 @@ public class MovieCompleteDescriptionController extends Controller {
     public void rentMovie() {
         if (movie != null && movie.getAvailableCopies() > 0) {
             User loggedUser = ApplicationStateData.getLoggedUser();
+            VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
+            service.create(link);
             movie.setAvailableCopies(movie.getAvailableCopies() - 1);
 
             MovieService movieService = Services.getMovieService();
