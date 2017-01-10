@@ -71,7 +71,7 @@ public class MainSectionController extends Controller {
                     break;
 
                 case "Título VO":
-                    //searchBy(MovieQueryTypeMultiple.TITLE_VO);
+                    searchBy(MovieQueryTypeMultiple.TITLE_OV);
                     break;
 
                 case "Año":

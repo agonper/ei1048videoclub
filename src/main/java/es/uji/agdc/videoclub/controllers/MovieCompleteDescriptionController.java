@@ -100,11 +100,11 @@ public class MovieCompleteDescriptionController extends Controller {
 
             String genres = genresBuilder.toString();
 
-            movieData_actors_label.setText(actors);
-            movieData_directors_label.setText(directors);
-            movieData_generes_label.setText(genres);
+            movieData_actors_label.setText("Actores: " + actors);
+            movieData_directors_label.setText("Directores: " + directors);
+            movieData_generes_label.setText("Géneros: " + genres);
             movieData_description_textArea.setText(movie.getDescription());
-            movieData_copies_label.setText(String.valueOf(movie.getAvailableCopies()));
+            movieData_copies_label.setText("Copias disponibles: " + String.valueOf(movie.getAvailableCopies()));
 
             movieData_rent_button.setDisable(movie.getAvailableCopies() <= 0);
         }
