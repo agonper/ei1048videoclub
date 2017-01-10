@@ -44,6 +44,7 @@ public class VisualizationLinkServiceDBTest {
         when(movieService.findBy(any(), anyString())).thenReturn(Optional.empty());
 
         when(repository.findByMovie_Id(anyLong())).thenReturn(Stream.empty());
+        when(repository.findByUser_Id(anyLong())).thenReturn(Stream.empty());
 
         user = new User();
         user.setId(0L);
@@ -189,6 +190,58 @@ public class VisualizationLinkServiceDBTest {
                 service.findAllBy(VisualizationLinkQueryTypeMultiple.MOVIE, "0");
 
         verify(repository, only()).findByMovie_Id(anyLong());
+
+        assertEquals(1, links.count());
+    }
+
+    @Test
+    public void findAllBy_userNullId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, null);
+
+        verify(repository, never()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userEmptyId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "");
+
+        verify(repository, never()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userInvalidId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "id");
+
+        verify(repository, never()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userNoMatchingId_returnsEmptyStream() throws Exception {
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "0");
+
+        verify(repository, only()).findByUser_Id(anyLong());
+
+        assertEquals(0, links.count());
+    }
+
+    @Test
+    public void findAllBy_userMatchingId_returnsEmptyStream() throws Exception {
+        when(repository.findByUser_Id(0)).thenReturn(Stream.of(link));
+
+        Stream<VisualizationLink> links =
+                service.findAllBy(VisualizationLinkQueryTypeMultiple.USER, "0");
+
+        verify(repository, only()).findByUser_Id(anyLong());
 
         assertEquals(1, links.count());
     }

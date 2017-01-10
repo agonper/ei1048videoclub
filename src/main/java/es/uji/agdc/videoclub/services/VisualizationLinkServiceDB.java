@@ -71,6 +71,8 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
         switch (field) {
             case MOVIE:
                 return findIfValidMovieId(value);
+            case USER:
+                return findIfValidUserId(value);
             default:
                 throw new Error("Unimplemented");
         }
@@ -79,6 +81,11 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
     private Stream<VisualizationLink> findIfValidMovieId(String id) {
         if (!isLong(id)) return Stream.empty();
         return repository.findByMovie_Id(Long.parseLong(id));
+    }
+
+    private Stream<VisualizationLink> findIfValidUserId(String id) {
+        if (!isLong(id)) return Stream.empty();
+        return repository.findByUser_Id(Long.parseLong(id));
     }
 
     private boolean isLong(String string) {
