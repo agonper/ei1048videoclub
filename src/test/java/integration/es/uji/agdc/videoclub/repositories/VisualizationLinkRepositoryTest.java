@@ -84,7 +84,7 @@ public class VisualizationLinkRepositoryTest {
         visualizationLinkRepository.save(visualizationLink);
 
         Optional<VisualizationLink> savedVisualizationLink =
-                visualizationLinkRepository.findByLinkToken(visualizationLink.getLinkToken());
+                visualizationLinkRepository.findByToken(visualizationLink.getToken());
 
         assertTrue(savedVisualizationLink.isPresent());
     }
@@ -107,7 +107,7 @@ public class VisualizationLinkRepositoryTest {
         VisualizationLink savedVisualizationLink = visualizationLinkRepository.save(visualizationLink);
         visualizationLinkRepository.delete(savedVisualizationLink);
         Optional<VisualizationLink> noVisualizationLink =
-                visualizationLinkRepository.findByLinkToken(visualizationLink.getLinkToken());
+                visualizationLinkRepository.findByToken(visualizationLink.getToken());
         assertFalse(noVisualizationLink.isPresent());
     }
 

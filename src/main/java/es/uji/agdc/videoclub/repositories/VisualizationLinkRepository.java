@@ -15,5 +15,5 @@ public interface VisualizationLinkRepository extends CrudRepositoryJ8<Visualizat
      * @return A filled {@link Optional} with the {@link VisualizationLink} that was found
      * or an empty one if no {@link VisualizationLink} was found
      */
-    Optional<VisualizationLink> findByLinkToken(String string);
+    Optional<VisualizationLink> findByToken(String string);
 }

@@ -18,7 +18,7 @@ public class VisualizationLink extends AbstractEntity {
     private Movie movie;
 
     @Column(nullable = false)
-    private String linkToken;
+    private String token;
 
     @Column(nullable = false)
     private LocalDateTime expeditionDate;
@@ -29,7 +29,7 @@ public class VisualizationLink extends AbstractEntity {
     public VisualizationLink(User user, Movie movie) {
         setUser(user);
         setMovie(movie);
-        linkToken = UUID.randomUUID().toString();
+        token = UUID.randomUUID().toString();
         expeditionDate = LocalDateTime.now();
     }
 
@@ -53,13 +53,8 @@ public class VisualizationLink extends AbstractEntity {
         return this;
     }
 
-    public String getLinkToken() {
-        return linkToken;
-    }
-
-    public VisualizationLink setLinkToken(String linkToken) {
-        this.linkToken = linkToken;
-        return this;
+    public String getToken() {
+        return token;
     }
 
     public LocalDateTime getExpeditionDate() {
@@ -76,7 +71,7 @@ public class VisualizationLink extends AbstractEntity {
         return "VisualizationLink{" +
                 "user=" + user +
                 ", movie=" + movie +
-                ", linkToken='" + linkToken + '\'' +
+                ", linkToken='" + token + '\'' +
                 ", expeditionDate=" + expeditionDate +
                 "} " + super.toString();
     }
