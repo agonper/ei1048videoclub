@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.media.MediaView?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.MovieViewController">
-   <center>
-      <MediaView fx:id="viewMovie_mediaView" fitHeight="250.0" fitWidth="450.0" preserveRatio="false" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </MediaView>
-   </center>
    <bottom>
-      <VBox prefHeight="90.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="256.0" prefWidth="450.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="movieView_label" text="Está viendo: NOMBRE_PELICULA, token: XXXX" />
+            <Label fx:id="movieView_label" contentDisplay="CENTER" text="Está viendo: NOMBRE_PELICULA, token: XXXX" />
          </children>
       </VBox>
    </bottom>

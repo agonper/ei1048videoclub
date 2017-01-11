@@ -4,6 +4,7 @@ import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
 import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
 import es.uji.agdc.videoclub.services.MovieService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -133,7 +134,24 @@ public class InsertMovie_1Controller extends Controller implements Form {
      *  but with different year.
      *  With the movies in the database, real-time control of the fields. */
     private void checkIfActualMovieExists() {
-        //TODO: Finish
+        if (movieService.findBy(MovieQueryTypeSingle.TITLE_AND_YEAR, movieTitle_textField.getText(), movieYear_textField.getText()).isPresent()) {
+            movieTitle_textField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+            valid_title = false;
+
+            movieYear_textField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+            valid_year = false;
+        }
+        else {
+            if (movieYear_textField.getText().length() > 0 && validYear(Integer.parseInt(movieYear_textField.getText()))) {
+                movieYear_textField.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
+                valid_year = true;
+            }
+
+            if (validTitle(movieTitle_textField.getText())) {
+                movieTitle_textField.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
+                valid_title = true;
+            }
+        }
     }
 
     @FXML
