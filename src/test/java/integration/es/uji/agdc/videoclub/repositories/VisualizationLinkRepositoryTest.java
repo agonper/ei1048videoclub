@@ -166,7 +166,7 @@ public class VisualizationLinkRepositoryTest {
     @Test
     public void deleteByExpeditionDateBefore_doesNotDeleteAfter() throws Exception {
         VisualizationLink visualizationLink = repository.save(this.visualizationLink);
-        repository.deleteByExpeditionDateBefore(LocalDateTime.now().minusSeconds(1));
+        repository.deleteByExpeditionDateBefore(LocalDateTime.now().minusSeconds(2));
         Optional<VisualizationLink> possibleVisualizationLink =
                 repository.findByToken(visualizationLink.getToken());
         assertTrue(possibleVisualizationLink.isPresent());
