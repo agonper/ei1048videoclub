@@ -12,6 +12,7 @@ import es.uji.agdc.videoclub.repositories.MovieRepository;
 import es.uji.agdc.videoclub.services.MovieQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.MovieQueryTypeSingle;
 import es.uji.agdc.videoclub.services.MovieService;
+import es.uji.agdc.videoclub.services.utils.Result;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -199,6 +201,53 @@ public class MovieServiceDBTest {
         assertTrue(allMovies.count() > 0);
     }
 
+    @Test
+    public void update_simpleFields() throws Exception {
+        service.create(movie);
+
+        Movie savedMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).get();
+
+        String newTitle = "Capitán América: El Primer Vengador";
+        savedMovie.setTitle(newTitle);
+        Result result = service.update(movie);
+
+        Movie updatedMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).get();
+        assertTrue(result.isOk());
+        assertEquals(newTitle, updatedMovie.getTitle());
+    }
+
+    @Test
+    public void update_addComplexField() throws Exception {
+        service.create(movie);
+
+        Movie savedMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).get();
+
+        int numberOfActors = savedMovie.getActors().size();
+        Actor actor = new Actor("Samuel L. Jackson");
+        savedMovie.addActor(actor);
+        Result result = service.update(movie);
+
+        Movie updatedMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).get();
+        assertTrue(result.isOk());
+        assertEquals(numberOfActors + 1, updatedMovie.getActors().size());
+    }
+
+    @Test
+    public void update_removeComplexField() throws Exception {
+        service.create(movie);
+
+        Movie savedMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).get();
+
+        List<Actor> actors = savedMovie.getActors();
+        int numberOfActors = actors.size();
+        actors.remove(0);
+        savedMovie.setActors(actors);
+        Result result = service.update(movie);
+
+        Movie updatedMovie = repository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()).get();
+        assertTrue(result.isOk());
+        assertEquals(numberOfActors - 1, updatedMovie.getActors().size());
+    }
 
     @After
     public void tearDown() throws Exception {
