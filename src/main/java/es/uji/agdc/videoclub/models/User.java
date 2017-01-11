@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.models;
 
+import es.uji.agdc.videoclub.services.UserServiceDB;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -7,6 +8,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.MONTHS;
 
 /**
  * User entity, from the business domain
@@ -147,6 +150,11 @@ public class User extends AbstractEntity {
 
     public boolean isAdmin() {
         return !isMember();
+    }
+
+    public int getUnpaidMonths() {
+        if (lastPayment == null) return 0;
+        return (int) MONTHS.between(lastPayment, LocalDate.now());
     }
 
     @Override
