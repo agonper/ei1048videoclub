@@ -8,7 +8,6 @@ import es.uji.agdc.videoclub.models.Actor;
 import es.uji.agdc.videoclub.models.Director;
 import es.uji.agdc.videoclub.models.Genre;
 import es.uji.agdc.videoclub.models.Movie;
-import es.uji.agdc.videoclub.services.MovieAssetService;
 import es.uji.agdc.videoclub.services.MovieService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Created by daniel on 5/01/17.
@@ -66,7 +64,7 @@ public class InsertMovieController extends Controller implements RootController 
     private boolean valid_04 = false;
     private boolean valid_05 = false;
 
-    private Movie movieToCreate;
+    private Movie movie;
 
     private int actualPage = 0;
     private boolean editing = false;
@@ -101,6 +99,14 @@ public class InsertMovieController extends Controller implements RootController 
         for (int i = 0; i < data_movie_05.length; i++)
             data_movie_05[i] = movie.getGenres().get(i).getName();
 
+        this.movie = movie;
+
+        movie_01_controller.setAllData(data_movie_01);
+        movie_02_controller.setAllData(data_movie_02);
+        movie_03_controller.setAllData(data_movie_03);
+        movie_04_controller.setAllData(data_movie_04);
+        movie_05_controller.setAllData(data_movie_05);
+
         label.setText("Edición de una película");
         valid_01 = true;
         valid_02 = true;
@@ -110,14 +116,22 @@ public class InsertMovieController extends Controller implements RootController 
         finishedForm();
     }
 
+    public boolean isEditing() {
+        return editing;
+    }
+
+    public Movie getMovieToEdit() {
+        return movie;
+    }
+
     @FXML
     public void initialize() {
-        movie_Pagination.setPageFactory(param -> changedPage());
         loadResource(movie_01, 0);
         loadResource(movie_02, 1);
         loadResource(movie_03, 2);
         loadResource(movie_04, 3);
         loadResource(movie_05, 4);
+        movie_Pagination.setPageFactory(param -> changedPage());
     }
 
     @FXML
@@ -126,9 +140,9 @@ public class InsertMovieController extends Controller implements RootController 
         GridPane loadedResource = null;
 
         switch (actualPage) {
-            //case 0:
-            //    data_movie_01 = movie_01_controller.getAllData();
-            //    break;
+            case 0:
+                data_movie_01 = movie_01_controller.getAllData();
+                break;
 
             case 1:
                 data_movie_02 = movie_02_controller.getAllData();
@@ -273,14 +287,14 @@ public class InsertMovieController extends Controller implements RootController 
 
     @FXML
     public void submitForm() {
-        movieToCreate = new Movie();
+        movie = new Movie();
         setAllMovieData();
         MovieService movieService = Services.getMovieService();
 
         if (!editing)
-            movieService.create(movieToCreate);
+            movieService.create(movie);
         else
-            movieService.update(movieToCreate);
+            movieService.update(movie);
 
         super.stage.close();
     }
@@ -288,7 +302,7 @@ public class InsertMovieController extends Controller implements RootController 
     private void setAllMovieData() {
         String[] page1 = movie_01_controller.getAllData();
 
-        movieToCreate = movieToCreate.setTitle(page1[0])
+        movie = movie.setTitle(page1[0])
                 .setTitleOv(page1[1])
                 .setYear(Integer.parseInt(page1[2]))
                 .setAvailableCopies(Integer.parseInt(page1[3]));
@@ -298,7 +312,7 @@ public class InsertMovieController extends Controller implements RootController 
         for (int i = 0; i < page2.length; i++) {
             String actor = page2[i];
 
-            movieToCreate = movieToCreate.addActor(new Actor(actor));
+            movie = movie.addActor(new Actor(actor));
         }
 
         String[] page3 = movie_03_controller.getAllData();
@@ -306,18 +320,18 @@ public class InsertMovieController extends Controller implements RootController 
         for (int i = 0; i < page3.length; i++) {
             String director = page3[i];
 
-            movieToCreate = movieToCreate.addDirector(new Director(director));
+            movie = movie.addDirector(new Director(director));
         }
 
         String[] page4 = movie_04_controller.getAllData();
-        movieToCreate = movieToCreate.setDescription(page4[0]);
+        movie = movie.setDescription(page4[0]);
 
         String[] page5 = movie_05_controller.getAllData();
 
         for (int i = 0; i < page5.length; i++) {
             String genre = page5[i];
 
-            movieToCreate = movieToCreate.addGenre(new Genre(genre));
+            movie = movie.addGenre(new Genre(genre));
         }
     }
 }

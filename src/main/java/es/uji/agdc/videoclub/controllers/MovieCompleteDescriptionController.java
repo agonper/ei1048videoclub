@@ -125,12 +125,6 @@ public class MovieCompleteDescriptionController extends Controller {
             VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
             service.create(link);
-
-            // FIXME: I think this is not needed
-            MovieService movieService = Services.getMovieService();
-            movieService.update(movie);
-            UserService userService = Services.getUserService();
-            userService.update(loggedUser, loggedUser.getId());
         }
     }
 }
