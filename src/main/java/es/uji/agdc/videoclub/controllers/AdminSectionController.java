@@ -100,57 +100,13 @@ public class AdminSectionController extends Controller {
 
     @FXML
     public void cleanOldRents() {
-        //TODO: Test
-        int deletedRents = 0;
-        LinkedList<String> tokens = new LinkedList<>();
+        VisualizationLinkService visualizationLinkService = Services.getVisualizationLinkService();
 
-        UserService service = Services.getUserService();
-
-        Stream<User> users = service.findAllBy(UserQueryTypeMultiple.ROLE, User.Role.MEMBER.toString());
-        Iterator<User> userIterator = users.iterator();
-
-        while (userIterator.hasNext()) {
-            User user = userIterator.next();
-            List<VisualizationLink> links = user.getVisualizationLinks();
-
-            for (VisualizationLink link : links) {
-                LocalDateTime createdAt = link.getExpeditionDate();
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime movieRentDeadline = now.minusDays(2L);
-
-                if (movieRentDeadline.isAfter(createdAt) || movieRentDeadline.isEqual(createdAt)) {
-                    deletedRents++;
-                    tokens.add(link.getToken());
-                    user.getVisualizationLinks().remove(link);
-                    Movie movie = link.getMovie();
-                    movie.getVisualizationLinks().remove(link);
-                    movie.setAvailableCopies(movie.getAvailableCopies() + 1);
-                }
-            }
-        }
+        visualizationLinkService.removeTimedOutLinks();
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Devolución automática de películas");
         alert.setHeaderText("Se ha realizado la devolución de copias en alquileres antiguos de forma satisfactoria.");
-
-        if (deletedRents > 0) {
-            StringBuilder builder = new StringBuilder();
-            builder.append("Se ha eliminado un total de ");
-            builder.append(deletedRents);
-            builder.append(" películas.\n");
-            builder.append("Los códigos asociados a dichos alquileres son:\n\n");
-
-            for (String token : tokens) {
-                builder.append(token);
-                builder.append("\n");
-            }
-
-            alert.setContentText(builder.toString());
-        }
-
-        else
-            alert.setContentText("No se ha eliminado ningún alquiler.");
-
 
         alert.showAndWait();
     }
