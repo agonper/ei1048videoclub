@@ -274,8 +274,12 @@ public class MoviesListController extends Controller {
             MovieService service = Services.getMovieService();
             Result result = service.remove(movie.getId());
 
-            if (result.isOk())
-                movies_TableView.getItems().remove(movie);
+            if (result.isOk()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Película correctamente deshabilitada");
+                alert.setHeaderText("La película se ha deshabilitado correctamente");
+                alert.showAndWait();
+            }
             else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error al deshabilitar la película");

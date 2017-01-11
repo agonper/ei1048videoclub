@@ -48,31 +48,5 @@ public class AdminInitializer {
             log.info("No default admin was found, creating one");
             service.create(superAdmin);
         }
-
-        superAdmin = UserFactory.createMember()
-                .setDni("20332033D")
-                .setName("Videoclub")
-                .setAddress("C/El Mejor Videoclub, nª2")
-                .setPhone(693582441)
-                .setEmail("admin@videoclub.es")
-                .setUsername("prueba")
-                .setPassword("pruebaprueba");
-
-        service.create(superAdmin);
-
-        Movie movie = new Movie()
-                .setTitle("Capitán América")
-                .setTitleOv("Captain America")
-                .setYear(2011)
-                .addActor(new Actor("Chris Evans"))
-                .addActor(new Actor("Hayley Atwell"))
-                .addDirector(new Director("Joe Johnston"))
-                .addGenre(new Genre("Comedia"))
-                .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
-                        "tristeza, le dijo: Sábete, Sancho, que no es un hombre más que otro si no " +
-                        "hace más que otro. Todas estas borrascas que nos suceden son.")
-                .setAvailableCopies(3);
-
-        Services.getMovieService().create(movie);
     }
 }
