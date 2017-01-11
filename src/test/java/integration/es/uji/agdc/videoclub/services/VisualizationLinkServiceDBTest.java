@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -115,6 +116,32 @@ public class VisualizationLinkServiceDBTest {
 
         assertTrue(result.isOk());
         assertEquals(0, links.count());
+    }
+
+    @Test
+    public void removeTimedOutLinks_removesATimedOutLink() throws Exception {
+        visualizationLink.setExpeditionDate(LocalDateTime.now().minusHours(48));
+        linkService.create(visualizationLink);
+
+        linkService.removeTimedOutLinks();
+
+        Optional<VisualizationLink> noLink = linkService.findBy(VisualizationLinkQueryTypeSimple.TOKEN,
+                visualizationLink.getToken(), visualizationLink.getUser().getId().toString());
+
+        assertFalse(noLink.isPresent());
+    }
+
+    @Test
+    public void removeTimedOutLinks_doesNotRemoveANotTimedOutLink() throws Exception {
+        visualizationLink.setExpeditionDate(LocalDateTime.now().minusHours(47).minusSeconds(59));
+        linkService.create(visualizationLink);
+
+        linkService.removeTimedOutLinks();
+
+        Optional<VisualizationLink> possibleLink = linkService.findBy(VisualizationLinkQueryTypeSimple.TOKEN,
+                visualizationLink.getToken(), visualizationLink.getUser().getId().toString());
+
+        assertTrue(possibleLink.isPresent());
     }
 
     @After

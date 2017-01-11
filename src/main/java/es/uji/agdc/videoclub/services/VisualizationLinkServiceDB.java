@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 @Service
 public class VisualizationLinkServiceDB implements VisualizationLinkService {
 
+    private static final int HOURS_TO_CONSIDER_AS_TIMED_OUT = 48;
+
     private static Logger log = LoggerFactory.getLogger(VisualizationLinkServiceDB.class);
 
     private UserService userService;
@@ -174,5 +176,10 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
         } catch (Error e) {
             return ResultBuilder.error(e.getMessage());
         }
+    }
+
+    @Override
+    public void removeTimedOutLinks() {
+        repository.deleteByExpeditionDateBefore(LocalDateTime.now().minusHours(HOURS_TO_CONSIDER_AS_TIMED_OUT));
     }
 }

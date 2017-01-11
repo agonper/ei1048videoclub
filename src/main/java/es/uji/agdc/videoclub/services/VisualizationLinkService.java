@@ -48,4 +48,9 @@ public interface VisualizationLinkService {
      * If not an ERROR with a message and the fields that do not meet the requisites
      */
     Result remove(String token, String userId);
+
+    /**
+     * Removes those links whose expedition time is considered old enough to become timed out
+     */
+    void removeTimedOutLinks();
 }

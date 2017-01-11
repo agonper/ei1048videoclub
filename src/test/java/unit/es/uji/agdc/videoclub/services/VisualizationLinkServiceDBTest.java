@@ -392,6 +392,13 @@ public class VisualizationLinkServiceDBTest {
         assertEquals("FOREIGN_LINK", result.getMsg());
     }
 
+    @Test
+    public void removeTimedOutLinks_callsRepository() throws Exception {
+        service.removeTimedOutLinks();
+
+        verify(repository, only()).deleteByExpeditionDateBefore(any());
+    }
+
     @After
     public void tearDown() throws Exception {
         userService = null;
