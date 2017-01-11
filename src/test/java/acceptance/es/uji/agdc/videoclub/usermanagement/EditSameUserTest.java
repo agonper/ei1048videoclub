@@ -113,7 +113,7 @@ public class EditSameUserTest {
     }
 
     @Test
-    public void userEditsHimself_someFieldsAreEmpty_returnsError() throws Exception {
+    public void userEditsHimself_someFieldsAreEmpty_returnsError_EMPTY_PARAMETER() throws Exception {
         // Given a registered user the system
         service.create(user);
         User savedUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername()).get();
@@ -141,7 +141,7 @@ public class EditSameUserTest {
     }
 
     @Test
-    public void userEditsHimself_someFieldsAreInvalid_returnsError() throws Exception {
+    public void userEditsHimself_someFieldsAreInvalid_returnsError_INVALID_PARAMETER() throws Exception {
         // Given a registered user the system
         service.create(user);
         User savedUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername()).get();
