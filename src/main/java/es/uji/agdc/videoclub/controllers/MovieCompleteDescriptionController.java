@@ -132,6 +132,7 @@ public class MovieCompleteDescriptionController extends Controller {
             VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
             service.create(link);
+            initWindow();
         }
     }
 }

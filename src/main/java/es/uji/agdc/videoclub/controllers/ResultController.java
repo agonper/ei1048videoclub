@@ -86,11 +86,26 @@ public class ResultController extends Controller {
 
         if (answer.get().getButtonData().isDefaultButton()) {
             User loggedUser = ApplicationStateData.getLoggedUser();
-            VisualizationLinkService service = Services.getVisualizationLinkService();
-            VisualizationLink link = new VisualizationLink(loggedUser, movie);
-            service.create(link);
 
-            initState();
+            boolean movie_is_rented_by_logged_user = false;
+
+            for (VisualizationLink link : loggedUser.getVisualizationLinks())
+                if (link.getMovie().getId() == movie.getId())
+                    movie_is_rented_by_logged_user = true;
+
+            if (!movie_is_rented_by_logged_user) {
+                VisualizationLinkService service = Services.getVisualizationLinkService();
+                VisualizationLink link = new VisualizationLink(loggedUser, movie);
+                service.create(link);
+
+                initState();
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Película ya alquilada");
+                alert.setHeaderText("La película ya ha sido alquilada por este usuario");
+                alert.showAndWait();
+            }
         }
     }
 }
