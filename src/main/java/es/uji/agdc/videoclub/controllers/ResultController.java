@@ -32,8 +32,7 @@ public class ResultController extends Controller {
     @FXML
     private Button rentMovie_button;
 
-    private UserService userService = Services.getUserService();
-    private MovieService movieService = Services.getMovieService();
+
     private User loggedUser = ApplicationStateData.getLoggedUser();
     private Movie movie;
 

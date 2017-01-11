@@ -287,14 +287,17 @@ public class InsertMovieController extends Controller implements RootController 
 
     @FXML
     public void submitForm() {
-        movie = new Movie();
-        setAllMovieData();
         MovieService movieService = Services.getMovieService();
 
-        if (!editing)
+        if (!editing) {
+            movie = new Movie();
+            setAllMovieData();
             movieService.create(movie);
-        else
+        }
+        else {
+            setAllMovieData();
             movieService.update(movie);
+        }
 
         super.stage.close();
     }

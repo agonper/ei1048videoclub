@@ -6,6 +6,7 @@ import es.uji.agdc.videoclub.services.MovieService;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * Created by daniel on 11/01/17.
  */
 @Component
+@Profile("!test")
 public class DataInitializer {
 
     private UserService userService;
@@ -122,8 +124,8 @@ public class DataInitializer {
                 .setTitle("Película 1")
                 .setTitleOv("Movie number 1")
                 .setYear(2000)
-                .addActor(new Actor("Chris Evans"))
-                .addActor(new Actor("Hayley Atwell"))
+                .addActor(new Actor("Chris"))
+                .addActor(new Actor("Hayley"))
                 .addDirector(new Director("Joe Johnston"))
                 .addGenre(new Genre("Comedia"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
@@ -137,10 +139,10 @@ public class DataInitializer {
                 .setTitle("Película número 2")
                 .setTitleOv("Movie number 2")
                 .setYear(2010)
-                .addActor(new Actor("Chris Evans"))
-                .addActor(new Actor("Hayley Atwell"))
+                .addActor(new Actor("Chris"))
+                .addActor(new Actor("Hayley"))
                 .addActor(new Actor("Tipo de relleno 1"))
-                .addDirector(new Director("Joe Johnston"))
+                .addDirector(new Director("Johnston"))
                 .addDirector(new Director("Steven Spielberg"))
                 .addGenre(new Genre("Comedia"))
                 .addGenre(new Genre("Terror"))
@@ -187,8 +189,8 @@ public class DataInitializer {
                 .setTitle("Película 5")
                 .setTitleOv("Movie number 5")
                 .setYear(2015)
-                .addActor(new Actor("Chris Evans"))
-                .addDirector(new Director("Joe Johnston"))
+                .addActor(new Actor("Chris"))
+                .addDirector(new Director("Johnston"))
                 .addGenre(new Genre("Histórica"))
                 .addGenre(new Genre("Drama"))
                 .setDescription("Y, viéndole don Quijote de aquella manera, con muestras de tanta " +
