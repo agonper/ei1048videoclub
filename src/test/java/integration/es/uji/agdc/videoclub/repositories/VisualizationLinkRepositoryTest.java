@@ -175,7 +175,7 @@ public class VisualizationLinkRepositoryTest {
     @Test
     public void deleteByUser() throws Exception {
         VisualizationLink visualizationLink = repository.save(this.visualizationLink);
-        repository.deleteByUser(user);
+        repository.deleteByUser_Id(user.getId());
         Optional<VisualizationLink> noVisualizationLink =
                 repository.findByToken(visualizationLink.getToken());
         assertFalse(noVisualizationLink.isPresent());

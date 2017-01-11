@@ -228,6 +228,7 @@ public class UserServiceDB implements UserService{
     }
 
     @Override
+    @Transactional
     public Result remove(long userId) {
         Optional<User> possibleUser = repository.findOne(userId);
         if (!possibleUser.isPresent()) {
@@ -235,8 +236,8 @@ public class UserServiceDB implements UserService{
             return ResultBuilder.error("USER_NOT_FOUND");
         }
         User user = possibleUser.get();
-        linkRepository.deleteByUser(user);
         repository.delete(user);
+        linkRepository.deleteByUser_Id(user.getId());
         return ResultBuilder.ok();
     }
 }

@@ -55,8 +55,8 @@ public interface VisualizationLinkRepository extends CrudRepositoryJ8<Visualizat
 
     /**
      * Deletes all links from a given user
-     * @param user the whose links are going to be deleted
+     * @param userId the id of the user whose links are going to be deleted
      */
-    void deleteByUser(User user);
+    void deleteByUser_Id(long userId);
 
 }

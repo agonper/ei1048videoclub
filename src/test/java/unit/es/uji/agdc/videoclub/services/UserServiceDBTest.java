@@ -566,7 +566,7 @@ public class UserServiceDBTest {
 
         Result result = service.remove(user.getId());
 
-        verify(linkRepository, only()).deleteByUser(user);
+        verify(linkRepository, only()).deleteByUser_Id(user.getId());
         verify(repository, times(1)).delete(user);
         assertTrue(result.isOk());
     }
@@ -577,7 +577,7 @@ public class UserServiceDBTest {
 
         Result result = service.remove(user.getId());
 
-        verify(linkRepository, never()).deleteByUser(user);
+        verify(linkRepository, never()).deleteByUser_Id(user.getId());
         verify(repository, never()).delete(user);
         assertTrue(result.isError());
         assertEquals("USER_NOT_FOUND", result.getMsg());

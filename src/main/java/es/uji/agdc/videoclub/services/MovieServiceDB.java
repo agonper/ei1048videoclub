@@ -279,6 +279,7 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
+    @Transactional
     public Result remove(long movieId) {
         Optional<Movie> possibleMovie = movieRepository.findOne(movieId);
         if (!possibleMovie.isPresent()) {
