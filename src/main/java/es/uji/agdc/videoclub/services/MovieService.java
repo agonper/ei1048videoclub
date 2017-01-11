@@ -54,9 +54,8 @@ public interface MovieService {
 
     /**
      * Tries to remove a {@link Movie} from the database based on its title and year
-     * @param title The title of the movie to be deleted
-     * @param year The year of the movie to be deleted
+     * @param movieId The id of the movie to become deleted
      * @return An OK {@link Result}, if everything went fine. If not an ERROR.
      */
-    Result remove(String title, int year);
+    Result remove(long movieId);
 }

@@ -249,6 +249,17 @@ public class MovieServiceDBTest {
         assertEquals(numberOfActors - 1, updatedMovie.getActors().size());
     }
 
+    @Test
+    public void remove() throws Exception {
+        service.create(movie);
+        Long movieId = movie.getId();
+        Result result = service.remove(movieId);
+
+        Movie movie = repository.findOne(movieId).get();
+        assertTrue(result.isOk());
+        assertEquals(0, movie.getAvailableCopies());
+    }
+
     @After
     public void tearDown() throws Exception {
         movie = null;

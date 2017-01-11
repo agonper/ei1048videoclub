@@ -272,7 +272,7 @@ public class MoviesListController extends Controller {
         Optional<ButtonType> answer = confirmation.showAndWait();
         if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
             MovieService service = Services.getMovieService();
-            Result result = service.remove(movie.getTitle(), movie.getYear());
+            Result result = service.remove(movie.getId());
 
             if (result.isOk())
                 movies_TableView.getItems().remove(movie);

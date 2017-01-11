@@ -279,7 +279,14 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
-    public Result remove(String title, int year) {
-        throw new Error("Unimplemented");
+    public Result remove(long movieId) {
+        Optional<Movie> possibleMovie = movieRepository.findOne(movieId);
+        if (!possibleMovie.isPresent()) {
+            log.warn("remove(): Called with non-existing ID: " + movieId);
+            return ResultBuilder.error("MOVIE_NOT_FOUND");
+        }
+        Movie movieToDisable = possibleMovie.get();
+        movieToDisable.setAvailableCopies(0);
+        return update(movieToDisable);
     }
 }

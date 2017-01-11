@@ -1154,6 +1154,30 @@ public class MovieServiceDBTest {
         assertEquals(movie.getAvailableCopies(), savedMovie.getAvailableCopies());
     }
 
+    @Test
+    public void remove_withExistingMovie_updatesMovieAvailability() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findOne(movie.getId())).thenReturn(Optional.of(movie));
+
+        Result result = service.remove(movie.getId());
+
+        verify(movieRepository, times(1)).save(movie);
+        verify(movieRepository, never()).delete(movie);
+        assertTrue(result.isOk());
+        assertEquals(0, movie.getAvailableCopies());
+    }
+
+    @Test
+    public void remove_withNonExistingMovie_returnsError() throws Exception {
+        movie.setId(0L);
+        Result result = service.remove(movie.getId());
+
+        verify(movieRepository, never()).save(movie);
+        verify(movieRepository, never()).delete(movie);
+        assertTrue(result.isError());
+        assertEquals("MOVIE_NOT_FOUND", result.getMsg());
+    }
+
     @After
     public void tearDown() throws Exception {
         service = null;
