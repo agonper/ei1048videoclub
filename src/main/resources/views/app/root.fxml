@@ -2,34 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="root" minHeight="300.0" minWidth="300.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
-    <top>
-        <BorderPane fx:id="root_TopSection" minHeight="63.0" minWidth="300" prefHeight="63.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <top>
-                <MenuBar fx:id="root_MenuBar" BorderPane.alignment="CENTER">
-                    <menus>
-                        <Menu mnemonicParsing="false" text="Opciones">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Close" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Ayuda">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Pasos para utilizar la aplicación" />
-                                <MenuItem mnemonicParsing="false" text="Manual de usuario" />
-                            </items>
-                        </Menu>
-                    </menus>
-                </MenuBar>
-            </top>
-        </BorderPane>
-    </top>
     <center>
 
     </center>

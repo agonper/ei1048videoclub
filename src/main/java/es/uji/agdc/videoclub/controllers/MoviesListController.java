@@ -279,6 +279,7 @@ public class MoviesListController extends Controller {
                 alert.setTitle("Película correctamente deshabilitada");
                 alert.setHeaderText("La película se ha deshabilitado correctamente");
                 alert.showAndWait();
+                loadData();
             }
             else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -112,7 +112,9 @@ public class MainSectionController extends Controller {
         Iterator<Movie> movies = movieService.findAllBy(element, searchedBy).iterator();
 
         while (movies.hasNext()) {
-            searchResult_VBox.getChildren().add(generateSearchContainer(movies.next()));
+            Movie movie = movies.next();
+            if (movie.getActualAvailableCopies() > 0)
+                searchResult_VBox.getChildren().add(generateSearchContainer(movie));
         }
     }
 
