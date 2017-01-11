@@ -44,7 +44,7 @@ public class Movie extends AbstractEntity {
     private int availableCopies;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "movie")
+    @OneToMany(mappedBy = "movie", orphanRemoval = true)
     private List<VisualizationLink> visualizationLinks = new LinkedList<>();
 
     public String getTitle() {

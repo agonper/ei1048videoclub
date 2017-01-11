@@ -50,7 +50,7 @@ public class User extends AbstractEntity {
     private Role role;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<VisualizationLink> visualizationLinks = new LinkedList<>();
 
     public String getDni() {
