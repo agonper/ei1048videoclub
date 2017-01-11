@@ -32,6 +32,7 @@ public class MovieServiceDBTest {
     private MovieAssetService assetService;
 
     private Movie movie;
+    private Movie savedMovie;
 
     @Before
     public void setUp() throws Exception {
@@ -53,9 +54,21 @@ public class MovieServiceDBTest {
                         "hace más que otro. Todas estas borrascas que nos suceden son.")
                 .setAvailableCopies(3);
 
+        savedMovie = new Movie()
+                .setTitle(movie.getTitle())
+                .setTitleOv(movie.getTitleOv())
+                .setYear(movie.getYear())
+                .setActors(movie.getActors())
+                .setDirectors(movie.getDirectors())
+                .setGenres(movie.getGenres())
+                .setDescription(movie.getDescription())
+                .setAvailableCopies(movie.getAvailableCopies());
+        savedMovie.setId(0L);
+
         when(movieRepository.save(any(Movie.class))).thenReturn(new Movie());
 
-        when(movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()))
+        when(movieRepository.findOne(anyLong())).thenReturn(Optional.empty());
+        when(movieRepository.findByTitleIgnoreCaseAndYear(anyString(), anyInt()))
                 .thenReturn(Optional.empty());
         when(movieRepository.findByTitleContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
         when(movieRepository.findByTitleOvContainsIgnoreCase(anyString())).thenReturn(Stream.empty());
@@ -985,12 +998,193 @@ public class MovieServiceDBTest {
         assertEquals(2, movies.count());
     }
 
+    @Test
+    public void update_unChangedMovie_saveCalledReturnsOk() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void update_unExistingMovie_returnsError() throws Exception {
+        movie.setId(0L);
+        Result result = service.update(movie);
+
+        verify(movieRepository, never()).save(movie);
+        assertTrue(result.isError());
+        assertEquals("MOVIE_NOT_FOUND", result.getMsg());
+    }
+
+    @Test
+    public void update_existingMovieWithMatchingTitleAndYear_returnsError() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Movie fakeMovie = new Movie();
+        fakeMovie.setId(1L);
+        when(movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear()))
+                .thenReturn(Optional.of(fakeMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, never()).save(movie);
+        assertTrue(result.isError());
+        assertEquals("MOVIE_ALREADY_EXISTS", result.getMsg());
+    }
+
+    @Test
+    public void update_invalidMovie_returnError() throws Exception {
+        movie.setId(0L);
+        movie.setDescription("");
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+        verify(movieRepository, never()).save(movie);
+
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(EMPTY_PARAMETER)[Description]", result.toString());
+    }
+
+    @Test
+    public void update_changedTitleMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.setTitle("New title");
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getTitle(), savedMovie.getTitle());
+    }
+
+    @Test
+    public void update_changedTitleOvMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.setTitleOv("New title");
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getTitleOv(), savedMovie.getTitleOv());
+    }
+
+    @Test
+    public void update_changedYearMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.setYear(2010);
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getYear(), savedMovie.getYear());
+    }
+
+    @Test
+    public void update_addActorMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.addActor(new Actor("New actor"));
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getActors().size(), savedMovie.getActors().size());
+    }
+
+    @Test
+    public void update_addDirectorMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.addDirector(new Director("New director"));
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getDirectors().size(), savedMovie.getDirectors().size());
+    }
+
+    @Test
+    public void update_addGenreMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.addGenre(new Genre("New genre"));
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getGenres().size(), savedMovie.getGenres().size());
+    }
+
+    @Test
+    public void update_changedDescriptionMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.setDescription(new String(new char[200]).replace('\0', 'a'));
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getDescription(), savedMovie.getDescription());
+    }
+
+
+    @Test
+    public void update_changedAvailableCopiesMovie_saveCalledReturnsOkAndIsModified() throws Exception {
+        movie.setId(0L);
+        movie.setAvailableCopies(0);
+        when(movieRepository.findOne(0L)).thenReturn(Optional.of(savedMovie));
+
+        Result result = service.update(movie);
+
+        verify(movieRepository, times(1)).save(movie);
+        assertTrue(result.isOk());
+        assertEquals(movie.getAvailableCopies(), savedMovie.getAvailableCopies());
+    }
+
+    @Test
+    public void remove_withExistingMovie_updatesMovieAvailability() throws Exception {
+        movie.setId(0L);
+        when(movieRepository.findOne(movie.getId())).thenReturn(Optional.of(movie));
+
+        Result result = service.remove(movie.getId());
+
+        verify(movieRepository, times(1)).save(movie);
+        verify(movieRepository, never()).delete(movie);
+        assertTrue(result.isOk());
+        assertEquals(0, movie.getAvailableCopies());
+    }
+
+    @Test
+    public void remove_withNonExistingMovie_returnsError() throws Exception {
+        movie.setId(0L);
+        Result result = service.remove(movie.getId());
+
+        verify(movieRepository, never()).save(movie);
+        verify(movieRepository, never()).delete(movie);
+        assertTrue(result.isError());
+        assertEquals("MOVIE_NOT_FOUND", result.getMsg());
+    }
+
     @After
     public void tearDown() throws Exception {
         service = null;
         movieRepository = null;
         assetService = null;
         movie = null;
+        savedMovie = null;
     }
 
 }

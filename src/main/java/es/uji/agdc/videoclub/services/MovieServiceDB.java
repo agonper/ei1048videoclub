@@ -46,7 +46,7 @@ public class MovieServiceDB implements MovieService{
         Result ALREADY_EXISTS = ResultBuilder.error("MOVIE_ALREADY_EXISTS");
 
         if (!movie.isNew()) {
-            log.warn("Tried to create an already persisted movie with ID: " + movie.getId());
+            log.warn("create() Tried to create an already persisted movie with ID: " + movie.getId());
             return ALREADY_EXISTS;
         }
 
@@ -234,12 +234,59 @@ public class MovieServiceDB implements MovieService{
     }
 
     @Override
+    @Transactional
     public Result update(Movie movie) {
-        throw new Error("Unimplemented");
+
+        Optional<Movie> possibleMovie = movieRepository.findOne(movie.getId());
+        if (!possibleMovie.isPresent()) {
+            log.warn("update() Tried to a non-existing movie with ID: " + movie.getId());
+            return ResultBuilder.error("MOVIE_NOT_FOUND");
+        }
+
+        Movie movieToModify = possibleMovie.get();
+
+        Optional<Movie> movieByTitleAndYear = movieRepository.findByTitleIgnoreCaseAndYear(movie.getTitle(), movie.getYear());
+        if (movieByTitleAndYear.isPresent() && !movieByTitleAndYear.get().getId().equals(movieToModify.getId())) {
+            return ResultBuilder.error("MOVIE_ALREADY_EXISTS");
+        }
+
+        Movie modifiedMovie = fillMovieWithChanges(movieToModify, movie);
+
+        Result validatorResult = validator.validate(modifiedMovie);
+        if (validatorResult.isError()) {
+            return validatorResult;
+        }
+
+        cleanupAssets(modifiedMovie);
+
+        Movie savedMovieWithAssets = movieRepository.save(modifiedMovie);
+
+        log.info("update(): Movie updated with ID: " +
+                (savedMovieWithAssets != null ? savedMovieWithAssets.getId() : "virtual"));
+        return ResultBuilder.ok();
+    }
+
+    private Movie fillMovieWithChanges(Movie toModify, Movie changes) {
+        toModify.setTitle(changes.getTitle());
+        toModify.setTitleOv(changes.getTitleOv());
+        toModify.setYear(changes.getYear());
+        toModify.setActors(changes.getActors());
+        toModify.setDirectors(changes.getDirectors());
+        toModify.setGenres(changes.getGenres());
+        toModify.setDescription(changes.getDescription());
+        toModify.setAvailableCopies(changes.getAvailableCopies());
+        return toModify;
     }
 
     @Override
-    public Result remove(String title, int year) {
-        throw new Error("Unimplemented");
+    public Result remove(long movieId) {
+        Optional<Movie> possibleMovie = movieRepository.findOne(movieId);
+        if (!possibleMovie.isPresent()) {
+            log.warn("remove(): Called with non-existing ID: " + movieId);
+            return ResultBuilder.error("MOVIE_NOT_FOUND");
+        }
+        Movie movieToDisable = possibleMovie.get();
+        movieToDisable.setAvailableCopies(0);
+        return update(movieToDisable);
     }
 }

@@ -90,7 +90,7 @@ public class AdminEditsUserTest {
     }
 
     @Test
-    public void adminEditsUser_someFieldsAreEmpty_returnsError() throws Exception {
+    public void adminEditsUser_someFieldsAreEmpty_returnsError_EMPTY_PARAMETER() throws Exception {
         // Given a registered user and an admin on the system
         service.create(user);
         User savedUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername()).get();
@@ -121,7 +121,7 @@ public class AdminEditsUserTest {
     }
 
     @Test
-    public void adminEditsUser_someFieldsAreInvalid_returnsError() throws Exception {
+    public void adminEditsUser_someFieldsAreInvalid_returnsError_INVALID_PARAMETER() throws Exception {
         // Given a registered user and an admin on the system
         service.create(user);
         User savedUser = service.findBy(UserQueryTypeSingle.USERNAME, user.getUsername()).get();

@@ -88,7 +88,8 @@ public class Movie extends AbstractEntity {
     }
 
     public int getActualAvailableCopies() {
-        return availableCopies - getVisualizationLinks().size();
+        int actualAvailableCopies = availableCopies - getVisualizationLinks().size();
+        return actualAvailableCopies < 0 ? 0 : actualAvailableCopies;
     }
 
     public Movie setAvailableCopies(int availableCopies) {
