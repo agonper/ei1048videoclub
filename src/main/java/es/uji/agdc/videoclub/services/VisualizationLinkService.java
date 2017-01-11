@@ -43,8 +43,9 @@ public interface VisualizationLinkService {
     /**
      * Removes an existing visualization link
      * @param token The token of the {@link VisualizationLink} to be deleted
+     * @param userId The user to whom the {@link VisualizationLink} belongs
      * @return An OK {@link Result}, if everything went fine.
-     * If not an ERROR with a message and the fields that do not meet the requisites.
+     * If not an ERROR with a message and the fields that do not meet the requisites
      */
-    Result remove(String token);
+    Result remove(String token, String userId);
 }

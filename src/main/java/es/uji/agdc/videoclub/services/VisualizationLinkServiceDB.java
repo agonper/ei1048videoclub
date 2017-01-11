@@ -103,7 +103,7 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
 
         switch (field) {
             case TOKEN:
-                if (values.length != 2) {
+                if (values.length != 2 || isEmpty(values[1])) {
                     log.error(String.format("findBy(%s): called with unexpected number of values", field));
                     throw new Error("MISSING_USER_ID");
                 }
@@ -163,7 +163,16 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
     }
 
     @Override
-    public Result remove(String token) {
-        throw new Error("Unimplemented");
+    @Transactional
+    public Result remove(String token, String userId) {
+        try {
+            Optional<VisualizationLink> possibleLink = findBy(VisualizationLinkQueryTypeSimple.TOKEN, token, userId);
+            if (!possibleLink.isPresent()) return ResultBuilder.error("LINK_NOT_FOUND");
+
+            repository.delete(possibleLink.get());
+            return ResultBuilder.ok();
+        } catch (Error e) {
+            return ResultBuilder.error(e.getMessage());
+        }
     }
 }

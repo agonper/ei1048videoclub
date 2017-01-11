@@ -105,6 +105,18 @@ public class VisualizationLinkServiceDBTest {
         assertEquals(user.getUsername(), links.findFirst().get().getUser().getUsername());
     }
 
+    @Test
+    public void remove() throws Exception {
+        linkService.create(visualizationLink);
+        Result result = linkService.remove(visualizationLink.getToken(), user.getId().toString());
+
+        Stream<VisualizationLink> links =
+                linkService.findAllBy(VisualizationLinkQueryTypeMultiple.USER, user.getId().toString());
+
+        assertTrue(result.isOk());
+        assertEquals(0, links.count());
+    }
+
     @After
     public void tearDown() throws Exception {
         user = null;

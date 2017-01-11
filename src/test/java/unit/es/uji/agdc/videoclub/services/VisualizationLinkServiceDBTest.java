@@ -329,6 +329,69 @@ public class VisualizationLinkServiceDBTest {
         assertEquals(1, links.count());
     }
 
+    @Test
+    public void remove_nullTokenAndNullUser_returnsEmptyOptional() throws Exception {
+        Result result = service.remove(null, null);
+
+        verify(repository, never()).delete(any(VisualizationLink.class));
+
+        assertTrue(result.isError());
+        assertEquals("LINK_NOT_FOUND", result.getMsg());
+    }
+
+    @Test
+    public void remove_emptyTokenAndUser_returnsEmptyOptional() throws Exception {
+        Result result = service.remove("", "");
+
+        verify(repository, never()).delete(any(VisualizationLink.class));
+
+        assertTrue(result.isError());
+        assertEquals("LINK_NOT_FOUND", result.getMsg());
+    }
+
+    @Test
+    public void remove_withTokenAndNullUser_returnsEmptyOptional() throws Exception {
+        when(repository.findByToken(link.getToken())).thenReturn(Optional.of(link));
+        Result result = service.remove(link.getToken(), null);
+
+        verify(repository, never()).delete(any(VisualizationLink.class));
+
+        assertTrue(result.isError());
+        assertEquals("MISSING_USER_ID", result.getMsg());
+    }
+
+    @Test
+    public void remove_withTokenAndEmptyUser_returnsEmptyOptional() throws Exception {
+        when(repository.findByToken(link.getToken())).thenReturn(Optional.of(link));
+        Result result = service.remove(link.getToken(), "");
+
+        verify(repository, never()).delete(any(VisualizationLink.class));
+
+        assertTrue(result.isError());
+        assertEquals("MISSING_USER_ID", result.getMsg());
+    }
+
+    @Test
+    public void remove_existingTokenForUserLink_returnsLink() throws Exception {
+        when(repository.findByToken(link.getToken())).thenReturn(Optional.of(link));
+        Result result = service.remove(link.getToken(), user.getId().toString());
+
+        verify(repository, times(1)).delete(any(VisualizationLink.class));
+
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void remove_existingTokenForDifferentUserLink_returnsLink() throws Exception {
+        when(repository.findByToken(link.getToken())).thenReturn(Optional.of(link));
+        Result result = service.remove(link.getToken(), "1");
+
+        verify(repository, never()).delete(any(VisualizationLink.class));
+
+        assertTrue(result.isError());
+        assertEquals("FOREIGN_LINK", result.getMsg());
+    }
+
     @After
     public void tearDown() throws Exception {
         userService = null;

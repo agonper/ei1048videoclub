@@ -257,7 +257,7 @@ public class RentedMoviesController extends Controller {
 
             if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
                 VisualizationLinkService service = Services.getVisualizationLinkService();
-                Result result = service.remove(selected.getToken());
+                Result result = service.remove(selected.getToken(), selected.getUser().getId().toString());
 
                 if (result.isOk())
                     rentedMovies_TableView.getItems().remove(selectedIndex);
