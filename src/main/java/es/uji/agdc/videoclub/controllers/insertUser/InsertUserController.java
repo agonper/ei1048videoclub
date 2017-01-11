@@ -3,11 +3,14 @@ package es.uji.agdc.videoclub.controllers.insertUser;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.utils.UserFactory;
+import es.uji.agdc.videoclub.services.utils.Result;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
@@ -50,35 +53,41 @@ public class InsertUserController extends Controller implements RootController {
     private boolean valid_02 = false;
     private boolean valid_03 = false;
 
-    private User userToCreate;
+    private User user;
 
     private int actualPage = 0;
 
     private boolean editing = false;
+    private boolean hasErrors = false;
 
 
     public void editUser(User user, String labelText) {
         editing = true;
+        this.user = user;
 
         data_user_01 = new String[3];
-        data_user_01[0] = user.getDni();
-        data_user_01[1] = user.getUsername();
-        data_user_01[2] = user.getAddress();
+        data_user_01[0] = this.user.getDni();
+        data_user_01[1] = this.user.getUsername();
+        data_user_01[2] = this.user.getAddress();
 
         data_user_02 = new String[2];
-        data_user_02[0] = String.valueOf(user.getPhone());
-        data_user_02[1] = user.getEmail();
+        data_user_02[0] = String.valueOf(this.user.getPhone());
+        data_user_02[1] = this.user.getEmail();
 
         data_user_03 = new String[3];
-        data_user_03[0] = user.getUsername();
+        data_user_03[0] = this.user.getUsername();
         data_user_03[1] = "";
 
-        if (user.getLastPayment() != null)
-            data_user_03[2] = user.getLastPayment().toString();
+        if (this.user.getLastPayment() != null)
+            data_user_03[2] = this.user.getLastPayment().toString();
         else
             data_user_03[2] = "";
 
         label.setText(labelText);
+
+        user_01_controller.setAllData(data_user_01);
+        user_02_controller.setAllData(data_user_02);
+        user_03_controller.setAllData(data_user_03);
 
         valid_01 = true;
         valid_02 = true;
@@ -87,16 +96,20 @@ public class InsertUserController extends Controller implements RootController {
         finishedForm();
     }
 
+    public User getUserToEdit() {
+        return user;
+    }
+
     public boolean isEditing() {
         return editing;
     }
 
     @FXML
     public void initialize() {
-        insertUserPagination.setPageFactory(param -> changedPage());
         loadResource(user_01, 0);
         loadResource(user_02, 1);
         loadResource(user_03, 2);
+        insertUserPagination.setPageFactory(param -> changedPage());
     }
 
     @FXML
@@ -105,9 +118,9 @@ public class InsertUserController extends Controller implements RootController {
         BorderPane loadedResource = null;
 
         switch (actualPage) {
-            //case 0:
-            //    data_user_01 = user_01_controller.getAllData();
-            //    break;
+            case 0:
+                data_user_01 = user_01_controller.getAllData();
+                break;
 
             case 1:
                 data_user_02 = user_02_controller.getAllData();
@@ -200,40 +213,60 @@ public class InsertUserController extends Controller implements RootController {
     }
 
     @FXML
-    public void finishedForm() {
+    public boolean finishedForm() {
         submit_button.setDisable(!(valid_01 && valid_02 && valid_03));
+        return valid_01 && valid_02 && valid_03;
     }
 
     @FXML
     public void submitForm() {
-        userToCreate = UserFactory.createMember();
-        setAllUserData();
+        if (!editing) {
+            user = UserFactory.createMember();
+            setAllUserData();
+            if (!Services.getUserService().create(user).isOk()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error al insertar un usuario");
+                alert.setHeaderText("Ha habido un error al insertar la información, ¿está conectado a la base de datos?");
+                hasErrors = true;
+                alert.showAndWait();
+            }
+        }
+        else {
+            setAllUserData();
+            Result result = Services.getUserService().update(user, ApplicationStateData.getLoggedUser().getId());
+            if (!result.isOk()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error al actualizar");
+                alert.setHeaderText("Ha habido un error al actualizar la información, ¿está conectado a la base de datos?");
+                hasErrors = true;
+                alert.showAndWait();
+            }
+        }
 
-        if (!editing)
-            Services.getUserService().create(userToCreate);
-        else
-            // TODO: Check that this is fine
-            Services.getUserService().update(userToCreate, userToCreate.getId());
         super.stage.close();
     }
 
     private void setAllUserData() {
         String[] page1 = user_01_controller.getAllData();
-        userToCreate.setDni(page1[0]);
-        userToCreate.setName(page1[1]);
-        userToCreate.setAddress(page1[2]);
+        user.setDni(page1[0]);
+        user.setName(page1[1]);
+        user.setAddress(page1[2]);
 
         String[] page2 = user_02_controller.getAllData();
-        userToCreate.setPhone(Integer.parseInt(page2[0]));
-        userToCreate.setEmail(page2[1]);
+        user.setPhone(Integer.parseInt(page2[0]));
+        user.setEmail(page2[1]);
 
         String[] page3 = user_03_controller.getAllData();
-        userToCreate.setUsername(page3[0]);
-        userToCreate.setPassword(page3[1]);
+        user.setUsername(page3[0]);
+        user.setPassword(page3[1]);
 
         if (page3[2].equals(""))
-            userToCreate.setLastPayment(null);
+            user.setLastPayment(null);
         else
-            userToCreate.setLastPayment(LocalDate.parse(page3[2]));
+            user.setLastPayment(LocalDate.parse(page3[2]));
+    }
+
+    public boolean hasErrors() {
+        return hasErrors;
     }
 }

@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.initializers;
 
+import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.*;
 import es.uji.agdc.videoclub.models.utils.UserFactory;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
@@ -47,5 +48,30 @@ public class AdminInitializer {
             log.info("No default admin was found, creating one");
             service.create(superAdmin);
         }
+
+        UserService service = Services.getUserService();
+
+        User user = new User()
+                .setDni("10614397N")
+                .setName("Paco Sánchez Díaz")
+                .setAddress("C/Falsa, 123, 1º")
+                .setPhone(693582471)
+                .setEmail("pacosd@hotmail.com")
+                .setUsername("paquito69")
+                .setPassword("pacosd69")
+                .setRole(User.Role.MEMBER);
+
+        User user1 = new User()
+                .setDni("10614397Q")
+                .setName("Paco Díaz")
+                .setAddress("C/Falsa, 124, 1º")
+                .setPhone(693582470)
+                .setEmail("pacosd1@hotmail.com")
+                .setUsername("paquito")
+                .setPassword("pacosd123")
+                .setRole(User.Role.MEMBER);
+
+        System.out.println(service.create(user).getMsg());
+        System.out.println(service.create(user1).getMsg());
     }
 }

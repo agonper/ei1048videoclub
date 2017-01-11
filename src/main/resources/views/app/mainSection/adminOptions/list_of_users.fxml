@@ -9,16 +9,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxWidth="1000.0" prefHeight="400.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.UsersListController">
+<BorderPane maxWidth="1000.0" prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.uji.agdc.videoclub.controllers.UsersListController">
    <center>
-       <TableView fx:id="users_TableView" BorderPane.alignment="CENTER">
+       <TableView fx:id="users_TableView" prefHeight="360.0" prefWidth="720.0" BorderPane.alignment="CENTER">
            <columns>
-               <TableColumn fx:id="DNI_TableColumn" prefWidth="60.0" text="DNI">
+               <TableColumn fx:id="DNI_TableColumn" prefWidth="69.99998474121094" text="DNI">
                    <cellValueFactory>
                        <PropertyValueFactory property="dni" />
                    </cellValueFactory>
                </TableColumn>
-               <TableColumn fx:id="completeName_TableColumn" prefWidth="150.0" text="Nombre completo">
+               <TableColumn fx:id="completeName_TableColumn" prefWidth="140.0" text="Nombre completo">
                    <cellValueFactory>
                        <PropertyValueFactory property="name" />
                    </cellValueFactory>
@@ -60,8 +60,8 @@
    <bottom>
       <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="673.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="editUser_button" onAction="#editSelectedUser" mnemonicParsing="false" text="Editar seleccionado" />
-            <Button fx:id="deleteUser_button" onAction="#deleteSelectedUser" mnemonicParsing="false" text="Eliminar seleccionado">
+            <Button fx:id="editUser_button" mnemonicParsing="false" onAction="#editSelectedUser" text="Editar seleccionado" />
+            <Button fx:id="deleteUser_button" mnemonicParsing="false" onAction="#deleteSelectedUser" text="Eliminar seleccionado">
                <HBox.margin>
                   <Insets left="20.0" right="20.0" />
                </HBox.margin>

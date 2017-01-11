@@ -3,7 +3,10 @@ package es.uji.agdc.videoclub.controllers.insertUser;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.ApplicationState;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
@@ -30,6 +33,7 @@ public class InsertUser_2Controller extends Controller implements Form {
     private InsertUserController rootController = null;
 
     private UserService userService = Services.getUserService();
+
 
     @FXML
     public void initialize() {
@@ -103,7 +107,18 @@ public class InsertUser_2Controller extends Controller implements Form {
 
         Pattern p = Pattern.compile(EMAIL_PATTERN);
 
-        return p.matcher(email).matches() && !userService.findBy(UserQueryTypeSingle.EMAIL, email).isPresent();
+        if (rootController.isEditing()) {
+            User loggedUser = ApplicationStateData.getLoggedUser();
+
+            if (loggedUser.isAdmin()) {
+                User user = rootController.getUserToEdit();
+                return p.matcher(email).matches() && (!userService.findBy(UserQueryTypeSingle.EMAIL, email).isPresent()) || email.equals(user.getEmail());
+            } else
+                return p.matcher(email).matches() && !userService.findBy(UserQueryTypeSingle.EMAIL, email).isPresent() || email.equals(loggedUser.getEmail());
+
+        }
+        else
+            return p.matcher(email).matches() && !userService.findBy(UserQueryTypeSingle.EMAIL, email).isPresent();
     }
 
     @Override

@@ -179,13 +179,13 @@ public class MoviesListController extends Controller {
     }
 
     @FXML
-    public void deleteSelectedMovie() {
+    public void disableSelectedMovie() {
         ObservableList<Integer> selectedIndices = movies_TableView.getSelectionModel().getSelectedIndices();
 
         if (selectedIndices.size() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Película no seleccionada");
-            alert.setHeaderText("Ha de seleccionarse una película para poder eliminarla");
+            alert.setHeaderText("Ha de seleccionarse una película para poder deshabilitarla");
             alert.showAndWait();
         }
         else if (selectedIndices.size() > 1) {
@@ -203,8 +203,8 @@ public class MoviesListController extends Controller {
 
     private void deleteSelectedMovie(Movie movie) {
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmation.setTitle("Confirmación de borrado");
-        confirmation.setHeaderText("¿Está seguro de querer borrar la película seleccionada?");
+        confirmation.setTitle("Confirmación de deshabilitación");
+        confirmation.setHeaderText("¿Está seguro de querer deshabilitar la película seleccionada?");
 
         StringBuilder actorsBuilder = new StringBuilder();
 
@@ -278,7 +278,7 @@ public class MoviesListController extends Controller {
                 movies_TableView.getItems().remove(movie);
             else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error al eliminar la película");
+                alert.setTitle("Error al deshabilitar la película");
                 alert.setHeaderText("No se ha podido eliminar la película por un error en el sistema.");
                 alert.showAndWait();
             }
