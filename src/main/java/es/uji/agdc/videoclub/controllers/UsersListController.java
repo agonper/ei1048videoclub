@@ -1,6 +1,7 @@
 package es.uji.agdc.videoclub.controllers;
 
 import es.uji.agdc.videoclub.controllers.insertUser.InsertUserController;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
@@ -166,19 +167,28 @@ public class UsersListController extends Controller {
         "Dirección: " + user.getAddress());
 
         Optional<ButtonType> answer = confirmation.showAndWait();
+
         if (answer.isPresent() && answer.get().getButtonData().isDefaultButton()) {
-            UserService service = Services.getUserService();
-            Result result = service.remove(user.getUsername());
 
-            if (result.isOk())
-                loadData();
-
-            else {
+            if (user.getId() == ApplicationStateData.getLoggedUser().getId() || user.isAdmin()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error al eliminar el usuario");
-                alert.setHeaderText("No se ha podido eliminar al usuario, por un error en el sistema o por ser un usuario administrador.");
+                alert.setTitle("No se puede eliminar al usuario");
+                alert.setContentText("No se puede eliminar al usuario administrador\n o a su propio usuario.");
+                alert.showAndWait();
             }
+            else {
+                UserService service = Services.getUserService();
+                Result result = service.remove(user.getUsername());
 
+                if (result.isOk())
+                    loadData();
+
+                else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error al eliminar el usuario");
+                    alert.setHeaderText("No se ha podido eliminar al usuario, por un error en el sistema o por ser un usuario administrador.");
+                }
+            }
         }
     }
 }
