@@ -212,7 +212,8 @@ public class InsertUserController extends Controller implements RootController {
         if (!editing)
             Services.getUserService().create(userToCreate);
         else
-            Services.getUserService().update(userToCreate);
+            // TODO: Check that this is fine
+            Services.getUserService().update(userToCreate, userToCreate.getId());
         super.stage.close();
     }
 

@@ -7,6 +7,7 @@ import es.uji.agdc.videoclub.repositories.UserRepository;
 import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
+import es.uji.agdc.videoclub.services.utils.Result;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,22 @@ public class UserServiceDBTest {
 
         Stream<User> defaulterUsers = service.findDefaulterUsers();
         assertEquals(0, defaulterUsers.count());
+    }
+
+    @Test
+    public void update() throws Exception {
+        service.create(user);
+        User savedUser = service.findBy(UserQueryTypeSingle.DNI, this.user.getDni()).get();
+
+        String newName = "Pedro Enrique García";
+        savedUser.setName(newName).setPassword("");
+        Result result = service.update(savedUser, savedUser.getId());
+        System.out.println(result);
+
+        User updatedUser = service.findBy(UserQueryTypeSingle.DNI, this.user.getDni()).get();
+        assertTrue(result.isOk());
+        assertEquals(newName, updatedUser.getName());
+        assertEquals(savedUser.getPassword(), updatedUser.getPassword());
     }
 
     @After

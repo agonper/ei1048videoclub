@@ -44,9 +44,10 @@ public interface UserService {
     /**
      * Updates the given user entity, it must be a non-new entity
      * @param user A non-new user entity
+     * @param userIdPerformsUpdate The id of the user that performs the update
      * @return An OK {@link Result}, if everything went fine. If not an ERROR with a message and the fields that do not meet the requisites.
      */
-    Result update(User user);
+    Result update(User user, long userIdPerformsUpdate);
 
     /**
      * Deletes a user by its given username. Returns error if the user was not found

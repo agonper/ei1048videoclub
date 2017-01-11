@@ -91,7 +91,8 @@ public class ResultController extends Controller {
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
             service.create(link);
 
-            userService.update(loggedUser);
+            // TODO: I think this is not needed
+            userService.update(loggedUser, loggedUser.getId());
             movieService.update(movie);
 
             initState();

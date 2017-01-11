@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -35,6 +37,7 @@ public class UserServiceDB implements UserService{
     }
 
     @Override
+    @Transactional
     public Result create(User user) {
 
         if (!user.isNew()) {
@@ -137,9 +140,86 @@ public class UserServiceDB implements UserService{
     }
 
     @Override
-    public Result update(User user) {
-        // FIXME Implement
-        throw new Error("Unimplemented");
+    @Transactional
+    public Result update(User user, long userIdThatPerformsUpdate) {
+
+        Optional<User> possibleUser = repository.findOne(user.getId());
+        if (!possibleUser.isPresent()) {
+            log.warn("update(): called with non-existing user");
+            return ResultBuilder.error("USER_NOT_FOUND");
+        }
+
+        User userToModify = possibleUser.get();
+
+        Optional<User> possibleModifier = repository.findOne(userIdThatPerformsUpdate);
+        if (!possibleModifier.isPresent() ||
+                (userIdThatPerformsUpdate != userToModify.getId() &&
+                        possibleModifier.get().getRole() != User.Role.ADMIN)) {
+            log.warn("update(): called with unauthorized user: " + userIdThatPerformsUpdate);
+            return ResultBuilder.error("FOREIGN_USER");
+        }
+
+        User userThatModifies = possibleModifier.get();
+
+        Result alreadyExists = ResultBuilder.error("USER_ALREADY_EXISTS");
+
+        Optional<User> userByDni = findBy(UserQueryTypeSingle.DNI, user.getDni());
+        if (userByDni.isPresent() && !userByDni.get().getId().equals(userToModify.getId())) {
+            return alreadyExists.addField("DNI");
+        }
+
+        Optional<User> userByUsername = findBy(UserQueryTypeSingle.USERNAME, user.getUsername());
+        if (userByUsername.isPresent() && !userByUsername.get().getId().equals(userToModify.getId())) {
+            return alreadyExists.addField("Username");
+        }
+
+        Optional<User> userByEmail = findBy(UserQueryTypeSingle.EMAIL, user.getEmail());
+        if (userByEmail.isPresent() && !userByEmail.get().getId().equals(userToModify.getId())) {
+            return alreadyExists.addField("Email");
+        }
+
+        User updatedUser = fillUserWithChanges(userToModify, user, userThatModifies.getRole());
+
+        Result validatorResult = validator.validate(updatedUser);
+        boolean containsPasswordError = Arrays.asList(validatorResult.getFields()).contains("Password");
+        boolean hasChangedPassword = !isEmpty(user.getPassword());
+
+        if (validatorResult.isError() && containsPasswordError && hasChangedPassword
+                || validatorResult.isError() && !containsPasswordError) {
+            return validatorResult;
+        }
+
+        if (hasChangedPassword) {
+            updatedUser.setPassword(encryptor.hash(updatedUser.getPassword()));
+        }
+
+        try {
+            repository.save(updatedUser);
+            return ResultBuilder.ok();
+        } catch (Exception e) {
+            return ResultBuilder.error(e.getMessage());
+        }
+    }
+
+    private User fillUserWithChanges(User toModify, User changes, User.Role whoChanges) {
+        toModify.setDni(changes.getDni());
+        toModify.setName(changes.getName());
+        toModify.setAddress(changes.getAddress());
+        toModify.setPhone(changes.getPhone());
+        toModify.setEmail(changes.getEmail());
+        toModify.setUsername(changes.getUsername());
+        if (!isEmpty(changes.getPassword())) {
+            toModify.setPassword(changes.getPassword());
+        }
+        if (whoChanges == User.Role.ADMIN) {
+            toModify.setLastPayment(changes.getLastPayment());
+        }
+
+        return toModify;
+    }
+
+    private boolean isEmpty(String string) {
+        return string == null || string.isEmpty();
     }
 
     @Override

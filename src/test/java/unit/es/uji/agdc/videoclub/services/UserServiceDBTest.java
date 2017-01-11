@@ -34,6 +34,7 @@ public class UserServiceDBTest {
     private UserService service;
 
     private User user;
+    private User savedUser;
     private User secondaryUser;
 
     @Before
@@ -53,14 +54,25 @@ public class UserServiceDBTest {
                 .setPassword("pacosd69")
                 .setRole(User.Role.MEMBER);
 
+        savedUser = new User()
+                .setDni(user.getDni())
+                .setName(user.getName())
+                .setAddress(user.getAddress())
+                .setPhone(user.getPhone())
+                .setEmail(user.getEmail())
+                .setUsername(user.getUsername())
+                .setPassword(user.getPassword())
+                .setRole(user.getRole());
+        savedUser.setId(0L);
+
         secondaryUser = new User()
                 .setDni("20614397N")
-                .setName("Paco Sánchez Díaz")
-                .setAddress("C/Falsa, 123, 1º")
+                .setName("Paco Sánchez Día")
+                .setAddress("C/Falsa, 12, 1º")
                 .setPhone(693582471)
                 .setEmail("paco@hotmail.com")
                 .setUsername("paquito6")
-                .setPassword("pacosd69")
+                .setPassword("pacosd689")
                 .setRole(User.Role.MEMBER);
 
         when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
@@ -68,6 +80,7 @@ public class UserServiceDBTest {
         when(repository.findByDni(anyString())).thenReturn(Optional.empty());
 
         when(repository.findByLastPaymentBefore(any())).thenReturn(Stream.empty());
+        when(encryptor.hash(anyString())).thenReturn("password");
     }
 
     @Test
@@ -317,6 +330,234 @@ public class UserServiceDBTest {
 
         verify(repository, only()).findByLastPaymentBefore(LocalDate.now().minusMonths(1));
         assertEquals(1, defaulterUsers.count());
+    }
+
+    @Test
+    public void update_validUserWithNoChangesAndValidModifier_saveCalledAndReturnsOk() throws Exception {
+        user.setId(0L);
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        when(repository.findByUsername(user.getUsername())).thenReturn(Optional.of(savedUser));
+        when(repository.findByEmail(user.getEmail())).thenReturn(Optional.of(savedUser));
+        when(repository.findByDni(user.getDni())).thenReturn(Optional.of(savedUser));
+
+        Result result = service.update(user, user.getId());
+        System.out.println(result);
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void update_validUserWithNoChangesAndInvalidModifier_saveNotCalledReturnsError() throws Exception {
+        user.setId(0L);
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        when(repository.findOne(1L)).thenReturn(Optional.of(new User().setRole(User.Role.MEMBER)));
+
+        Result result = service.update(user, 1);
+        System.out.println(result);
+        verify(repository, times(0)).save(user);
+        assertTrue(result.isError());
+        assertEquals("FOREIGN_USER", result.getMsg());
+    }
+
+    @Test
+    public void update_validUserWithNoChangesAndValidAdminModifier_saveCalledReturnsOk() throws Exception {
+        user.setId(0L);
+        user.setPassword("");
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        when(repository.findOne(1L)).thenReturn(Optional.of(new User().setRole(User.Role.ADMIN)));
+
+        Result result = service.update(user, 1);
+        System.out.println(result);
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void update_validUserWithValidChangesAndValidModifier_saveCalledAndReturnsOk() throws Exception {
+        user.setId(0L);
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        user.setUsername("paquito");
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void update_inValidUser_saveNotCalledAndReturnsError() throws Exception {
+        user.setId(0L);
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        user.setName("");
+        Result result = service.update(user, user.getId());
+        verify(repository, never()).save(user);
+        assertTrue(result.isError());
+    }
+
+    @Test
+    public void update_userWithDniCollision_saveNotCalledAndReturnsError() throws Exception {
+        user.setId(0L);
+        secondaryUser.setId(1L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        when(repository.findByDni(secondaryUser.getDni())).thenReturn(Optional.of(secondaryUser));
+
+        user.setDni(secondaryUser.getDni());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(0)).save(user);
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(USER_ALREADY_EXISTS)[DNI]", result.toString());
+    }
+
+    @Test
+    public void update_userWithUsernameCollision_saveNotCalledAndReturnsError() throws Exception {
+        user.setId(0L);
+        secondaryUser.setId(1L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        when(repository.findByUsername(secondaryUser.getUsername())).thenReturn(Optional.of(secondaryUser));
+
+        user.setUsername(secondaryUser.getUsername());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(0)).save(user);
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(USER_ALREADY_EXISTS)[Username]", result.toString());
+    }
+
+    @Test
+    public void update_userWithEmailCollision_saveNotCalledAndReturnsError() throws Exception {
+        user.setId(0L);
+        secondaryUser.setId(1L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        when(repository.findByEmail(secondaryUser.getEmail())).thenReturn(Optional.of(secondaryUser));
+
+        user.setEmail(secondaryUser.getEmail());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(0)).save(user);
+        assertTrue(result.isError());
+        assertEquals("Result: ERROR(USER_ALREADY_EXISTS)[Email]", result.toString());
+    }
+
+    @Test
+    public void update_userChangeDni_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setDni(secondaryUser.getDni());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(secondaryUser.getDni(), savedUser.getDni());
+    }
+
+    @Test
+    public void update_userChangeName_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setName(secondaryUser.getName());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(secondaryUser.getName(), savedUser.getName());
+    }
+
+    @Test
+    public void update_userChangeAddress_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setAddress(secondaryUser.getAddress());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(secondaryUser.getAddress(), savedUser.getAddress());
+    }
+
+    @Test
+    public void update_userChangePhone_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setPhone(secondaryUser.getPhone());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(secondaryUser.getPhone(), savedUser.getPhone());
+    }
+
+    @Test
+    public void update_userChangeEmail_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setEmail(secondaryUser.getEmail());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(secondaryUser.getEmail(), savedUser.getEmail());
+    }
+
+    @Test
+    public void update_userChangeUsername_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setUsername(secondaryUser.getUsername());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(secondaryUser.getUsername(), savedUser.getUsername());
+    }
+
+    @Test
+    public void update_userChangePassword_saveCalledReturnsOkAndIsModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        String originalPassword = savedUser.getPassword();
+        String newPassword = "newpassword";
+        user.setPassword(newPassword);
+        Result result = service.update(user, user.getId());
+        verify(encryptor, times(1)).hash(newPassword);
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertNotEquals(originalPassword, savedUser.getPassword());
+    }
+
+    @Test
+    public void update_userChangePaymentDate_saveCalledReturnsOkAndIsNotModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+
+        user.setLastPayment(LocalDate.now());
+        Result result = service.update(user, user.getId());
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(null, savedUser.getLastPayment());
+    }
+
+    @Test
+    public void update_adminChangePaymentDate_saveCalledReturnsOkAndIsNotModified() throws Exception {
+        user.setId(0L);
+
+        when(repository.findOne(0L)).thenReturn(Optional.of(savedUser));
+        when(repository.findOne(1L)).thenReturn(Optional.of(new User().setRole(User.Role.ADMIN)));
+
+        LocalDate now = LocalDate.now();
+        user.setLastPayment(now);
+        Result result = service.update(user, 1);
+        verify(repository, times(1)).save(user);
+        assertTrue(result.isOk());
+        assertEquals(now, savedUser.getLastPayment());
     }
 
     @After

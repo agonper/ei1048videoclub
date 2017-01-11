@@ -151,7 +151,8 @@ public class PersonalDataScreenController extends Controller {
             Result validationResult = userValidator.validate(editedUser);
 
             if (validationResult.isOk())
-                userService.update(editedUser);
+                // TODO Check that this is ok
+                userService.update(editedUser, editedUser.getId());
 
         }
     }
