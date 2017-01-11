@@ -259,8 +259,10 @@ public class RentedMoviesController extends Controller {
                 VisualizationLinkService service = Services.getVisualizationLinkService();
                 Result result = service.remove(selected.getToken(), selected.getUser().getId().toString());
 
-                if (result.isOk())
+                if (result.isOk()) {
+                    ApplicationStateData.getLoggedUser().getVisualizationLinks().remove(selected);
                     rentedMovies_TableView.getItems().remove(selectedIndex);
+                }
 
                 else {
                     Alert alert1 = new Alert(Alert.AlertType.ERROR);

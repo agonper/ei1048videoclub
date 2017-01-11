@@ -47,10 +47,9 @@ public class ResultController extends Controller {
 
         boolean user_has_rented_the_movie = false;
 
-        for (VisualizationLink link : loggedUser.getVisualizationLinks()) {
+        for (VisualizationLink link : loggedUser.getVisualizationLinks())
             if (link.getMovie().getId() == movie.getId())
                 user_has_rented_the_movie = true;
-        }
 
         if (movie.getAvailableCopies() == 0 || user_has_rented_the_movie)
             rentMovie_button.setDisable(true);
