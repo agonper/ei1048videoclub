@@ -144,6 +144,21 @@ public class VisualizationLinkServiceDBTest {
         assertTrue(possibleLink.isPresent());
     }
 
+    @Test
+    public void removeUserLinks() throws Exception {
+        linkService.create(visualizationLink);
+        User user = userService.findBy(UserQueryTypeSingle.USERNAME, this.user.getUsername()).get();
+
+        Result result = linkService.removeUserLinks(this.user.getId());
+
+        Stream<VisualizationLink> userLinks = linkService.findAllBy(VisualizationLinkQueryTypeMultiple.USER,
+                user.getId().toString());
+
+        assertTrue(result.isOk());
+        assertEquals(0, userLinks.count());
+
+    }
+
     @After
     public void tearDown() throws Exception {
         user = null;

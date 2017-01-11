@@ -53,4 +53,10 @@ public interface VisualizationLinkRepository extends CrudRepositoryJ8<Visualizat
      */
     void deleteByExpeditionDateBefore(LocalDateTime time);
 
+    /**
+     * Deletes all links from a given user
+     * @param user the whose links are going to be deleted
+     */
+    void deleteByUser(User user);
+
 }

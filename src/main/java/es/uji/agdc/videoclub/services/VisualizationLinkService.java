@@ -45,7 +45,6 @@ public interface VisualizationLinkService {
      * @param token The token of the {@link VisualizationLink} to be deleted
      * @param userId The user to whom the {@link VisualizationLink} belongs
      * @return An OK {@link Result}, if everything went fine.
-     * If not an ERROR with a message and the fields that do not meet the requisites
      */
     Result remove(String token, String userId);
 
@@ -53,4 +52,11 @@ public interface VisualizationLinkService {
      * Removes those links whose expedition time is considered old enough to become timed out
      */
     void removeTimedOutLinks();
+
+    /**
+     * Removes the links of a user by his id
+     * @param id the id of the user whose links are going to be deleted
+     * @return An OK {@link Result}, if everything went fine.
+     */
+    Result removeUserLinks(long id);
 }

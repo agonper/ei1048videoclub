@@ -172,6 +172,15 @@ public class VisualizationLinkRepositoryTest {
         assertTrue(possibleVisualizationLink.isPresent());
     }
 
+    @Test
+    public void deleteByUser() throws Exception {
+        VisualizationLink visualizationLink = repository.save(this.visualizationLink);
+        repository.deleteByUser(user);
+        Optional<VisualizationLink> noVisualizationLink =
+                repository.findByToken(visualizationLink.getToken());
+        assertFalse(noVisualizationLink.isPresent());
+    }
+
     @After
     public void tearDown() throws Exception {
         user = null;
