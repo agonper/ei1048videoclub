@@ -32,7 +32,9 @@ public class ResultController extends Controller {
     @FXML
     private Button rentMovie_button;
 
-
+    private UserService userService = Services.getUserService();
+    private MovieService movieService = Services.getMovieService();
+    private User loggedUser = ApplicationStateData.getLoggedUser();
     private Movie movie;
 
 
@@ -42,8 +44,16 @@ public class ResultController extends Controller {
 
     public void initState() {
         title_searchResult.setText(movie.getTitle() + ": " + movie.getTitleOv());
-        rentMovie_button.setText("Reservar película (" + movie.getAvailableCopies() + " disponibles)");
-        if (movie.getAvailableCopies() == 0)
+        rentMovie_button.setText("Reservar película (" + movie.getActualAvailableCopies() + " disponibles)");
+
+        boolean user_has_rented_the_movie = false;
+
+        for (VisualizationLink link : loggedUser.getVisualizationLinks()) {
+            if (link.getMovie().getId() == movie.getId())
+                user_has_rented_the_movie = true;
+        }
+
+        if (movie.getAvailableCopies() == 0 || user_has_rented_the_movie)
             rentMovie_button.setDisable(true);
     }
 
@@ -80,10 +90,6 @@ public class ResultController extends Controller {
             VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
             service.create(link);
-            movie.setAvailableCopies(movie.getAvailableCopies() - 1);
-
-            UserService userService = Services.getUserService();
-            MovieService movieService = Services.getMovieService();
 
             userService.update(loggedUser);
             movieService.update(movie);

@@ -40,7 +40,7 @@
                 </cellValueFactory>
             </TableColumn>
 
-            <TableColumn fx:id="slowPayers_months_tableColumn" prefWidth="201.0" text="Meses que adeudan">
+            <TableColumn fx:id="slowPayers_months_tableColumn" prefWidth="201.0" text="Meses que adeuda">
                 <cellValueFactory>
                     <PropertyValueFactory property="unpaidMonths" />
                 </cellValueFactory>

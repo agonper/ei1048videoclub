@@ -107,9 +107,9 @@ public class MovieCompleteDescriptionController extends Controller {
             movieData_directors_label.setText("Directores: " + directors);
             movieData_generes_label.setText("Géneros: " + genres);
             movieData_description_textArea.setText(movie.getDescription());
-            movieData_copies_label.setText("Copias disponibles: " + String.valueOf(movie.getAvailableCopies()));
+            movieData_copies_label.setText("Copias disponibles: " + String.valueOf(movie.getActualAvailableCopies()));
 
-            movieData_rent_button.setDisable(movie.getAvailableCopies() <= 0);
+            movieData_rent_button.setDisable(movie.getActualAvailableCopies() <= 0);
         }
     }
 
@@ -120,12 +120,11 @@ public class MovieCompleteDescriptionController extends Controller {
 
     @FXML
     public void rentMovie() {
-        if (movie != null && movie.getAvailableCopies() > 0) {
+        if (movie != null && movie.getActualAvailableCopies() > 0) {
             User loggedUser = ApplicationStateData.getLoggedUser();
             VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
             service.create(link);
-            movie.setAvailableCopies(movie.getAvailableCopies() - 1);
 
             MovieService movieService = Services.getMovieService();
             movieService.update(movie);

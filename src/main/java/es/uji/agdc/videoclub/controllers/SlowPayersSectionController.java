@@ -38,35 +38,30 @@ public class SlowPayersSectionController extends Controller {
             @Override
             public ObservableValue call(TableColumn.CellDataFeatures<User, Long> param) {
 
-                //TODO: TEST
-                LocalDate lastPayment = param.getValue().getLastPayment();
-                Period between = Period.between(lastPayment, LocalDate.now());
-                long unpaidMonths = between.toTotalMonths();
-
-                return new ObservableLongValue() {
+                return new ObservableIntegerValue() {
                     @Override
-                    public long get() {
-                        return unpaidMonths;
+                    public int get() {
+                        return param.getValue().getUnpaidMonths();
                     }
 
                     @Override
                     public int intValue() {
-                        return between.getMonths();
+                        return param.getValue().getUnpaidMonths();
                     }
 
                     @Override
                     public long longValue() {
-                        return unpaidMonths;
+                        return param.getValue().getUnpaidMonths();
                     }
 
                     @Override
                     public float floatValue() {
-                        return unpaidMonths;
+                        return param.getValue().getUnpaidMonths();
                     }
 
                     @Override
                     public double doubleValue() {
-                        return unpaidMonths;
+                        return param.getValue().getUnpaidMonths();
                     }
 
                     @Override
@@ -81,7 +76,7 @@ public class SlowPayersSectionController extends Controller {
 
                     @Override
                     public Number getValue() {
-                        return unpaidMonths;
+                        return param.getValue().getUnpaidMonths();
                     }
 
                     @Override
@@ -109,21 +104,11 @@ public class SlowPayersSectionController extends Controller {
 
         while (membersIterator.hasNext()) {
             User member = membersIterator.next();
-            if (isSlowPayer(member))
+            if (member.getUnpaidMonths() > 0)
                 usersToTableView.add(member);
         }
 
         slowPayers_TableView.setItems(usersToTableView);
-    }
-
-    private boolean isSlowPayer(User user) {
-        LocalDate actualDate = LocalDate.now();
-        LocalDate lastPayment = user.getLastPayment();
-
-        if (lastPayment != null && actualDate.minusMonths(1).isAfter(lastPayment))
-            return true;
-
-        return false;
     }
 
     @FXML
