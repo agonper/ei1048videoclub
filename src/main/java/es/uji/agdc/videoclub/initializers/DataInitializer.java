@@ -22,7 +22,7 @@ public class DataInitializer {
     private UserService userService;
     private MovieService movieService;
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void setData() {
 
         userService = Services.getUserService();

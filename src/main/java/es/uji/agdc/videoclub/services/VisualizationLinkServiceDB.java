@@ -85,6 +85,10 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
         if (linksCount >= movie.getAvailableCopies())
             return ResultBuilder.error("NO_COPIES_AVAILABLE");
 
+        visualizationLink
+                .setUser(possibleUser.get())
+                .setMovie(possibleMovie.get());
+
         VisualizationLink link = repository.save(visualizationLink);
         log.info(String.format("create(): Link (%s) created for user: %s and movie: %s", (link != null) ?
                 link.getToken() : "virtual", user.getUsername(), movie.getTitle()));

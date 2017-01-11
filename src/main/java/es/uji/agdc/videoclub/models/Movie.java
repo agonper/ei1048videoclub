@@ -152,7 +152,8 @@ public class Movie extends AbstractEntity {
 
     public Movie addVisualizationLink(VisualizationLink link) {
         List<VisualizationLink> visualizationLinks = getVisualizationLinks();
-        visualizationLinks.add(link);
+        if (!visualizationLinks.contains(link))
+            visualizationLinks.add(link);
         return this;
     }
 
