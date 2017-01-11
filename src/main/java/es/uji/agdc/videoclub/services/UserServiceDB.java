@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 @Service
 public class UserServiceDB implements UserService{
     private Logger log = LoggerFactory.getLogger(UserServiceDB.class);
+    private static final int UNPAID_MONTHS_TO_BECOME_A_DEFAULTER = 1;
 
     private final UserRepository repository;
     private final PasswordEncryptor encryptor;
@@ -127,6 +129,11 @@ public class UserServiceDB implements UserService{
             log.warn(e.getMessage());
             return Stream.empty();
         }
+    }
+
+    @Override
+    public Stream<User> findDefaulterUsers() {
+        return repository.findByLastPaymentBefore(LocalDate.now().minusMonths(UNPAID_MONTHS_TO_BECOME_A_DEFAULTER));
     }
 
     @Override

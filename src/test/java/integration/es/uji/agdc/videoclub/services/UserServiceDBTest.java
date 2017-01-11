@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -83,6 +84,25 @@ public class UserServiceDBTest {
 
         // Assert that the user is contained
         assertTrue(members.anyMatch(user1 -> user1.equals(user)));
+    }
+
+    @Test
+    public void findDefaulterUsers_defaulter() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1).minusDays(1));
+        service.create(user);
+
+        Stream<User> defaulterUsers = service.findDefaulterUsers();
+        assertEquals(1, defaulterUsers.count());
+    }
+
+
+    @Test
+    public void findDefaulterUsers_noDefaulter() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1));
+        service.create(user);
+
+        Stream<User> defaulterUsers = service.findDefaulterUsers();
+        assertEquals(0, defaulterUsers.count());
     }
 
     @After

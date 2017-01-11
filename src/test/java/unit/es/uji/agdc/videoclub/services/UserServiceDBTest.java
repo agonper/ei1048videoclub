@@ -66,6 +66,8 @@ public class UserServiceDBTest {
         when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(repository.findByDni(anyString())).thenReturn(Optional.empty());
+
+        when(repository.findByLastPaymentBefore(any())).thenReturn(Stream.empty());
     }
 
     @Test
@@ -306,7 +308,16 @@ public class UserServiceDBTest {
         assertEquals(0, members.count());
     }
 
-    //FIXME Add more tests
+    @Test
+    public void findAllDefaulters() throws Exception {
+        user.setLastPayment(LocalDate.now().minusMonths(1).minusDays(1));
+        when(repository.findByLastPaymentBefore(LocalDate.now().minusMonths(1))).thenReturn(Stream.of(user));
+
+        Stream<User> defaulterUsers = service.findDefaulterUsers();
+
+        verify(repository, only()).findByLastPaymentBefore(LocalDate.now().minusMonths(1));
+        assertEquals(1, defaulterUsers.count());
+    }
 
     @After
     public void tearDown() throws Exception {

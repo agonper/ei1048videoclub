@@ -31,9 +31,15 @@ public interface UserService {
      * Looks for multiple users given a determinate field
      * @param field search by one of {@link UserQueryTypeMultiple}.
      * @param value attribute that must be matched.
-     * @return A {@link Stream} with one or more records.
+     * @return A {@link Stream} with one or more {@link User}
      */
     Stream<User> findAllBy(UserQueryTypeMultiple field, String value);
+
+    /**
+     * Retrieves a {@link Stream} containing all the users who are considered defaulters
+     * @return A {@link Stream} with one or more {@link User}
+     */
+    Stream<User> findDefaulterUsers();
 
     /**
      * Updates the given user entity, it must be a non-new entity
