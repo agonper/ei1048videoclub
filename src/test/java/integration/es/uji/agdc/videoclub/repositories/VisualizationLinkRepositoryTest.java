@@ -144,6 +144,34 @@ public class VisualizationLinkRepositoryTest {
         assertFalse(noVisualizationLink.isPresent());
     }
 
+    @Test
+    public void deleteByExpeditionDateBefore_deletesOneBefore() throws Exception {
+        VisualizationLink visualizationLink = repository.save(this.visualizationLink);
+        repository.deleteByExpeditionDateBefore(LocalDateTime.now().plusSeconds(1));
+        Optional<VisualizationLink> noVisualizationLink =
+                repository.findByToken(visualizationLink.getToken());
+        assertFalse(noVisualizationLink.isPresent());
+    }
+
+    @Test
+    public void deleteByExpeditionDateBefore_doesNotDeleteAtTheExactTime() throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        VisualizationLink visualizationLink = repository.save(this.visualizationLink);
+        repository.deleteByExpeditionDateBefore(now);
+        Optional<VisualizationLink> possibleVisualizationLink =
+                repository.findByToken(visualizationLink.getToken());
+        assertTrue(possibleVisualizationLink.isPresent());
+    }
+
+    @Test
+    public void deleteByExpeditionDateBefore_doesNotDeleteAfter() throws Exception {
+        VisualizationLink visualizationLink = repository.save(this.visualizationLink);
+        repository.deleteByExpeditionDateBefore(LocalDateTime.now().minusSeconds(1));
+        Optional<VisualizationLink> possibleVisualizationLink =
+                repository.findByToken(visualizationLink.getToken());
+        assertTrue(possibleVisualizationLink.isPresent());
+    }
+
     @After
     public void tearDown() throws Exception {
         user = null;

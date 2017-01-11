@@ -5,6 +5,7 @@ import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.models.VisualizationLink;
 import java.util.stream.Stream;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -45,4 +46,11 @@ public interface VisualizationLinkRepository extends CrudRepositoryJ8<Visualizat
      * or an empty one if no {@link VisualizationLink} was found
      */
     Optional<VisualizationLink> findByUserAndMovie(User user, Movie movie);
+
+    /**
+     * Deletes all link whose expedition time dates from before a given time
+     * @param time the moment that serves as reference
+     */
+    void deleteByExpeditionDateBefore(LocalDateTime time);
+
 }
