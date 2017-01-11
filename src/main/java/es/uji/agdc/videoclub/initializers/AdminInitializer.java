@@ -1,5 +1,6 @@
 package es.uji.agdc.videoclub.initializers;
 
+import es.uji.agdc.videoclub.helpers.Services;
 import es.uji.agdc.videoclub.models.*;
 import es.uji.agdc.videoclub.models.utils.UserFactory;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;

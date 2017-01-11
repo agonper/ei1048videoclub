@@ -48,6 +48,9 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     private InsertUserController rootController = null;
 
+    private String password = "";
+
+
     @FXML
     public void initialize() {
         userLastPaymentDate_datePicker.valueProperty().addListener(e -> checkDate_datePicker());
@@ -60,12 +63,12 @@ public class InsertUser_3Controller extends Controller implements Form {
 
     @FXML
     public void showPassword() {
-        String introducedPassword = userPassword_passwordField.getText();
+        password = userPassword_passwordField.getText();
         gridPane.getChildren().remove(userPassword_passwordField);
 
         if (showPassword.isSelected()) {
             TextField newPasswordField = new TextField();
-            newPasswordField.setText(introducedPassword);
+            newPasswordField.setText(password);
             newPasswordField.setId("userPassword_passwordField");
             newPasswordField.setOnKeyReleased(e -> checkPassword_textField());
             gridPane.add(newPasswordField, 1, 1);
@@ -74,7 +77,7 @@ public class InsertUser_3Controller extends Controller implements Form {
 
         else {
             PasswordField newPasswordField = new PasswordField();
-            newPasswordField.setText(introducedPassword);
+            newPasswordField.setText(password);
             newPasswordField.setId("userPassword_passwordField");
             newPasswordField.setOnKeyReleased(e -> checkPassword_textField());
             gridPane.add(newPasswordField, 1, 1);
@@ -101,16 +104,27 @@ public class InsertUser_3Controller extends Controller implements Form {
     }
 
     private boolean checkUsername(String username) {
-        if (username.length() < 4 || (userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent() && !rootController.isEditing()) || username.length() > 20)
-            return false;
+        if (rootController.isEditing()) {
+            User loggedUser = ApplicationStateData.getLoggedUser();
 
-        return true;
+            if (loggedUser.isAdmin()) {
+                User user = rootController.getUserToEdit();
+                return (username.length() >= 4 && username.length() <= 15) && (!userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent()) || username.equals(user.getUsername());
+            }
+            else
+                return (username.length() >= 4 && username.length() <= 15) && !userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent() || username.equals(loggedUser.getUsername());
+        }
+        else
+            return (username.length() >= 4 && username.length() <= 15) && !userService.findBy(UserQueryTypeSingle.USERNAME, username).isPresent();
+
     }
 
     @FXML
     public void checkPassword_textField() {
         checkDate_datePicker();
-        if (checkPassword(userPassword_passwordField.getText())) {
+        password = userPassword_passwordField.getText();
+
+        if (checkPassword(password)) {
             userPassword_passwordField.setStyle("-fx-border-color: lawngreen ; -fx-border-width: 2px ;");
             valid_password = true;
         }

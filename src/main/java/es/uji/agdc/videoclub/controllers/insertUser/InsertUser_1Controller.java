@@ -3,7 +3,9 @@ package es.uji.agdc.videoclub.controllers.insertUser;
 import es.uji.agdc.videoclub.controllers.Controller;
 import es.uji.agdc.videoclub.controllers.Form;
 import es.uji.agdc.videoclub.controllers.RootController;
+import es.uji.agdc.videoclub.helpers.ApplicationStateData;
 import es.uji.agdc.videoclub.helpers.Services;
+import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
 import es.uji.agdc.videoclub.services.UserService;
 import javafx.fxml.FXML;
@@ -50,10 +52,20 @@ public class InsertUser_1Controller extends Controller implements Form {
             String DNI_PATTERN = "(([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))";
             Pattern p = Pattern.compile(DNI_PATTERN);
 
-            boolean dni_valid_format = p.matcher(dni).matches();
+            if (rootController.isEditing()) {
+                User loggedUser = ApplicationStateData.getLoggedUser();
 
-            if (dni_valid_format && (!userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent() || rootController.isEditing()))
-                return true;
+                if (loggedUser.isAdmin()) {
+                    User user = rootController.getUserToEdit();
+                    return p.matcher(dni).matches() && (!userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent() || dni.equals(user.getDni()));
+                }
+                else
+                    return p.matcher(dni).matches() && !userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent() || dni.equals(loggedUser.getDni());
+
+            }
+            else {
+                return p.matcher(dni).matches() && !userService.findBy(UserQueryTypeSingle.DNI, dni).isPresent();
+            }
         }
 
         return false;

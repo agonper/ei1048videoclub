@@ -73,6 +73,9 @@ public class ProfileSectionController extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (!username_lb.getText().equals(ApplicationStateData.getLoggedUser().getUsername()))
+            username_lb.setText(ApplicationStateData.getLoggedUser().getUsername());
     }
 
     @FXML
