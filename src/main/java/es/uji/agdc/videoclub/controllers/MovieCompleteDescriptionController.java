@@ -109,7 +109,14 @@ public class MovieCompleteDescriptionController extends Controller {
             movieData_description_textArea.setText(movie.getDescription());
             movieData_copies_label.setText("Copias disponibles: " + String.valueOf(movie.getActualAvailableCopies()));
 
-            movieData_rent_button.setDisable(movie.getActualAvailableCopies() <= 0);
+            User loggedUser = ApplicationStateData.getLoggedUser();
+            boolean movie_is_rented_by_logged_user = false;
+
+            for (VisualizationLink link : loggedUser.getVisualizationLinks())
+                if (link.getMovie().getId() == movie.getId())
+                    movie_is_rented_by_logged_user = true;
+
+            movieData_rent_button.setDisable(movie.getActualAvailableCopies() <= 0 || movie_is_rented_by_logged_user);
         }
     }
 
@@ -125,6 +132,7 @@ public class MovieCompleteDescriptionController extends Controller {
             VisualizationLinkService service = Services.getVisualizationLinkService();
             VisualizationLink link = new VisualizationLink(loggedUser, movie);
             service.create(link);
+            initWindow();
         }
     }
 }
