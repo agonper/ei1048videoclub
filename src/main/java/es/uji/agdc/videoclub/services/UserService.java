@@ -50,9 +50,9 @@ public interface UserService {
     Result update(User user, long userIdPerformsUpdate);
 
     /**
-     * Deletes a user by its given username. Returns error if the user was not found
-     * @param username The username of the user to be deleted
+     * Deletes a user by a given id. Returns error if the user was not found
+     * @param userId The id of the user to be deleted
      * @return An OK {@link Result}, if everything went fine. If not an ERROR.
      */
-    Result remove(String username);
+    Result remove(long userId);
 }

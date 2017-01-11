@@ -2,7 +2,9 @@ package es.uji.agdc.videoclub.services;
 
 import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
+import es.uji.agdc.videoclub.models.VisualizationLink;
 import es.uji.agdc.videoclub.repositories.UserRepository;
+import es.uji.agdc.videoclub.repositories.VisualizationLinkRepository;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.services.utils.ResultBuilder;
 import es.uji.agdc.videoclub.validators.Validator;
@@ -26,12 +28,15 @@ public class UserServiceDB implements UserService{
     private static final int UNPAID_MONTHS_TO_BECOME_A_DEFAULTER = 1;
 
     private final UserRepository repository;
+    private final VisualizationLinkRepository linkRepository;
     private final PasswordEncryptor encryptor;
     private final Validator<User> validator;
 
     @Autowired
-    public UserServiceDB(UserRepository repository, PasswordEncryptor encryptor, Validator<User> validator) {
+    public UserServiceDB(UserRepository repository, VisualizationLinkRepository linkRepository,
+                         PasswordEncryptor encryptor, Validator<User> validator) {
         this.repository = repository;
+        this.linkRepository = linkRepository;
         this.encryptor = encryptor;
         this.validator = validator;
     }
@@ -223,8 +228,15 @@ public class UserServiceDB implements UserService{
     }
 
     @Override
-    public Result remove(String username) {
-        // FIXME Implement
-        throw new Error("Unimplemented");
+    public Result remove(long userId) {
+        Optional<User> possibleUser = repository.findOne(userId);
+        if (!possibleUser.isPresent()) {
+            log.warn("remove(): called with a non-existing user id: " + userId);
+            return ResultBuilder.error("USER_NOT_FOUND");
+        }
+        User user = possibleUser.get();
+        linkRepository.deleteByUser(user);
+        repository.delete(user);
+        return ResultBuilder.ok();
     }
 }

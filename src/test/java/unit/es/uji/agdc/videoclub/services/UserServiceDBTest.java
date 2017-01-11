@@ -3,10 +3,8 @@ package unit.es.uji.agdc.videoclub.services;
 import es.uji.agdc.videoclub.helpers.PasswordEncryptor;
 import es.uji.agdc.videoclub.models.User;
 import es.uji.agdc.videoclub.repositories.UserRepository;
-import es.uji.agdc.videoclub.services.UserQueryTypeMultiple;
-import es.uji.agdc.videoclub.services.UserQueryTypeSingle;
-import es.uji.agdc.videoclub.services.UserService;
-import es.uji.agdc.videoclub.services.UserServiceDB;
+import es.uji.agdc.videoclub.repositories.VisualizationLinkRepository;
+import es.uji.agdc.videoclub.services.*;
 import es.uji.agdc.videoclub.services.utils.Result;
 import es.uji.agdc.videoclub.validators.UserValidator;
 import es.uji.agdc.videoclub.validators.Validator;
@@ -28,9 +26,8 @@ import static org.mockito.Mockito.*;
 public class UserServiceDBTest {
 
     private UserRepository repository;
-
+    private VisualizationLinkRepository linkRepository;
     private PasswordEncryptor encryptor;
-
     private UserService service;
 
     private User user;
@@ -40,9 +37,10 @@ public class UserServiceDBTest {
     @Before
     public void setUp() throws Exception {
         repository = mock(UserRepository.class);
+        linkRepository = mock(VisualizationLinkRepository.class);
         encryptor = mock(PasswordEncryptor.class);
         Validator<User> validator = new UserValidator();
-        service = new UserServiceDB(repository, encryptor, validator);
+        service = new UserServiceDB(repository, linkRepository, encryptor, validator);
 
         user = new User()
                 .setDni("10614397N")
@@ -75,6 +73,7 @@ public class UserServiceDBTest {
                 .setPassword("pacosd689")
                 .setRole(User.Role.MEMBER);
 
+        when(repository.findOne(anyLong())).thenReturn(Optional.empty());
         when(repository.findByUsername(anyString())).thenReturn(Optional.empty());
         when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(repository.findByDni(anyString())).thenReturn(Optional.empty());
@@ -560,9 +559,34 @@ public class UserServiceDBTest {
         assertEquals(now, savedUser.getLastPayment());
     }
 
+    @Test
+    public void removeUser_existingUser_callsDeleteByUserAndDelete() throws Exception {
+        user.setId(1L);
+        when(repository.findOne(1L)).thenReturn(Optional.of(user));
+
+        Result result = service.remove(user.getId());
+
+        verify(linkRepository, only()).deleteByUser(user);
+        verify(repository, times(1)).delete(user);
+        assertTrue(result.isOk());
+    }
+
+    @Test
+    public void removeUserLinks_nonExistingUser_callsDeleteByUser() throws Exception {
+        user.setId(1L);
+
+        Result result = service.remove(user.getId());
+
+        verify(linkRepository, never()).deleteByUser(user);
+        verify(repository, never()).delete(user);
+        assertTrue(result.isError());
+        assertEquals("USER_NOT_FOUND", result.getMsg());
+    }
+
     @After
     public void tearDown() throws Exception {
         repository = null;
+        linkRepository = null;
         service = null;
         user = null;
         secondaryUser = null;

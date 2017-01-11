@@ -52,11 +52,4 @@ public interface VisualizationLinkService {
      * Removes those links whose expedition time is considered old enough to become timed out
      */
     void removeTimedOutLinks();
-
-    /**
-     * Removes the links of a user by his id
-     * @param id the id of the user whose links are going to be deleted
-     * @return An OK {@link Result}, if everything went fine.
-     */
-    Result removeUserLinks(long id);
 }

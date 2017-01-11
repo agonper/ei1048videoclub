@@ -114,12 +114,23 @@ public class UserServiceDBTest {
         String newName = "Pedro Enrique García";
         savedUser.setName(newName).setPassword("");
         Result result = service.update(savedUser, savedUser.getId());
-        System.out.println(result);
 
         User updatedUser = service.findBy(UserQueryTypeSingle.DNI, this.user.getDni()).get();
         assertTrue(result.isOk());
         assertEquals(newName, updatedUser.getName());
         assertEquals(savedUser.getPassword(), updatedUser.getPassword());
+    }
+
+    @Test
+    public void remove() throws Exception {
+        service.create(user);
+        User savedUser = service.findBy(UserQueryTypeSingle.DNI, this.user.getDni()).get();
+
+        Result result = service.remove(savedUser.getId());
+
+        Optional<User> noUser = service.findBy(UserQueryTypeSingle.DNI, this.user.getDni());
+        assertTrue(result.isOk());
+        assertFalse(noUser.isPresent());
     }
 
     @After

@@ -178,7 +178,7 @@ public class UsersListController extends Controller {
             }
             else {
                 UserService service = Services.getUserService();
-                Result result = service.remove(user.getUsername());
+                Result result = service.remove(user.getId());
 
                 if (result.isOk())
                     loadData();

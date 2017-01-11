@@ -182,16 +182,4 @@ public class VisualizationLinkServiceDB implements VisualizationLinkService {
     public void removeTimedOutLinks() {
         repository.deleteByExpeditionDateBefore(LocalDateTime.now().minusHours(HOURS_TO_CONSIDER_AS_TIMED_OUT));
     }
-
-    @Override
-    public Result removeUserLinks(long id) {
-        Optional<User> possibleUser = userService.findBy(UserQueryTypeSingle.ID, Long.toString(id));
-        if (!possibleUser.isPresent()) {
-            log.warn(String.format("removeUserLinks(): called with non-existing user id" + id));
-            return ResultBuilder.error("USER_NOT_FOUND");
-        }
-
-        repository.deleteByUser(possibleUser.get());
-        return ResultBuilder.ok();
-    }
 }

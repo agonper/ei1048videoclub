@@ -399,27 +399,6 @@ public class VisualizationLinkServiceDBTest {
         verify(repository, only()).deleteByExpeditionDateBefore(any());
     }
 
-    @Test
-    public void removeUserLinks_existingUser_callsDeleteByUser() throws Exception {
-        user.setId(0L);
-        when(userService.findBy(UserQueryTypeSingle.ID, user.getId().toString())).thenReturn(Optional.of(user));
-
-        Result result = service.removeUserLinks(user.getId());
-
-        verify(repository, only()).deleteByUser(user);
-        assertTrue(result.isOk());
-    }
-
-    @Test
-    public void removeUserLinks_nonExistingUser_callsDeleteByUser() throws Exception {
-        user.setId(1L);
-        Result result = service.removeUserLinks(user.getId());
-
-        verify(repository, times(0)).deleteByUser(any());
-        assertTrue(result.isError());
-        assertEquals("USER_NOT_FOUND", result.getMsg());
-    }
-
     @After
     public void tearDown() throws Exception {
         userService = null;
