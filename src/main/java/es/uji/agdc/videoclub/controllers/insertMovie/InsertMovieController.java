@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * Created by daniel on 5/01/17.
@@ -311,30 +312,40 @@ public class InsertMovieController extends Controller implements RootController 
                 .setAvailableCopies(Integer.parseInt(page1[3]));
 
         String[] page2 = movie_02_controller.getAllData();
+        LinkedList<Actor> actors = new LinkedList<>();
 
         for (int i = 0; i < page2.length; i++) {
             String actor = page2[i];
 
-            movie = movie.addActor(new Actor(actor));
+            actors.add(new Actor(actor));
         }
 
+        movie = movie.setActors(actors);
+
+
         String[] page3 = movie_03_controller.getAllData();
+        LinkedList<Director> directors = new LinkedList<>();
 
         for (int i = 0; i < page3.length; i++) {
             String director = page3[i];
 
-            movie = movie.addDirector(new Director(director));
+            directors.add(new Director(director));
         }
+
+        movie = movie.setDirectors(directors);
+
 
         String[] page4 = movie_04_controller.getAllData();
         movie = movie.setDescription(page4[0]);
 
         String[] page5 = movie_05_controller.getAllData();
+        LinkedList<Genre> genres = new LinkedList<>();
 
         for (int i = 0; i < page5.length; i++) {
             String genre = page5[i];
-
-            movie = movie.addGenre(new Genre(genre));
+            genres.add(new Genre(genre));
         }
+
+        movie = movie.setGenres(genres);
     }
 }
