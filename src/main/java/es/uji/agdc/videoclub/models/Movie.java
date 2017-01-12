@@ -127,22 +127,31 @@ public class Movie extends AbstractEntity {
 
     public Movie addActor(Actor actor) {
         List<Actor> actors = getActors();
-        actors.add(actor);
-        actor.addMovie(this);
+        long count = actors.stream().filter(actor1 -> actor1.getName().equals(actor.getName())).count();
+        if (count == 0) {
+            actors.add(actor);
+            actor.addMovie(this);
+        }
         return this;
     }
 
     public Movie addDirector(Director director) {
         List<Director> directors = getDirectors();
-        directors.add(director);
-        director.addMovie(this);
+        long count = directors.stream().filter(director1 -> director1.getName().equals(director.getName())).count();
+        if (count == 0) {
+            directors.add(director);
+            director.addMovie(this);
+        }
         return this;
     }
 
     public Movie addGenre(Genre genre) {
         List<Genre> genres = getGenres();
-        genres.add(genre);
-        genre.addMovie(this);
+        long count = genres.stream().filter(genre1 -> genre1.getName().equals(genre.getName())).count();
+        if (count == 0) {
+            genres.add(genre);
+            genre.addMovie(this);
+        }
         return this;
     }
 

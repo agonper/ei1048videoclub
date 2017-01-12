@@ -72,18 +72,21 @@ public class MovieServiceDB implements MovieService{
 
         // Grab those actors that already exist on the database and replace them
         movie.setActors(movie.getActors().stream().map(actor -> {
+            if (actor.getId() != null) return actor;
             Optional<Actor> possibleActor = assetService.findActorByName(actor.getName());
             return possibleActor.isPresent() ? possibleActor.get() : actor;
         }).collect(Collectors.toList()));
 
         // Grab those directors that already exist on the database and replace them
         movie.setDirectors(movie.getDirectors().stream().map(director -> {
+            if (director.getId() != null) return director;
             Optional<Director> possibleDirector = assetService.findDirectorByName(director.getName());
             return possibleDirector.isPresent() ? possibleDirector.get() : director;
         }).collect(Collectors.toList()));
 
         // Grab those genres that already exist on the database and replace them
         movie.setGenres(movie.getGenres().stream().map(genre -> {
+            if (genre.getId() != null) return genre;
             Optional<Genre> possibleGenre = assetService.findGenreByName(genre.getName());
             return possibleGenre.isPresent() ? possibleGenre.get() : genre;
         }).collect(Collectors.toList()));
